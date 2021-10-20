@@ -2,6 +2,9 @@
 .vs/
 .idea/
 
+# Unreal stuff I don't want to track
+Content/ParagonKhaimera
+
 # Compiled Object files
 *.slo
 *.lo
