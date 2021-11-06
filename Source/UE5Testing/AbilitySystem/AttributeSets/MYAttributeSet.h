@@ -30,14 +30,29 @@ public:
 	// Current Health, when 0 we expect owner to die unless prevented by an ability. Capped by MaxHealth.
 	// Positive changes can directly use this.
 	// Negative changes to Health should go through Damage meta attribute.
-	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
+	UPROPERTY(BlueprintReadOnly, Category = "Stats.Defense", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UMYAttributeSet, Health)
 
 	// MaxHealth is its own attribute since GameplayEffects may modify it
-	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_MaxHealth)
+	UPROPERTY(BlueprintReadOnly, Category = "Stats.Defense", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UMYAttributeSet, MaxHealth)
+
+	// MaxHealth is its own attribute since GameplayEffects may modify it
+	UPROPERTY(BlueprintReadOnly, Category = "Stats.Offense", ReplicatedUsing = OnRep_AttackPower)
+	FGameplayAttributeData AttackPower;
+	ATTRIBUTE_ACCESSORS(UMYAttributeSet, AttackPower)
+
+	// MaxHealth is its own attribute since GameplayEffects may modify it
+	UPROPERTY(BlueprintReadOnly, Category = "Stats.Offense", ReplicatedUsing = OnRep_AbilityPower)
+	FGameplayAttributeData AbilityPower;
+	ATTRIBUTE_ACCESSORS(UMYAttributeSet, AbilityPower)
+
+	// MaxHealth is its own attribute since GameplayEffects may modify it
+	UPROPERTY(BlueprintReadOnly, Category = "Stats", ReplicatedUsing = OnRep_CharacterLevel)
+	FGameplayAttributeData CharacterLevel;
+	ATTRIBUTE_ACCESSORS(UMYAttributeSet, CharacterLevel)
 
 protected:
 	
@@ -49,4 +64,13 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
+	
+	UFUNCTION()
+	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldAttackPower);
+	
+	UFUNCTION()
+	virtual void OnRep_AbilityPower(const FGameplayAttributeData& OldAbilityPower);
+	
+	UFUNCTION()
+	virtual void OnRep_CharacterLevel(const FGameplayAttributeData& OldCharacterLevel);
 };

@@ -71,21 +71,6 @@ void AUE5TestingCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	// handle touch devices
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AUE5TestingCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AUE5TestingCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AUE5TestingCharacter::OnResetVR);
-}
-
-
-void AUE5TestingCharacter::OnResetVR()
-{
-	// If UE5Testing is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in UE5Testing.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
 void AUE5TestingCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)

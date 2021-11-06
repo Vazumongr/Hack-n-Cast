@@ -16,4 +16,7 @@ class UE5TESTING_API UMYAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	UPROPERTY(VisibleAnywhere, Category="Ability System")
 	bool bAbilitiesInitialized = false;
+
+	UFUNCTION(BlueprintCallable)
+	TArray<FGameplayAttribute> GetAttributes();
 };

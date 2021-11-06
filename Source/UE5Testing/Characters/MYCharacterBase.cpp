@@ -43,11 +43,66 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 	SetOwner(NewController);
 }
 
+void AMYCharacterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if(AbilitySystemComponent)
+	{
+		AbilitySystemComponent->AddSet<UMYAttributeSet>();
+	}
+}
+
 void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
+}
+
+float AMYCharacterBase::GetHealth() const
+{
+	if(AbilitySystemComponent != nullptr)
+	{
+		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetHealthAttribute());
+	}
+	return -1;
+}
+
+float AMYCharacterBase::GetMaxHealth() const
+{
+	if(AbilitySystemComponent != nullptr)
+	{
+		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetMaxHealthAttribute());
+	}
+	return -1;
+}
+
+float AMYCharacterBase::GetAttackPower() const
+{
+	if(AbilitySystemComponent != nullptr)
+	{
+		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetMaxHealthAttribute());
+	}
+	return -1;
+}
+
+float AMYCharacterBase::GetAbilityPower() const
+{
+	if(AbilitySystemComponent != nullptr)
+	{
+		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetAbilityPowerAttribute());
+	}
+	return -1;
+}
+
+float AMYCharacterBase::GetCharacterLevel() const
+{
+	if(AbilitySystemComponent != nullptr)
+	{
+		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetCharacterLevelAttribute());
+	}
+	return -1;
 }
 
 void AMYCharacterBase::InitializeAttributes()
@@ -64,7 +119,7 @@ void AMYCharacterBase::InitializeAttributes()
 	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
 
-	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 1, EffectContext);
+	const FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 1, EffectContext);
 	if(NewHandle.IsValid())
 	{
 		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
@@ -92,18 +147,6 @@ void AMYCharacterBase::InitializeAbilities()
 void AMYCharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
-	/*
-	// Since the ASC exists on the pawn, we initialize the server side here
-	if(AbilitySystemComponent)
-	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("Should be initialized on client"));
-		AbilitySystemComponent->InitAbilityActorInfo(this, this);
-		AbilitySystemComponent->SetOwnerActor(this);
-		InitializeAttributes();
-		InitializeAbilities();
-	}
-	*/
-	//InitializeAttributes();
 }
 
 void AMYCharacterBase::ActivatePrimaryAbility()

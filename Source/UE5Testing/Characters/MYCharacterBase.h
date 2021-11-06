@@ -27,8 +27,21 @@ public:
     virtual class UMYAttributeSet* GetAttributeSet() const;
 
 	virtual void PossessedBy(AController* NewController) override;
+	virtual void PostInitializeComponents() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	/* Attribute Getters */
+	UFUNCTION(BlueprintCallable)
+	float GetHealth() const;
+	UFUNCTION(BlueprintCallable)
+	float GetMaxHealth() const;
+	UFUNCTION(BlueprintCallable)
+	float GetAttackPower() const;
+	UFUNCTION(BlueprintCallable)
+	float GetAbilityPower() const;
+	UFUNCTION(BlueprintCallable)
+	float GetCharacterLevel() const;
     
 protected:
 	virtual void InitializeAttributes();
