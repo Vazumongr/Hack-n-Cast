@@ -69,7 +69,6 @@ protected:
 
 	/* Attribute Change Handlers */
 	void HealthChanged(const FOnAttributeChangeData & Data);
-	/* Attribute Change Handlers */
 	void MaxHealthChanged(const FOnAttributeChangeData & Data);
 	
 	UFUNCTION(BlueprintCallable)

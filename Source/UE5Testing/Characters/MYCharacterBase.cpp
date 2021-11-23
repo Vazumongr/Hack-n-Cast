@@ -2,6 +2,7 @@
 
 #include "UE5Testing/Characters/MYCharacterBase.h"
 
+#include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
@@ -188,11 +189,13 @@ void AMYCharacterBase::ActivateSecondaryAbility()
 
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
+	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
 	HealthChangedDelegate.Broadcast(Data.NewValue);
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
+	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
 	MaxHealthChangedDelegate.Broadcast(Data.NewValue);
 }
 

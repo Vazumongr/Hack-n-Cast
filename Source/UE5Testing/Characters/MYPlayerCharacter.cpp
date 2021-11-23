@@ -2,6 +2,8 @@
 #include "MYPlayerCharacter.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 
 AMYPlayerCharacter::AMYPlayerCharacter()
@@ -19,6 +21,12 @@ void AMYPlayerCharacter::AddControllerPitchInput(float Val)
 void AMYPlayerCharacter::AddControllerYawInput(float Val)
 {
 	Super::AddControllerYawInput(Val * MouseSensitivity);
+}
+
+void AMYPlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AMYPlayerCharacter, AttackChainCounter);
 }
 
 void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,12 +73,25 @@ void AMYPlayerCharacter::MoveRight(float InValue)
 
 void AMYPlayerCharacter::PrimaryAttack()
 {
+	UKismetSystemLibrary::PrintString(this, "PrimaryAttackClient?");
+	Server_PrimaryAttack();
+}
+
+void AMYPlayerCharacter::Server_PrimaryAttack_Implementation()
+{
+	UKismetSystemLibrary::PrintString(this, "PrimaryAttackImplementation?");
 	ActivateAbilityByHandle(PrimaryAbilityHandle);
-	if(++AttackChainCounter>3) AttackChainCounter = 0;
+	if(++AttackChainCounter>2) AttackChainCounter = 0;
+}
+
+bool AMYPlayerCharacter::Server_PrimaryAttack_Validate()
+{
+	UKismetSystemLibrary::PrintString(this, "PrimaryAttackValidation?");
+	return true;
 }
 
 void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AMYDroppedLootBase* Loot = Cast<AMYDroppedLootBase>(OtherActor);
 	if(Loot != nullptr)

@@ -18,6 +18,7 @@ class UE5TESTING_API AMYPlayerCharacter : public AMYCharacterBase
 public:
 	virtual void AddControllerPitchInput(float Val) override;
 	virtual void AddControllerYawInput(float Val) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -25,6 +26,8 @@ protected:
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);
 	virtual void PrimaryAttack();
+	UFUNCTION(Server, Unreliable, WithValidation)
+	virtual void Server_PrimaryAttack();
 
 	UFUNCTION()
 	virtual void LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
@@ -32,7 +35,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class USphereComponent* LootPickerUpper;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	uint8 AttackChainCounter{0};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
