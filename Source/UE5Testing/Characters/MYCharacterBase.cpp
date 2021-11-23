@@ -167,6 +167,8 @@ void AMYCharacterBase::SetupAttributeCallbacks()
 	}
 	AttributeHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AMYCharacterBase::HealthChanged);
 	HealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
+	AttributeMaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AMYCharacterBase::MaxHealthChanged);
+	MaxHealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
 	
 }
 
@@ -177,7 +179,7 @@ void AMYCharacterBase::OnRep_Controller()
 
 void AMYCharacterBase::ActivatePrimaryAbility(float num)
 {
-	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Orange,"Yahooooo!");
+	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Orange,"Yahooooo!");
 }
 
 void AMYCharacterBase::ActivateSecondaryAbility()
@@ -187,6 +189,11 @@ void AMYCharacterBase::ActivateSecondaryAbility()
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	HealthChangedDelegate.Broadcast(Data.NewValue);
+}
+
+void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
+{
+	MaxHealthChangedDelegate.Broadcast(Data.NewValue);
 }
 
 void AMYCharacterBase::ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle)

@@ -1,6 +1,7 @@
 ﻿#include "MYOverheadHealthBar.h"
 
 #include "MYOverheadHealthBarWidget.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "UE5Testing/UE5Testing.h"
 
@@ -13,12 +14,18 @@ void UMYOverheadHealthBar::TickComponent(float DeltaTime, ELevelTick Tick,
 	FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, Tick, ThisTickFunction);
-	//AddLocalRotation(FRotator(10,0,0));
+	if(!ensure(PlayerController)) return;
+	if(!ensure(PlayerController->PlayerCameraManager)) return;
+	const FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(GetComponentLocation(), PlayerController->PlayerCameraManager->GetCameraLocation());
+	SetWorldRotation(Rotation);
 }
 
 void UMYOverheadHealthBar::BeginPlay()
 {
 	Super::BeginPlay();
+	UWorld* World = GetWorld();
+	if(!ensure(World)) return;
+	PlayerController = World->GetFirstPlayerController();
 }
 
 void UMYOverheadHealthBar::InitWidget()
@@ -32,11 +39,6 @@ void UMYOverheadHealthBar::InitWidget()
 		return;
 	OverheadHealthBar->SetOwningActor(GetOwner());
 	return;
-	APawn* Pawn = Cast<APawn>(GetOwner());
-	if(!ensure(Pawn)) return;
-	AController* Controller = Pawn->GetController();
-	if(!ensure(Controller)) return;
-	OverheadHealthBar->SetOwningController(Controller);
 	
 }
 

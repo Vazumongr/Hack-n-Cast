@@ -9,7 +9,7 @@
 
 #include "MYCharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthChangedDelegate, float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatChangedDelegate, float, NewHealth);
 
 /**
  * This is the base class for all characters implementing an ability system
@@ -51,8 +51,11 @@ public:
 	float GetCharacterLevel() const;
 
 	FDelegateHandle AttributeHealthChangedDelegateHandle;
+	FDelegateHandle AttributeMaxHealthChangedDelegateHandle;
 	UPROPERTY(BlueprintAssignable)
-	FHealthChangedDelegate HealthChangedDelegate;
+	FStatChangedDelegate HealthChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FStatChangedDelegate MaxHealthChangedDelegate;
     
 protected:
 	virtual void InitializeAttributes();
@@ -66,6 +69,8 @@ protected:
 
 	/* Attribute Change Handlers */
 	void HealthChanged(const FOnAttributeChangeData & Data);
+	/* Attribute Change Handlers */
+	void MaxHealthChanged(const FOnAttributeChangeData & Data);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);

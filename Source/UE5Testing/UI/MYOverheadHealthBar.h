@@ -20,6 +20,6 @@ public:
 	virtual void InitWidget() override;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class AController* OwningController;
+	class APlayerController* PlayerController;
 private:
 };

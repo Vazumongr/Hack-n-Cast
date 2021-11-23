@@ -3,20 +3,20 @@
 
 #include "MYOverheadHealthBarWidget.h"
 
+#include "UE5Testing/Characters/MYCharacterBase.h"
+
 void UMYOverheadHealthBarWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	if(OwningController == nullptr) return;
-}
-
-void UMYOverheadHealthBarWidget::SetOwningController(AController* InController)
-{
-	if(InController != nullptr)
-	OwningController = InController;
 }
 
 void UMYOverheadHealthBarWidget::SetOwningActor(AActor* InActor)
 {
 	if(InActor != nullptr)
 	OwningActor = InActor;
+	AMYCharacterBase* OwningCharacter = Cast<AMYCharacterBase>(OwningActor);
+	if(!ensure(OwningCharacter)) return;
+	OwningCharacter->HealthChangedDelegate.AddDynamic(this, &UMYOverheadHealthBarWidget::UpdateCurrentHealth);
+	OwningCharacter->MaxHealthChangedDelegate.AddDynamic(this, &UMYOverheadHealthBarWidget::UpdateMaxHealth);
+	InitializeHealthBar();
 }
