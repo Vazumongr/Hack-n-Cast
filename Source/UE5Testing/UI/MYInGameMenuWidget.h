@@ -27,9 +27,5 @@ private:
 	void Quit();
 	UFUNCTION()
 	void Cancel();
-
-
-	
-	class IMYMainMenuInterface* MainMenuInterface;
 	
 };

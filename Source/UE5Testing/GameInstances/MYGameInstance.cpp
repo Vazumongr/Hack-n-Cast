@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UE5Testing/UI/MYInGameMenuWidget.h"
 #include "UE5Testing/UI/MYMainMenuWidget.h"
+#include "UE5Testing/UI/MYHUD.h"
 
 UMYGameInstance::UMYGameInstance()
 {
@@ -16,6 +17,7 @@ void UMYGameInstance::Init()
 {
 	Super::Init();
 	UE_LOG(LogTemp, Warning, TEXT("Init"));
+	
 }
 
 void UMYGameInstance::Host()
@@ -40,7 +42,20 @@ void UMYGameInstance::LoadInGameMenu()
 	if(!ensure(InGameMenuClass)) return;
 	UMYInGameMenuWidget* InGameMenu = CreateWidget<UMYInGameMenuWidget>(this, InGameMenuClass);
 	if(!ensure(InGameMenu != nullptr)) return;
+	InGameMenu->SetInterface(this);
 	InGameMenu->Setup();
+}
+
+void UMYGameInstance::CreateHUD()
+{
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if(!ensure(PlayerController)) return;
+	if(!ensure(HUDClass)) return;
+	UMYHUD* HUD = CreateWidget<UMYHUD>(this, HUDClass);
+	if(!ensure(HUD)) return;
+	HUD->AddToViewport();
+	HUD->SetOwningController(PlayerController);
+	HUD->SetOwningPlayer(PlayerController);
 }
 
 void UMYGameInstance::Join(FString IPAddress)
@@ -49,4 +64,21 @@ void UMYGameInstance::Join(FString IPAddress)
 	APlayerController* PlayerController = GetPrimaryPlayerController();
 	if(!ensure(PlayerController)) return;
 	PlayerController->ClientTravel(IPAddress,ETravelType::TRAVEL_Absolute);
+}
+
+void UMYGameInstance::QuitToMainMenu()
+{
+	UE_LOG(LogTemp, Warning, TEXT("QUitting to main menu"));
+	APlayerController* PlayerController = GetPrimaryPlayerController();
+	if(!ensure(PlayerController)) return;
+	PlayerController->ClientTravel("/Game/Levels/MainMenuLevel",ETravelType::TRAVEL_Absolute);
+}
+
+void UMYGameInstance::QuitGame()
+{
+	UWorld* World = GetWorld();
+	if(!ensure(World)) return;
+	APlayerController* PlayerController = GetPrimaryPlayerController();
+	if(!ensure(PlayerController)) return;
+	PlayerController->ConsoleCommand("quit");
 }

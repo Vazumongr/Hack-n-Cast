@@ -6,6 +6,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
+#include "UE5Testing/UI/MYOverheadHealthBar.h"
 
 AMYCharacterBase::AMYCharacterBase()
 {
@@ -14,6 +15,14 @@ AMYCharacterBase::AMYCharacterBase()
 	AbilitySystemComponent->ReplicationMode = EGameplayEffectReplicationMode::Mixed;
 
 	AttributeSet = CreateDefaultSubobject<UMYAttributeSet>(TEXT("Attribute Set"));
+
+	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBar>(TEXT("Overhead Health Bar"));
+	OverheadHealthBar->SetupAttachment(RootComponent);
+}
+
+void AMYCharacterBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -36,6 +45,7 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 		UE_LOG(LogAbilitySystem, Warning, TEXT("Should be initialized on server"));
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetOwnerActor(this);
+		SetupAttributeCallbacks();
 		InitializeAttributes();
 		InitializeAbilities();
 	}
@@ -109,7 +119,7 @@ void AMYCharacterBase::InitializeAttributes()
 {
 	if(AbilitySystemComponent == nullptr)
 		return;
-	if(!DefaultAttributes)
+	if(DefaultLevel == nullptr)
 	{
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
 		return;
@@ -118,12 +128,16 @@ void AMYCharacterBase::InitializeAttributes()
 	// Can run on Server and Client
 	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
-
-	const FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 1, EffectContext);
-	if(NewHandle.IsValid())
+	
+	if(DefaultLevel)
 	{
-		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
+		const FGameplayEffectSpecHandle Handle = AbilitySystemComponent->MakeOutgoingSpec(DefaultLevel, 1, EffectContext);
+        if(Handle.IsValid())
+        {
+        	FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*Handle.Data.Get(), AbilitySystemComponent);
+        }
 	}
+	
 }
 
 void AMYCharacterBase::InitializeAbilities()
@@ -135,13 +149,25 @@ void AMYCharacterBase::InitializeAbilities()
 	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	AbilitySpec = FGameplayAbilitySpec(SecondaryAbility,1,INDEX_NONE,this);
 	SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-	
-	for(TSubclassOf<UMYGameplayAbility>& Ability : DefaultAbilities)
-	{
-		AbilitySpec = FGameplayAbilitySpec(Ability,1,INDEX_NONE,this);
-		AbilitySystemComponent->GiveAbility(AbilitySpec);
-	}
+
 	AbilitySystemComponent->bAbilitiesInitialized = true;
+}
+
+void AMYCharacterBase::SetupAttributeCallbacks()
+{
+	if(AttributeSet == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Error, TEXT("%s AttributeSet is null inside %s()!"), *GetName(), *FString(__FUNCTION__));
+		return;
+	}
+	if(AbilitySystemComponent == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Error, TEXT("%s AbilitySystemComponent is null inside %s()!"), *GetName(), *FString(__FUNCTION__));
+		return;
+	}
+	AttributeHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AMYCharacterBase::HealthChanged);
+	HealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
+	
 }
 
 void AMYCharacterBase::OnRep_Controller()
@@ -149,12 +175,18 @@ void AMYCharacterBase::OnRep_Controller()
 	Super::OnRep_Controller();
 }
 
-void AMYCharacterBase::ActivatePrimaryAbility()
+void AMYCharacterBase::ActivatePrimaryAbility(float num)
 {
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Orange,"Yahooooo!");
 }
 
 void AMYCharacterBase::ActivateSecondaryAbility()
 {
+}
+
+void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
+{
+	HealthChangedDelegate.Broadcast(Data.NewValue);
 }
 
 void AMYCharacterBase::ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle)

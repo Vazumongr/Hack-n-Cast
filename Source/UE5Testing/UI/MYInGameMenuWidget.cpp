@@ -4,6 +4,7 @@
 #include "MYInGameMenuWidget.h"
 #include "UE5Testing/UE5Testing.h"
 #include "Components/Button.h"
+#include "UE5Testing/Interfaces/MYMainMenuInterface.h"
 
 bool UMYInGameMenuWidget::Initialize()
 {
@@ -19,7 +20,8 @@ bool UMYInGameMenuWidget::Initialize()
 
 void UMYInGameMenuWidget::Quit()
 {
-	UE_LOG(LogUI, Warning, TEXT("Quitting"));
+	if(!ensure(MainMenuInterface)) return;
+	MainMenuInterface->QuitToMainMenu();
 }
 
 void UMYInGameMenuWidget::Cancel()

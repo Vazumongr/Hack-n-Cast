@@ -26,15 +26,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadInGameMenu();
 
+	UFUNCTION(BlueprintCallable)
+	void CreateHUD();
+
 	UFUNCTION(Exec)
 	void Host();
 	
 	UFUNCTION(Exec)
 	void Join(FString IPAddress);
+
+	virtual void QuitToMainMenu() override;
+	virtual void QuitGame() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> InGameMenuClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UUserWidget> HUDClass;
 	
 };

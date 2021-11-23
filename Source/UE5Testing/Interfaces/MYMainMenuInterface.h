@@ -25,4 +25,7 @@ public:
 	
 	UFUNCTION(Exec)
 	virtual void Join(FString IPAddress) = 0;
+
+	virtual void QuitToMainMenu() = 0;
+	virtual void QuitGame() = 0;
 };

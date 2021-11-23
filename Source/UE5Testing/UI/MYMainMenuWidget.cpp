@@ -14,14 +14,10 @@ bool UMYMainMenuWidget::Initialize()
 	HostButton->OnClicked.AddDynamic(this,&UMYMainMenuWidget::Host);
 	if(!ensure(JoinButton)) return false;
 	JoinButton->OnClicked.AddDynamic(this,&UMYMainMenuWidget::Join);
+	if(!ensure(QuitButton)) return false;
+	QuitButton->OnClicked.AddDynamic(this,&UMYMainMenuWidget::Quit);
 
 	return true;
-}
-
-void UMYMainMenuWidget::SetInterface(IMYMainMenuInterface* InMainMenuInterface)
-{
-	if(!ensure(InMainMenuInterface)) return;
-	MainMenuInterface = InMainMenuInterface;
 }
 
 void UMYMainMenuWidget::Host()
@@ -34,4 +30,10 @@ void UMYMainMenuWidget::Join()
 {
 	if(!ensure(MainMenuInterface)) return;
 	MainMenuInterface->Join(TEXT("127.0.0.1"));
+}
+
+void UMYMainMenuWidget::Quit()
+{
+	if(!ensure(MainMenuInterface)) return;
+	MainMenuInterface->QuitGame();
 }

@@ -15,4 +15,7 @@ class UE5TESTING_API UMYMenuWidgetBase : public UUserWidget
 public:
 	virtual bool Setup();
 	virtual bool Teardown();
+	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
+	void SetInterface(class IMYMainMenuInterface* InMainMenuInterface);
+	class IMYMainMenuInterface* MainMenuInterface;
 };

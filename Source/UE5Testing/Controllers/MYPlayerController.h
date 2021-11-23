@@ -18,9 +18,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void CreateHUD();
+
+	class UMYHUD* GetHUD();
+
 	virtual void AcknowledgePossession(APawn* P) override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UMYHUD> HUDClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UMYHUD* HUDWidget;
 };
