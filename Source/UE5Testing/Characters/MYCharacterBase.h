@@ -24,9 +24,11 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual void BeginPlay() override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UMYOverheadHealthBar* OverheadHealthBar;
+	class UMYOverheadHealthBarComponent* OverheadHealthBar;
 
 public:
 	/* All the solely related to GAS stuff STARTS here */
@@ -37,6 +39,7 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void SetOverheadHealthBarWidget(class UMYOverheadHealthBarWidget* InWidget);
 
 	/* Attribute Getters */
 	UFUNCTION(BlueprintCallable)
@@ -73,6 +76,9 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="UI")
+	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;

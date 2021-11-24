@@ -11,14 +11,11 @@ void UMYOverheadHealthBarWidget::NativeTick(const FGeometry& MyGeometry, float I
 	Super::NativeTick(MyGeometry, InDeltaTime);
 }
 
-void UMYOverheadHealthBarWidget::SetOwningActor(AActor* InActor)
+void UMYOverheadHealthBarWidget::SetOwningActor(AMYCharacterBase* InMYCharacterBase)
 {
-	if(InActor != nullptr)
-	OwningActor = InActor;
-	AMYCharacterBase* OwningCharacter = Cast<AMYCharacterBase>(OwningActor);
-	if(!ensure(OwningCharacter)) return;
+	if(InMYCharacterBase != nullptr)
+	OwningCharacter = InMYCharacterBase;
 	OwningCharacter->HealthChangedDelegate.AddDynamic(this, &UMYOverheadHealthBarWidget::UpdateCurrentHealth);
 	OwningCharacter->MaxHealthChangedDelegate.AddDynamic(this, &UMYOverheadHealthBarWidget::UpdateMaxHealth);
-	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
 	InitializeHealthBar();
 }

@@ -4,16 +4,16 @@
 #include "CoreMinimal.h"
 #include "Components/WidgetComponent.h"
 
-#include "MYOverheadHealthBar.generated.h"
+#include "MYOverheadHealthBarComponent.generated.h"
 
 UCLASS()
 /**
  * Class for overhead health bars
  */
-class UE5TESTING_API UMYOverheadHealthBar : public UWidgetComponent
+class UE5TESTING_API UMYOverheadHealthBarComponent : public UWidgetComponent
 {
     GENERATED_BODY()
-	UMYOverheadHealthBar();
+	UMYOverheadHealthBarComponent();
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void BeginPlay() override;

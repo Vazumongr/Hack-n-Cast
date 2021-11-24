@@ -15,21 +15,21 @@ class UE5TESTING_API UMYOverheadHealthBarWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-	public:
+public:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable)
-	void SetOwningActor(class AActor* InActor);
+	void SetOwningActor(class AMYCharacterBase* InCharacterBase);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateCurrentHealth(float NewCurrentHealth);
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateMaxHealth(float NewMaxHealth);
 
-	protected:
+protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void InitializeHealthBar();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class AActor* OwningActor;
+	class AMYCharacterBase* OwningCharacter;
 	
 };

@@ -7,7 +7,8 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
-#include "UE5Testing/UI/MYOverheadHealthBar.h"
+#include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
+#include "UE5Testing/UI/MYOverheadHealthBarWidget.h"
 
 AMYCharacterBase::AMYCharacterBase()
 {
@@ -17,13 +18,19 @@ AMYCharacterBase::AMYCharacterBase()
 
 	AttributeSet = CreateDefaultSubobject<UMYAttributeSet>(TEXT("Attribute Set"));
 
-	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBar>(TEXT("Overhead Health Bar"));
+	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBarComponent>(TEXT("Overhead Health Bar"));
 	OverheadHealthBar->SetupAttachment(RootComponent);
 }
 
 void AMYCharacterBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+}
+
+void AMYCharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+	SetupAttributeCallbacks();
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -46,7 +53,6 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 		UE_LOG(LogAbilitySystem, Warning, TEXT("Should be initialized on server"));
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetOwnerActor(this);
-		SetupAttributeCallbacks();
 		InitializeAttributes();
 		InitializeAbilities();
 	}
@@ -69,6 +75,14 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
+}
+
+void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* InWidget)
+{
+	if(InWidget != nullptr)
+	{
+		OverheadHealthBarWidget = InWidget;
+	}
 }
 
 float AMYCharacterBase::GetHealth() const
@@ -189,14 +203,18 @@ void AMYCharacterBase::ActivateSecondaryAbility()
 
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
-	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
 	HealthChangedDelegate.Broadcast(Data.NewValue);
+	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
+	//if(OverheadHealthBarWidget == nullptr) return;
+	//OverheadHealthBarWidget->UpdateCurrentHealth(Data.NewValue);
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
-	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
 	MaxHealthChangedDelegate.Broadcast(Data.NewValue);
+	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
+	//if(OverheadHealthBarWidget == nullptr) return;
+	//OverheadHealthBarWidget->UpdateMaxHealth(Data.NewValue);
 }
 
 void AMYCharacterBase::ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle)
