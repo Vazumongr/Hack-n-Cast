@@ -1,4 +1,5 @@
 ﻿#include "MYOverheadHealthBarComponent.h"
+#include "UE5Testing/UE5Testing.h"
 
 #include "MYOverheadHealthBarWidget.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -33,7 +34,17 @@ void UMYOverheadHealthBarComponent::InitWidget()
 	AActor* Owner = GetOwner();
 	if(Owner == nullptr) return;
 	UUserWidget* UserWidget = GetWidget();
-	if(UserWidget == nullptr) return;
+	if(UserWidget == nullptr)
+	{
+		UE_LOG(LogUI, Warning, TEXT("GetWidget() FAILED!"));
+		return;
+	}
+	UUserWidget* OtherWidget = GetUserWidgetObject();
+	if(OtherWidget == nullptr)
+	{
+		UE_LOG(LogUI, Warning, TEXT("GetUserWidgetObject() FAILED!"));
+		return;
+	}
 	UMYOverheadHealthBarWidget* OverheadHealthBarWidget = Cast<UMYOverheadHealthBarWidget>(UserWidget);
 	if(OverheadHealthBarWidget == nullptr) return;
 	AMYCharacterBase* OwningCharacter = Cast<AMYCharacterBase>(Owner);

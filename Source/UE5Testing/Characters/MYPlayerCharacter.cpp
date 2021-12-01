@@ -73,21 +73,8 @@ void AMYPlayerCharacter::MoveRight(float InValue)
 
 void AMYPlayerCharacter::PrimaryAttack()
 {
-	UKismetSystemLibrary::PrintString(this, "PrimaryAttackClient?");
-	Server_PrimaryAttack();
-}
-
-void AMYPlayerCharacter::Server_PrimaryAttack_Implementation()
-{
-	UKismetSystemLibrary::PrintString(this, "PrimaryAttackImplementation?");
+	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("PrimaryAttack: %f"), AttackChainCounter));
 	ActivateAbilityByHandle(PrimaryAbilityHandle);
-	if(++AttackChainCounter>2) AttackChainCounter = 0;
-}
-
-bool AMYPlayerCharacter::Server_PrimaryAttack_Validate()
-{
-	UKismetSystemLibrary::PrintString(this, "PrimaryAttackValidation?");
-	return true;
 }
 
 void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

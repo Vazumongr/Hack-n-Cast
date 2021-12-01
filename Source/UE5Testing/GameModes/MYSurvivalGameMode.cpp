@@ -12,6 +12,8 @@ void AMYSurvivalGameMode::BeginPlay()
 	Super::BeginPlay();
 	TArray<AActor*> TempActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), TempActors);
+	if(EnemyClass == nullptr)
+		return;
 	for(AActor* Actor : TempActors)
 	{
 		FActorSpawnParameters SpawnParameters;

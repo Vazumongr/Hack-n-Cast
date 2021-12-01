@@ -10,13 +10,12 @@
 
 UMYGameInstance::UMYGameInstance()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Constructor"));
+	
 }
 
 void UMYGameInstance::Init()
 {
 	Super::Init();
-	UE_LOG(LogTemp, Warning, TEXT("Init"));
 	
 }
 
@@ -68,7 +67,7 @@ void UMYGameInstance::Join(FString IPAddress)
 
 void UMYGameInstance::QuitToMainMenu()
 {
-	UE_LOG(LogTemp, Warning, TEXT("QUitting to main menu"));
+	UE_LOG(LogTemp, Warning, TEXT("Quitting to main menu"));
 	APlayerController* PlayerController = GetPrimaryPlayerController();
 	if(!ensure(PlayerController)) return;
 	PlayerController->ClientTravel("/Game/Levels/MainMenuLevel",ETravelType::TRAVEL_Absolute);

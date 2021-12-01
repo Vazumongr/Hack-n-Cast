@@ -57,10 +57,8 @@ void AMYPlayerController::AcknowledgePossession(APawn* P)
 	Super::AcknowledgePossession(P);
 	// We initialize the client side of the ASC here
 	AMYCharacterBase* CharacterBase = Cast<AMYCharacterBase>(P);
-	UE_LOG(LogTemp, Warning, TEXT("Aknowledging possession"));
 	if(CharacterBase != nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("Should be initialized on client"));
 		CharacterBase->GetAbilitySystemComponent()->InitAbilityActorInfo(CharacterBase, CharacterBase);
 		CharacterBase->GetAbilitySystemComponent()->SetOwnerActor(CharacterBase);
 	}

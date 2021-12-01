@@ -6,7 +6,7 @@
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
-#include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
+#include "UE5Testing/Actors/Weapons/MYWeapon.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
 #include "UE5Testing/UI/MYOverheadHealthBarWidget.h"
 
@@ -31,6 +31,52 @@ void AMYCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
+	SpawnWeapons();
+}
+
+void AMYCharacterBase::IAmATestMethod()
+{
+	UE_LOG(LogActor, Warning, TEXT("AHA! I AM THE TEST METHOD AHA!"));
+}
+
+void AMYCharacterBase::ActivateRightHandWeapon()
+{
+	ActivateWeapon(RightHandWeapon);
+}
+
+void AMYCharacterBase::ActivateLeftHandWeapon()
+{
+	ActivateWeapon(LeftHandWeapon);
+}
+
+void AMYCharacterBase::DeactivateRightHandWeapon()
+{
+	DeactivateWeapon(RightHandWeapon);
+}
+
+void AMYCharacterBase::DeactivateLeftHandWeapon()
+{
+	DeactivateWeapon(LeftHandWeapon);
+}
+
+void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
+{
+	if(WeaponActor != nullptr)
+		WeaponActor->Activate();
+}
+
+void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
+{
+	if(WeaponActor != nullptr)
+		WeaponActor->Deactivate();
+}
+
+void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
+{
+	if(RightHandWeapon != nullptr)
+		RightHandWeapon->SetGameplayEffect(InGESpecHandle);
+	if(LeftHandWeapon != nullptr)
+		LeftHandWeapon->SetGameplayEffect(InGESpecHandle);
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -50,7 +96,6 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 	// Since the ASC exists on the pawn, we initialize the server side here
 	if(AbilitySystemComponent)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("Should be initialized on server"));
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetOwnerActor(this);
 		InitializeAttributes();
@@ -157,8 +202,19 @@ void AMYCharacterBase::InitializeAttributes()
 
 void AMYCharacterBase::InitializeAbilities()
 {
-	if(GetLocalRole() != ROLE_Authority || !AbilitySystemComponent | AbilitySystemComponent->bAbilitiesInitialized)
+	if(GetLocalRole() != ROLE_Authority || !AbilitySystemComponent || AbilitySystemComponent->bAbilitiesInitialized)
 		return;
+	if(PrimaryAbility == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing PrimaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		return;
+	}
+	if(SecondaryAbility == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		return;
+	}
+	
 	
 	FGameplayAbilitySpec AbilitySpec(PrimaryAbility,1,INDEX_NONE,this);
 	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
@@ -199,22 +255,54 @@ void AMYCharacterBase::ActivatePrimaryAbility(float num)
 
 void AMYCharacterBase::ActivateSecondaryAbility()
 {
+	
+}
+
+void AMYCharacterBase::SpawnWeapons()
+{
+	if(RightHandWeaponClass == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
+	}
+	else
+	{
+		SpawnWeapon(RightHandWeapon, RightHandWeaponClass, RightSocketName);
+	}
+	
+	if(LeftHandWeaponClass == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s does not have LeftHandWeaponClass set."), *GetName());
+	}
+	else
+	{
+		SpawnWeapon(LeftHandWeapon, LeftHandWeaponClass, LeftSocketName);
+	}
+}
+
+void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName)
+{
+	UWorld* World = GetWorld();
+	if(!ensure(World)) return;
+	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass);
+	if(WeaponActor == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RightHandWeapon spawning failed!"));
+		return;
+	}
+	WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform,InSocketName);
+	WeaponActor->SetOwner(this);
+	WeaponActor->SetInstigator(this);
+	WeaponActor->SetOwnerASC(AbilitySystemComponent);
 }
 
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	HealthChangedDelegate.Broadcast(Data.NewValue);
-	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
-	//if(OverheadHealthBarWidget == nullptr) return;
-	//OverheadHealthBarWidget->UpdateCurrentHealth(Data.NewValue);
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
 {
 	MaxHealthChangedDelegate.Broadcast(Data.NewValue);
-	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("%s() inside %s"), *FString(__FUNCTION__), *GetName()),true,true,FLinearColor(0,0.66,1), 10);
-	//if(OverheadHealthBarWidget == nullptr) return;
-	//OverheadHealthBarWidget->UpdateMaxHealth(Data.NewValue);
 }
 
 void AMYCharacterBase::ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle)
