@@ -83,7 +83,10 @@ void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AA
 	AMYDroppedLootBase* Loot = Cast<AMYDroppedLootBase>(OtherActor);
 	if(Loot != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Pickup"));
-		Loot->ProximityPickUp(this);
+		if(Loot->GetOwner() == this)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Pickup"));
+			Loot->ProximityPickUp(this);
+		}
 	}
 }

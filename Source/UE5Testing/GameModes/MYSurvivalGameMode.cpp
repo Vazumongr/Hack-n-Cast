@@ -10,15 +10,30 @@
 void AMYSurvivalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AMYSurvivalGameMode::SpawnDrops()
+{
+	TArray<AActor*> LootSpawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), LootSpawnPoints);
 	TArray<AActor*> TempActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), TempActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYCharacterBase::StaticClass(), TempActors);
 	if(EnemyClass == nullptr)
 		return;
-	for(AActor* Actor : TempActors)
-	{
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		GetWorld()->SpawnActor<AMYCharacterBase>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
-		UE_LOG(LogTemp, Warning, TEXT("spawning"));
-	}
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	
+	uint8 Counter{0};
+	
+	for(AActor* Actor : LootSpawnPoints)
+    {
+		if(Counter<TempActors.Num())
+			SpawnParameters.Owner = TempActors[Counter];
+		else
+			SpawnParameters.Owner = TempActors[0];
+    	GetWorld()->SpawnActor<AActor>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
+    	UE_LOG(LogTemp, Warning, TEXT("spawning"));
+		Counter++;
+    }
 }

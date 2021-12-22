@@ -17,11 +17,11 @@ public:
 	virtual bool Initialize() override;
 
 	
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
 	class UButton* HostButton;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
 	class UButton* JoinButton;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
 	class UButton* QuitButton;
 
 private:

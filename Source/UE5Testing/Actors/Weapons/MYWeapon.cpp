@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "Components/BoxComponent.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
+#include "Engine.h"
 
 
 // Sets default values
@@ -16,6 +17,7 @@ AMYWeapon::AMYWeapon()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(RootComponent);
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMYWeapon::OnBeginOverlap);
+	
 }
 
 void AMYWeapon::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle)

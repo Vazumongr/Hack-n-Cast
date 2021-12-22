@@ -8,6 +8,7 @@ AMYDroppedLootBase::AMYDroppedLootBase()
 {
 	LootBeam = CreateDefaultSubobject<UNiagaraComponent>("Loot Beam");
 	LootBeam->SetupAttachment(RootComponent);
+	bOnlyRelevantToOwner = true;
 }
 
 void AMYDroppedLootBase::ProximityPickUp(AActor* PickerUpper)

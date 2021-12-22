@@ -15,11 +15,17 @@ class UE5TESTING_API AMYSurvivalGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 	virtual void BeginPlay() override;
+public:
+	UFUNCTION(BlueprintCallable)
+	void SpawnDrops();
+
+	UPROPERTY(EditAnywhere)
+	uint8 CharNumber = 0;
 
 	int8 CurrentWave{0};
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class AActor> EnemySpawnerClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class AMYCharacterBase> EnemyClass;
+	TSubclassOf<class AActor> EnemyClass;
 };
