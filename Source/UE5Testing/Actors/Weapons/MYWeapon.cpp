@@ -13,7 +13,7 @@
 AMYWeapon::AMYWeapon()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(RootComponent);
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMYWeapon::OnBeginOverlap);
@@ -37,12 +37,14 @@ void AMYWeapon::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
 
 void AMYWeapon::Activate()
 {
+	BoxCollider->SetGenerateOverlapEvents(true);
 	bActiveHitbox = true;
 	HitActors.Empty();
 }
 
 void AMYWeapon::Deactivate()
 {
+	BoxCollider->SetGenerateOverlapEvents(false);
 	bActiveHitbox = false;
 	HitActors.Empty();
 }

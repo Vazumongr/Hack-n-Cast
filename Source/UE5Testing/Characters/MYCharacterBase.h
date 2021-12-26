@@ -90,6 +90,7 @@ protected:
 	virtual void InitializeAttributes();
 	virtual void InitializeAbilities();
 	virtual void SetupAttributeCallbacks();
+	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivatePrimaryAbility(float num);
@@ -98,9 +99,10 @@ protected:
 	virtual void SpawnWeapons();
 	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName);
 
+	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	/* Attribute Change Handlers */
-	void HealthChanged(const FOnAttributeChangeData & Data);
-	void MaxHealthChanged(const FOnAttributeChangeData & Data);
+	virtual void HealthChanged(const FOnAttributeChangeData & Data);
+	virtual void MaxHealthChanged(const FOnAttributeChangeData & Data);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);
@@ -128,6 +130,8 @@ protected:
 	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	TSubclassOf<class UMYGameplayAbility> SecondaryAbility;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	TSubclassOf<class UMYGameplayAbility> DownedAbility;
 	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBase|Ability System", Replicated)
 	FGameplayAbilitySpecHandle PrimaryAbilityHandle;
 	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBase|Ability System", Replicated)

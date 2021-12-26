@@ -23,6 +23,9 @@ public:
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount) override;
+	virtual void HealthChanged(const FOnAttributeChangeData & Data) override;
+
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);
 	virtual void PrimaryAttack();

@@ -98,6 +98,7 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetOwnerActor(this);
+		SetupDelegates();
 		InitializeAttributes();
 		InitializeAbilities();
 	}
@@ -204,22 +205,38 @@ void AMYCharacterBase::InitializeAbilities()
 {
 	if(GetLocalRole() != ROLE_Authority || !AbilitySystemComponent || AbilitySystemComponent->bAbilitiesInitialized)
 		return;
+	
+	FGameplayAbilitySpec AbilitySpec;
+	
 	if(PrimaryAbility == nullptr)
 	{
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing PrimaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
-		return;
 	}
+	else
+	{
+		AbilitySpec = FGameplayAbilitySpec(PrimaryAbility,1,INDEX_NONE,this);
+		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
+	
 	if(SecondaryAbility == nullptr)
 	{
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
-		return;
+	}
+	else
+	{
+		AbilitySpec = FGameplayAbilitySpec(SecondaryAbility,1,INDEX_NONE,this);
+		SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
 	
-	
-	FGameplayAbilitySpec AbilitySpec(PrimaryAbility,1,INDEX_NONE,this);
-	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-	AbilitySpec = FGameplayAbilitySpec(SecondaryAbility,1,INDEX_NONE,this);
-	SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+	if(DownedAbility == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+	}
+	else
+	{
+		AbilitySpec = FGameplayAbilitySpec(DownedAbility,1,INDEX_NONE,this);
+		AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
 
 	AbilitySystemComponent->bAbilitiesInitialized = true;
 }
@@ -241,6 +258,11 @@ void AMYCharacterBase::SetupAttributeCallbacks()
 	AttributeMaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AMYCharacterBase::MaxHealthChanged);
 	MaxHealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
 	
+}
+
+void AMYCharacterBase::SetupDelegates()
+{
+	AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Downed"))).AddUObject(this, &AMYCharacterBase::DownedTagAddedOrRemoved);
 }
 
 void AMYCharacterBase::OnRep_Controller()
@@ -293,6 +315,11 @@ void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapo
 	WeaponActor->SetOwner(this);
 	WeaponActor->SetInstigator(this);
 	WeaponActor->SetOwnerASC(AbilitySystemComponent);
+}
+
+void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	UE_LOG(LogAbilitySystem, Warning, TEXT("Blargh! I'm down!"));
 }
 
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)

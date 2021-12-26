@@ -4,6 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 
 AMYPlayerCharacter::AMYPlayerCharacter()
@@ -40,6 +41,21 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AMYPlayerCharacter::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	Super::DownedTagAddedOrRemoved(CallbackTag, NewCount);
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Downed")));
+	AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
+}
+
+void AMYPlayerCharacter::HealthChanged(const FOnAttributeChangeData & Data)
+{
+	Super::HealthChanged(Data);
+	if(Data.NewValue <= 0)
+		AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Downed")));
 }
 
 void AMYPlayerCharacter::MoveForward(float InValue)
