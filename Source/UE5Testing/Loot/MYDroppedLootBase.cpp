@@ -2,13 +2,26 @@
 #include "MYDroppedLootBase.h"
 
 #include "NiagaraComponent.h"
+#include "GameFramework/GameStateBase.h"
 
 
 AMYDroppedLootBase::AMYDroppedLootBase()
 {
 	LootBeam = CreateDefaultSubobject<UNiagaraComponent>("Loot Beam");
 	LootBeam->SetupAttachment(RootComponent);
+	SetHidden(true);
 	bOnlyRelevantToOwner = true;
+}
+
+void AMYDroppedLootBase::BeginPlay()
+{
+	Super::BeginPlay();
+	SetDrop();
+}
+
+void AMYDroppedLootBase::SetDrop_Implementation()
+{
+	SetHidden(false);
 }
 
 void AMYDroppedLootBase::ProximityPickUp(AActor* PickerUpper)

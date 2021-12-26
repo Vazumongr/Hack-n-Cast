@@ -14,6 +14,11 @@ class UE5TESTING_API AMYDroppedLootBase : public AStaticMeshActor
 	GENERATED_BODY()
 public:
 	AMYDroppedLootBase();
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION(Reliable, Client)
+	void SetDrop();
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void PickUp();
