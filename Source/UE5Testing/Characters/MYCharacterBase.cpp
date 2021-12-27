@@ -31,7 +31,8 @@ void AMYCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
-	SpawnWeapons();
+	if(HasAuthority())
+		SpawnWeapons();
 }
 
 void AMYCharacterBase::IAmATestMethod()

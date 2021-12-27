@@ -6,3 +6,4 @@
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, UE5Testing, "UE5Testing" );
 
 DEFINE_LOG_CATEGORY(LogUI);
+DEFINE_LOG_CATEGORY(LogWeapon);
