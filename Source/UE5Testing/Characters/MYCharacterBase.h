@@ -48,7 +48,7 @@ public:
 	
 	
 	UFUNCTION(BlueprintCallable)
-	class AMYWeapon* GetWeaponActor() { return RightHandWeapon; }
+	class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle);
@@ -81,6 +81,11 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FStatChangedDelegate MaxHealthChangedDelegate;
 
+	UPROPERTY(EditAnywhere, Category="Setup")
+	FRotator RightHandWeaponRotation;
+	UPROPERTY(EditAnywhere, Category="Setup")
+	FRotator LeftHandWeaponRotation;
+
 	UPROPERTY(EditDefaultsOnly)
 	FName LeftSocketName;
 	UPROPERTY(EditDefaultsOnly)
@@ -97,9 +102,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateSecondaryAbility();
 	virtual void SpawnWeapons();
-	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName);
+	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation);
 
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	/* Attribute Change Handlers */
 	virtual void HealthChanged(const FOnAttributeChangeData & Data);
 	virtual void MaxHealthChanged(const FOnAttributeChangeData & Data);

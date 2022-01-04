@@ -289,7 +289,7 @@ void AMYCharacterBase::SpawnWeapons()
 	}
 	else
 	{
-		SpawnWeapon(RightHandWeapon, RightHandWeaponClass, RightSocketName);
+		SpawnWeapon(RightHandWeapon, RightHandWeaponClass, RightSocketName, RightHandWeaponRotation);
 	}
 	
 	if(LeftHandWeaponClass == nullptr)
@@ -298,15 +298,16 @@ void AMYCharacterBase::SpawnWeapons()
 	}
 	else
 	{
-		SpawnWeapon(LeftHandWeapon, LeftHandWeaponClass, LeftSocketName);
+		SpawnWeapon(LeftHandWeapon, LeftHandWeaponClass, LeftSocketName, LeftHandWeaponRotation);
 	}
 }
 
-void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName)
+void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation)
 {
 	UWorld* World = GetWorld();
 	if(!ensure(World)) return;
-	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass);
+	FTransform Transform = FTransform(SpawnWeaponRotation);
+	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass,Transform);
 	if(WeaponActor == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RightHandWeapon spawning failed!"));
@@ -321,11 +322,14 @@ void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapo
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	UE_LOG(LogAbilitySystem, Warning, TEXT("Blargh! I'm down!"));
+	BP_DownedTagAddedOrRemoved(CallbackTag, NewCount);
 }
 
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	HealthChangedDelegate.Broadcast(Data.NewValue);
+	if(Data.NewValue <= 0)
+		AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Downed")));
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)

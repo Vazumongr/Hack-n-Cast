@@ -54,8 +54,6 @@ void AMYPlayerCharacter::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag,
 void AMYPlayerCharacter::HealthChanged(const FOnAttributeChangeData & Data)
 {
 	Super::HealthChanged(Data);
-	if(Data.NewValue <= 0)
-		AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Downed")));
 }
 
 void AMYPlayerCharacter::MoveForward(float InValue)
