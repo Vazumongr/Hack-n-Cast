@@ -10,6 +10,8 @@
 void AMYSurvivalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	FTimerHandle EnemySpawnTimer;
+	GetWorldTimerManager().SetTimer(EnemySpawnTimer,this,&AMYSurvivalGameMode::SpawnEnemy,3.f,true);
 }
 
 void AMYSurvivalGameMode::SpawnDrops()
@@ -36,4 +38,14 @@ void AMYSurvivalGameMode::SpawnDrops()
     	UE_LOG(LogTemp, Warning, TEXT("spawning"));
 		Counter++;
     }
+}
+
+void AMYSurvivalGameMode::SpawnEnemy()
+{
+	TArray<AActor*> LootSpawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), LootSpawnPoints);
+	AActor* Actor = LootSpawnPoints[FMath::RandRange(0,2)];
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	GetWorld()->SpawnActor<AActor>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
 }

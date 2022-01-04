@@ -18,6 +18,8 @@ class UE5TESTING_API AMYSurvivalGameMode : public AGameModeBase
 public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnDrops();
+	UFUNCTION()
+	void SpawnEnemy();
 
 	UPROPERTY(EditAnywhere)
 	uint8 CharNumber = 0;
