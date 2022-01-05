@@ -7,6 +7,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/Actors/Weapons/MYWeapon.h"
+#include "UE5Testing/GameModes/MYSurvivalGameMode.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
 #include "UE5Testing/UI/MYOverheadHealthBarWidget.h"
 
@@ -35,9 +36,23 @@ void AMYCharacterBase::BeginPlay()
 		SpawnWeapons();
 }
 
-void AMYCharacterBase::IAmATestMethod()
+/**
+ * Delayed super call because it will finish destruction
+ * Need to do some stuff before finishing
+ */
+void AMYCharacterBase::Destroyed()
 {
-	UE_LOG(LogActor, Warning, TEXT("AHA! I AM THE TEST METHOD AHA!"));
+	UWorld* World = GetWorld();
+	if(World != nullptr)
+	{
+		AGameModeBase* GameModeBase = World->GetAuthGameMode();
+		AMYSurvivalGameMode* SurvivalGameMode = Cast<AMYSurvivalGameMode>(GameModeBase);
+		if(SurvivalGameMode != nullptr)
+		{
+			SurvivalGameMode->ActorDied(this);
+		}
+	}
+	Super::Destroyed();
 }
 
 void AMYCharacterBase::ActivateRightHandWeapon()

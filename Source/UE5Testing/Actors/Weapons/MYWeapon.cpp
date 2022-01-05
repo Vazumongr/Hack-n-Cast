@@ -68,7 +68,7 @@ void AMYWeapon::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__), *GetName());
 		return;
 	}
-	UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("Weapon hit %s"), *CharacterHit->GetName()));
+	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("Weapon hit %s"), *CharacterHit->GetName()));
 	OwnerASC->ApplyGameplayEffectSpecToTarget(*GESpecHandle.Data.Get(),CharacterHit->GetAbilitySystemComponent());
 }
 

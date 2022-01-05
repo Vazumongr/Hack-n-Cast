@@ -26,15 +26,13 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void Destroyed() override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMYOverheadHealthBarComponent* OverheadHealthBar;
 
 public:
-
-	UFUNCTION(BlueprintCallable)
-	void IAmATestMethod();
-
 	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();
 	UFUNCTION(BlueprintCallable)
@@ -45,7 +43,6 @@ public:
 	void DeactivateLeftHandWeapon();
 	void ActivateWeapon(class AMYWeapon* WeaponActor);
 	void DeactivateWeapon(class AMYWeapon* WeaponActor);
-	
 	
 	UFUNCTION(BlueprintCallable)
 	class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }

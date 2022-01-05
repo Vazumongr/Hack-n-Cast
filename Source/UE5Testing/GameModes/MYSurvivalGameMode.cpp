@@ -4,14 +4,18 @@
 #include "MYSurvivalGameMode.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
 
 void AMYSurvivalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle EnemySpawnTimer;
-	GetWorldTimerManager().SetTimer(EnemySpawnTimer,this,&AMYSurvivalGameMode::SpawnEnemy,3.f,true);
+	Spawner = GetWorld()->SpawnActor<AMYRoundSpawner>(SpawnerClass);
+	if(Spawner != nullptr)
+	{
+		Spawner->Spawner_BeginPlay();
+	}
 }
 
 void AMYSurvivalGameMode::SpawnDrops()
@@ -20,7 +24,7 @@ void AMYSurvivalGameMode::SpawnDrops()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), LootSpawnPoints);
 	TArray<AActor*> TempActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYCharacterBase::StaticClass(), TempActors);
-	if(EnemyClass == nullptr)
+	if(LootClass == nullptr)
 		return;
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -34,18 +38,12 @@ void AMYSurvivalGameMode::SpawnDrops()
 			SpawnParameters.Owner = TempActors[Counter];
 		else
 			SpawnParameters.Owner = TempActors[0];
-    	GetWorld()->SpawnActor<AActor>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
-    	UE_LOG(LogTemp, Warning, TEXT("spawning"));
+    	GetWorld()->SpawnActor<AActor>(LootClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
 		Counter++;
     }
 }
 
-void AMYSurvivalGameMode::SpawnEnemy()
+void AMYSurvivalGameMode::ActorDied(AActor* DeadActor)
 {
-	TArray<AActor*> LootSpawnPoints;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), LootSpawnPoints);
-	AActor* Actor = LootSpawnPoints[FMath::RandRange(0,2)];
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	GetWorld()->SpawnActor<AActor>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
+	Spawner->ActorDied(DeadActor);
 }

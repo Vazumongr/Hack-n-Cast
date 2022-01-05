@@ -13,21 +13,22 @@ UCLASS()
 class UE5TESTING_API AMYSurvivalGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-
+protected:
 	virtual void BeginPlay() override;
 public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnDrops();
-	UFUNCTION()
-	void SpawnEnemy();
 
+	virtual void ActorDied(AActor* DeadActor);
+
+protected:
 	UPROPERTY(EditAnywhere)
 	uint8 CharNumber = 0;
 
-	int8 CurrentWave{0};
-protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class AActor> EnemySpawnerClass;
+	TSubclassOf<class AMYRoundSpawner> SpawnerClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AMYRoundSpawner* Spawner;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class AActor> EnemyClass;
+	TSubclassOf<class AActor> LootClass;
 };
