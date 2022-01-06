@@ -3,6 +3,7 @@
 
 #include "MYSurvivalGameMode.h"
 
+#include "CrashReportCore/Public/Android/AndroidErrorReport.h"
 #include "Kismet/GameplayStatics.h"
 #include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
@@ -15,6 +16,8 @@ void AMYSurvivalGameMode::BeginPlay()
 	if(Spawner != nullptr)
 	{
 		Spawner->Spawner_BeginPlay();
+		//Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
+		//Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveEnded);
 	}
 }
 
@@ -46,4 +49,14 @@ void AMYSurvivalGameMode::SpawnDrops()
 void AMYSurvivalGameMode::ActorDied(AActor* DeadActor)
 {
 	Spawner->ActorDied(DeadActor);
+}
+
+void AMYSurvivalGameMode::WaveStarted(int32 InWave)
+{
+	UE_LOG(LogTemp, Error, TEXT("Wave Started on GameMode!!"));
+}
+
+void AMYSurvivalGameMode::WaveEnded(int32 InWave)
+{
+	UE_LOG(LogTemp, Error, TEXT("Wave Ended on GameMode!!"));
 }

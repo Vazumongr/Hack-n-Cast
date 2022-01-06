@@ -58,18 +58,21 @@ void AMYWeapon::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(GetNetMode() == NM_Client) return;
-	if(OtherActor == nullptr || OtherActor==GetOwner()) return;
+	if(!IsValid(OtherActor) || OtherActor==GetOwner()) return;
+	//if(OtherActor == nullptr || OtherActor==GetOwner()) return;
 	if(HitActors.Contains(OtherActor)) return;
 	HitActors.Add(OtherActor);
 	AMYCharacterBase* CharacterHit = Cast<AMYCharacterBase>(OtherActor);
-	if(CharacterHit == nullptr) return;
-	if(OwnerASC == nullptr)
+	if(!IsValid(CharacterHit)) return;
+	//if(CharacterHit == nullptr) return;
+	if(!IsValid(OwnerASC))
 	{
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__), *GetName());
 		return;
 	}
+	if(CharacterHit->bIsReady)
+		OwnerASC->ApplyGameplayEffectSpecToTarget(*GESpecHandle.Data.Get(),CharacterHit->GetAbilitySystemComponent());
 	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("Weapon hit %s"), *CharacterHit->GetName()));
-	OwnerASC->ApplyGameplayEffectSpecToTarget(*GESpecHandle.Data.Get(),CharacterHit->GetAbilitySystemComponent());
 }
 
 // Called every frame

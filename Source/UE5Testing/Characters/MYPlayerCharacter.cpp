@@ -37,6 +37,8 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMYPlayerCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMYPlayerCharacter::MyCrouch);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::MyInteract);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -89,6 +91,18 @@ void AMYPlayerCharacter::PrimaryAttack()
 {
 	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("PrimaryAttack: %f"), AttackChainCounter));
 	ActivateAbilityByHandle(PrimaryAbilityHandle);
+}
+
+void AMYPlayerCharacter::MyCrouch()
+{
+	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond()));
+	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
+}
+
+void AMYPlayerCharacter::MyInteract()
+{
+	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond()));
+	UE_LOG(LogTemp, Warning, TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond());
 }
 
 void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

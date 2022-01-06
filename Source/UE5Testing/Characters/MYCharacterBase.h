@@ -33,6 +33,10 @@ protected:
 	class UMYOverheadHealthBarComponent* OverheadHealthBar;
 
 public:
+	bool bWasKilled{false};
+	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
+	bool bIsReady{false};
+	
 	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();
 	UFUNCTION(BlueprintCallable)

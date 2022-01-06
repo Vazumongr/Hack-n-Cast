@@ -8,7 +8,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogEnemySpawning, All, All);
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FWaveChangeDelegate, int16 CurrentWave);
+DECLARE_MULTICAST_DELEGATE_OneParam(FWaveChangeDelegate, int32 CurrentWave);
 
 UCLASS(notplaceable, BlueprintType, Blueprintable, Transient, hideCategories = (Info, Rendering, MovementReplication, Replication, Actor))
 class UE5TESTING_API AMYRoundSpawner : public AInfo
@@ -25,6 +25,9 @@ public:
 	virtual void BeginSpawning();
 	virtual void Spawner_BeginPlay();
 	virtual void ActorDied(AActor* DeadActor);
+
+	virtual FWaveChangeDelegate& GetWaveStartedDelegate() { return WaveStarted; }
+	virtual FWaveChangeDelegate& GetWaveEndedDelegate() { return WaveEnded; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -69,6 +72,10 @@ protected:
 	/** The time between enemy spawns **/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 EnemySpawnTimer{5};
+	
+	/** The time between waves  **/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 WaveTimer{5};
 	
 	int32 KillCount{0};
 	

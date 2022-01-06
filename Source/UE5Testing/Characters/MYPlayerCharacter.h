@@ -29,6 +29,8 @@ protected:
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);
 	virtual void PrimaryAttack();
+	virtual void MyCrouch();
+	virtual void MyInteract();
 
 	UFUNCTION()
 	virtual void LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

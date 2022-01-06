@@ -21,6 +21,9 @@ public:
 
 	virtual void ActorDied(AActor* DeadActor);
 
+	void WaveStarted(int32 InWave);
+	void WaveEnded(int32 InWave);
+
 protected:
 	UPROPERTY(EditAnywhere)
 	uint8 CharNumber = 0;

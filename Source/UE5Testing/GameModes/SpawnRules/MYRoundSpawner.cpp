@@ -13,7 +13,7 @@ DEFINE_LOG_CATEGORY(LogEnemySpawning);
 AMYRoundSpawner::AMYRoundSpawner()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +26,13 @@ void AMYRoundSpawner::BeginPlay()
 void AMYRoundSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("CurrentWave: %i"), CurrentWave));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemyCount: %i"), EnemyCount));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemiesSpawned: %i"), EnemiesSpawned));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemyLimit: %i"), EnemyLimit));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("TotalEnemiesToSpawn: %i"), TotalEnemiesToSpawn));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("KillCount: %i"), KillCount));
+	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("bAllEnemiesSpawned: %hs"), bAllEnemiesSpawned ? "true" : "false"));
 }
 
 void AMYRoundSpawner::TrySpawnEnemy()
@@ -46,24 +53,37 @@ void AMYRoundSpawner::TrySpawnEnemy()
 
 void AMYRoundSpawner::SpawnEnemy()
 {
-	TArray<AActor*> LootSpawnPoints;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), LootSpawnPoints);
-	AActor* Actor = LootSpawnPoints[FMath::RandRange(0,2)];
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
-	if(SpawnedActor == nullptr)
-	{
-		UE_LOG(LogEnemySpawning, Error, TEXT("Failed to spawn an enemy!"));
-		return;
-	}
 	EnemyCount++;
 	EnemiesSpawned++;
+	TArray<AActor*> EnemySpawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMYEnemySpawnPoint::StaticClass(), EnemySpawnPoints);
+	AActor* Actor = EnemySpawnPoints[FMath::RandRange(0,EnemySpawnPoints.Num()-1)];
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnParameters.bNoFail = true;
+	AMYCharacterBase* SpawnedActor = GetWorld()->SpawnActor<AMYCharacterBase>(EnemyClass,Actor->GetActorLocation(),Actor->GetActorRotation(), SpawnParameters);
+	if(!IsValid(SpawnedActor))
+	{
+		UE_LOG(LogEnemySpawning, Error, TEXT("Failed to spawn an enemy! | %i"), FDateTime::Now().GetMillisecond());
+		EnemyCount--;
+		EnemiesSpawned--;
+		return;
+	}
+	if(EnemiesSpawned == TotalEnemiesToSpawn)
+	{
+		bAllEnemiesSpawned = true;
+		GetWorldTimerManager().ClearTimer(SpawnerTimerHandle);
+	}
+	else if(EnemyCount == EnemyLimit)
+	{
+		GetWorldTimerManager().PauseTimer(SpawnerTimerHandle);
+	}
+	SpawnedActor->bIsReady = true;
 }
 
 void AMYRoundSpawner::BeginSpawning()
 {
-	GetWorldTimerManager().SetTimer(SpawnerTimerHandle,this,&AMYRoundSpawner::TrySpawnEnemy,EnemySpawnTimer,true,0);
+	GetWorldTimerManager().SetTimer(SpawnerTimerHandle,this,&AMYRoundSpawner::SpawnEnemy,EnemySpawnTimer,true,0);
 }
 
 void AMYRoundSpawner::Spawner_BeginPlay()
@@ -73,16 +93,23 @@ void AMYRoundSpawner::Spawner_BeginPlay()
 
 void AMYRoundSpawner::ActorDied(AActor* DeadActor)
 {
+	AMYCharacterBase* Enemy = Cast<AMYCharacterBase>(DeadActor);
+	if(Enemy != nullptr && Enemy->bWasKilled == false)
+	{
+		UE_LOG(LogEnemySpawning, Warning, TEXT("Enemy was destroyed but not killed!"));
+		return;
+	}
 	if(DeadActor != nullptr && DeadActor->GetClass() == EnemyClass)
 	{
 		KillCount++;
-		if(--EnemyCount == 0 && bAllEnemiesSpawned)
+		EnemyCount--;
+		if(EnemyCount == 0 && bAllEnemiesSpawned)
 		{
 			EndWave();
 		}
 		else
 		{
-			UE_LOG(LogEnemySpawning, Error, TEXT("Enemy Killed! %i/%i remaining!"), TotalEnemiesToSpawn-KillCount, TotalEnemiesToSpawn);
+			UE_LOG(LogEnemySpawning, Error, TEXT("Enemy Killed! %i/%i remaining! | %i"), TotalEnemiesToSpawn-KillCount, TotalEnemiesToSpawn, FDateTime::Now().GetMillisecond());
 			GetWorldTimerManager().UnPauseTimer(SpawnerTimerHandle);
 		}
 	}
@@ -105,7 +132,7 @@ void AMYRoundSpawner::EndWave()
 	TotalEnemiesToSpawn += EnemySpawnCountIncrease;
 	WaveEnded.Broadcast(CurrentWave);
 	FTimerHandle Th;
-	GetWorldTimerManager().SetTimer(Th,this,&AMYRoundSpawner::StartWave,5.f);
+	GetWorldTimerManager().SetTimer(Th,this,&AMYRoundSpawner::StartWave,WaveTimer);
 	UE_LOG(LogEnemySpawning, Warning, TEXT("Wave Ended"));
 }
 

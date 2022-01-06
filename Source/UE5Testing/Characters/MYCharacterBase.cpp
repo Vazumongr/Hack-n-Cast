@@ -33,7 +33,9 @@ void AMYCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
 	if(HasAuthority())
+	{
 		SpawnWeapons();
+	}
 }
 
 /**
@@ -344,7 +346,11 @@ void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	HealthChangedDelegate.Broadcast(Data.NewValue);
 	if(Data.NewValue <= 0)
+	{
+		bWasKilled = true;
 		AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Downed")));
+	}
+		
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
