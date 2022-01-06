@@ -10,6 +10,6 @@ public class UE5Testing : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Niagara" });
 		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayAbilities", "GameplayTags", "GameplayTasks" });
-		bUseUnity = false;
+		bUseUnity = true;
 	}
 }

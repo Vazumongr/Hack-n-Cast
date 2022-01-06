@@ -15,7 +15,6 @@ AMYSurvivalGameState::AMYSurvivalGameState()
 void AMYSurvivalGameState::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 int32 AMYSurvivalGameState::GetCurrentWave()

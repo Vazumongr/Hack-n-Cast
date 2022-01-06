@@ -25,7 +25,7 @@ public:
 	virtual void BeginSpawning();
 	virtual void Spawner_BeginPlay();
 	virtual void ActorDied(AActor* DeadActor);
-
+	
 	virtual FWaveChangeDelegate& GetWaveStartedDelegate() { return WaveStarted; }
 	virtual FWaveChangeDelegate& GetWaveEndedDelegate() { return WaveEnded; }
 

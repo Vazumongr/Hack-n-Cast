@@ -3,7 +3,6 @@
 
 #include "MYSurvivalGameMode.h"
 
-#include "CrashReportCore/Public/Android/AndroidErrorReport.h"
 #include "Kismet/GameplayStatics.h"
 #include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
@@ -16,8 +15,9 @@ void AMYSurvivalGameMode::BeginPlay()
 	if(Spawner != nullptr)
 	{
 		Spawner->Spawner_BeginPlay();
-		//Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
-		//Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveEnded);
+		//Spawner->BindToWaveStartedDelegate(this, &AMYSurvivalGameMode::WaveStarted);
+		Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
+		Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveEnded);
 	}
 }
 
