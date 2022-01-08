@@ -17,6 +17,18 @@ void AMYSurvivalGameState::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AMYSurvivalGameState::WaveStarted_Multicast_Implementation(int32 CurrentWave)
+{
+	UE_LOG(LogTemp, Error, TEXT("Wave Started on Client GameState!!"));
+	WaveStarted_BIE(CurrentWave);
+}
+
+void AMYSurvivalGameState::WaveEnded_Multicast_Implementation(int32 CurrentWave)
+{
+	UE_LOG(LogTemp, Error, TEXT("Wave Ended on Client GameState!!"));
+	WaveEnded_BIE(CurrentWave);
+}
+
 int32 AMYSurvivalGameState::GetCurrentWave()
 {
 	return 0;

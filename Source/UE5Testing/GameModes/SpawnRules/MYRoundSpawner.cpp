@@ -135,4 +135,3 @@ void AMYRoundSpawner::EndWave()
 	GetWorldTimerManager().SetTimer(Th,this,&AMYRoundSpawner::StartWave,WaveTimer);
 	UE_LOG(LogEnemySpawning, Warning, TEXT("Wave Ended"));
 }
-

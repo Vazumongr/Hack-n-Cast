@@ -7,6 +7,7 @@
 #include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
+#include "UE5Testing/GameStates/MYSurvivalGameState.h"
 
 void AMYSurvivalGameMode::BeginPlay()
 {
@@ -16,7 +17,7 @@ void AMYSurvivalGameMode::BeginPlay()
 	{
 		Spawner->Spawner_BeginPlay();
 		//Spawner->BindToWaveStartedDelegate(this, &AMYSurvivalGameMode::WaveStarted);
-		Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
+		Spawner->GetWaveStartedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
 		Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveEnded);
 	}
 }
@@ -53,10 +54,18 @@ void AMYSurvivalGameMode::ActorDied(AActor* DeadActor)
 
 void AMYSurvivalGameMode::WaveStarted(int32 InWave)
 {
-	UE_LOG(LogTemp, Error, TEXT("Wave Started on GameMode!!"));
+	AMYSurvivalGameState* SurvivalGameState = GetGameState<AMYSurvivalGameState>();
+	if(SurvivalGameState != nullptr)
+	{
+		SurvivalGameState->WaveStarted_Multicast(InWave);
+	}
 }
 
 void AMYSurvivalGameMode::WaveEnded(int32 InWave)
 {
-	UE_LOG(LogTemp, Error, TEXT("Wave Ended on GameMode!!"));
+	AMYSurvivalGameState* SurvivalGameState = GetGameState<AMYSurvivalGameState>();
+	if(SurvivalGameState != nullptr)
+	{
+		SurvivalGameState->WaveEnded_Multicast(InWave);
+	}
 }
