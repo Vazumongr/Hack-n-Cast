@@ -7,6 +7,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/Actors/Weapons/MYWeapon.h"
+#include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/GameModes/MYSurvivalGameMode.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
 #include "UE5Testing/UI/MYOverheadHealthBarWidget.h"
@@ -21,6 +22,8 @@ AMYCharacterBase::AMYCharacterBase()
 
 	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBarComponent>(TEXT("Overhead Health Bar"));
 	OverheadHealthBar->SetupAttachment(RootComponent);
+
+	InventoryComponent = CreateDefaultSubobject<UMYInventoryComponent>(TEXT("Inventory Component"));
 }
 
 void AMYCharacterBase::Tick(float DeltaSeconds)
@@ -35,6 +38,8 @@ void AMYCharacterBase::BeginPlay()
 	if(HasAuthority())
 	{
 		SpawnWeapons();
+		InventoryComponent->AddItem(FInventoryWeapon(RightHandWeaponClass));
+		InventoryComponent->AddItem(FInventoryWeapon(LeftHandWeaponClass));
 	}
 }
 
@@ -341,6 +346,9 @@ void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapo
 	UWorld* World = GetWorld();
 	if(!ensure(World)) return;
 	FTransform Transform = FTransform(SpawnWeaponRotation);
+	
+	if(IsValid(WeaponActor)) WeaponActor->Destroy();
+	
 	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass,Transform);
 	if(WeaponActor == nullptr)
 	{

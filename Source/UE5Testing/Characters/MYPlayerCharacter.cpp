@@ -5,6 +5,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
+#include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 
 AMYPlayerCharacter::AMYPlayerCharacter()
@@ -34,11 +35,15 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	check(PlayerInputComponent);
+	
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMYPlayerCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMYPlayerCharacter::MyCrouch);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::MyInteract);
+	PlayerInputComponent->BindAction("ToggleRightHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleRightHand);
+	PlayerInputComponent->BindAction("ToggleLeftHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleLeftHand);
+	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -103,6 +108,34 @@ void AMYPlayerCharacter::MyInteract()
 {
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond()));
 	UE_LOG(LogTemp, Warning, TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond());
+}
+
+void AMYPlayerCharacter::ToggleRightHand()
+{
+	ToggleRightHand_Server();
+}
+
+void AMYPlayerCharacter::ToggleLeftHand()
+{
+	ToggleLeftHand_Server();
+}
+
+void AMYPlayerCharacter::ToggleRightHand_Server_Implementation()
+{
+	FInventoryWeapon Weapon;
+	InventoryComponent->GetInventoryWeaponAtIndex(Weapon,0);
+	RightHandWeaponClass = Weapon.WeaponClass;
+	LeftHandWeaponClass = Weapon.WeaponClass;
+	SpawnWeapons();
+}
+
+void AMYPlayerCharacter::ToggleLeftHand_Server_Implementation()
+{
+	FInventoryWeapon Weapon;
+	InventoryComponent->GetInventoryWeaponAtIndex(Weapon,1);
+	RightHandWeaponClass = Weapon.WeaponClass;
+	LeftHandWeaponClass = Weapon.WeaponClass;
+	SpawnWeapons();
 }
 
 void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

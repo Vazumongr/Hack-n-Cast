@@ -57,6 +57,9 @@ public:
 	class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }
 
 	UFUNCTION(BlueprintCallable)
+	class UMYInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
+
+	UFUNCTION(BlueprintCallable)
 	void SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle);
 	/* All the solely related to GAS stuff STARTS here */
     virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -128,6 +131,9 @@ protected:
 	TSubclassOf<class AMYWeapon> RightHandWeaponClass;
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeapon* RightHandWeapon;
+	
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
+	class UMYInventoryComponent* InventoryComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;
