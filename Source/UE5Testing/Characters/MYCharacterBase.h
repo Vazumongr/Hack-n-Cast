@@ -34,8 +34,13 @@ protected:
 
 public:
 	bool bWasKilled{false};
+	
 	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
+	UPROPERTY(Replicated)
 	bool bIsReady{false};
+
+	UFUNCTION(BlueprintNativeEvent)
+	void Die();
 	
 	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();
@@ -98,12 +103,10 @@ protected:
 	virtual void SetupAttributeCallbacks();
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
-	UFUNCTION(BlueprintCallable)
-	virtual void ActivatePrimaryAbility(float num);
-	UFUNCTION(BlueprintCallable)
-	virtual void ActivateSecondaryAbility();
 	virtual void SpawnWeapons();
 	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation);
+	UFUNCTION(Client, Reliable)
+	virtual void SpawnWeapons_Client();
 
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	UFUNCTION(BlueprintImplementableEvent)
@@ -119,11 +122,11 @@ protected:
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeapon> LeftHandWeaponClass;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeapon* LeftHandWeapon;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeapon> RightHandWeaponClass;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeapon* RightHandWeapon;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")

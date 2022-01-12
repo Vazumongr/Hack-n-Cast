@@ -36,6 +36,7 @@ void AMYCharacterBase::BeginPlay()
 	{
 		SpawnWeapons();
 	}
+	//SpawnWeapons();
 }
 
 /**
@@ -55,6 +56,11 @@ void AMYCharacterBase::Destroyed()
 		}
 	}
 	Super::Destroyed();
+}
+
+void AMYCharacterBase::Die_Implementation()
+{
+	Destroy();
 }
 
 void AMYCharacterBase::ActivateRightHandWeapon()
@@ -81,6 +87,10 @@ void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
 {
 	if(WeaponActor != nullptr)
 		WeaponActor->Activate();
+	else
+		UKismetSystemLibrary::PrintString(this, TEXT("WeaponActor is null!"));
+
+	//UKismetSystemLibrary::PrintString(this, TEXT("Activate Weapon Called!"));
 }
 
 void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
@@ -110,6 +120,7 @@ UMYAttributeSet* AMYCharacterBase::GetAttributeSet() const
 void AMYCharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+	//UKismetSystemLibrary::PrintString(this, TEXT("PossessedBy()"));
 
 	// Since the ASC exists on the pawn, we initialize the server side here
 	if(AbilitySystemComponent)
@@ -139,6 +150,9 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
+	DOREPLIFETIME(AMYCharacterBase, bIsReady);
+	DOREPLIFETIME(AMYCharacterBase, RightHandWeapon);
+	DOREPLIFETIME(AMYCharacterBase, LeftHandWeapon);
 }
 
 void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* InWidget)
@@ -272,9 +286,7 @@ void AMYCharacterBase::SetupAttributeCallbacks()
 		return;
 	}
 	AttributeHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AMYCharacterBase::HealthChanged);
-	HealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
 	AttributeMaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AMYCharacterBase::MaxHealthChanged);
-	MaxHealthChangedDelegate.AddDynamic(this, &AMYCharacterBase::ActivatePrimaryAbility);
 	
 }
 
@@ -286,20 +298,13 @@ void AMYCharacterBase::SetupDelegates()
 void AMYCharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
-}
+	//UKismetSystemLibrary::PrintString(this, TEXT("Controller OnRep!"));
 
-void AMYCharacterBase::ActivatePrimaryAbility(float num)
-{
-	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Orange,"Yahooooo!");
-}
-
-void AMYCharacterBase::ActivateSecondaryAbility()
-{
-	
 }
 
 void AMYCharacterBase::SpawnWeapons()
 {
+	//UKismetSystemLibrary::PrintString(this, TEXT("SpawningWeapons!!"));
 	if(RightHandWeaponClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
@@ -333,7 +338,16 @@ void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapo
 	WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform,InSocketName);
 	WeaponActor->SetOwner(this);
 	WeaponActor->SetInstigator(this);
+	if(AbilitySystemComponent == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__), *GetName());
+
+	}
 	WeaponActor->SetOwnerASC(AbilitySystemComponent);
+}
+
+void AMYCharacterBase::SpawnWeapons_Client_Implementation()
+{
 }
 
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)

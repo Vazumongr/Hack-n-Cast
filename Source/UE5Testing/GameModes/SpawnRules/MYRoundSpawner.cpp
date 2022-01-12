@@ -26,13 +26,20 @@ void AMYRoundSpawner::BeginPlay()
 void AMYRoundSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("CurrentWave: %i"), CurrentWave));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemyCount: %i"), EnemyCount));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemiesSpawned: %i"), EnemiesSpawned));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("EnemyLimit: %i"), EnemyLimit));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("TotalEnemiesToSpawn: %i"), TotalEnemiesToSpawn));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("KillCount: %i"), KillCount));
-	GEngine->AddOnScreenDebugMessage(-1,-1,FColor::Purple,FString::Printf(TEXT("bAllEnemiesSpawned: %hs"), bAllEnemiesSpawned ? "true" : "false"));
+	if (bShouldDebugLog)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple, FString::Printf(TEXT("CurrentWave: %i"), CurrentWave));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple, FString::Printf(TEXT("EnemyCount: %i"), EnemyCount));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple,
+		                                 FString::Printf(TEXT("EnemiesSpawned: %i"), EnemiesSpawned));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple, FString::Printf(TEXT("EnemyLimit: %i"), EnemyLimit));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple,
+		                                 FString::Printf(TEXT("TotalEnemiesToSpawn: %i"), TotalEnemiesToSpawn));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple, FString::Printf(TEXT("KillCount: %i"), KillCount));
+		GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Purple,
+		                                 FString::Printf(
+			                                 TEXT("bAllEnemiesSpawned: %hs"), bAllEnemiesSpawned ? "true" : "false"));
+	}
 }
 
 void AMYRoundSpawner::TrySpawnEnemy()

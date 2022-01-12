@@ -26,7 +26,16 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void WaveEnded_Multicast(int32 CurrentWave);
+/*
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	virtual void PrintPlayerController_Multicast();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	virtual void PrintPlayerController_Server();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void PrintPlayerController();
+*/
 	UFUNCTION(BlueprintImplementableEvent)
 	void WaveStarted_BIE(int32 CurrentWave);
 	
@@ -36,4 +45,8 @@ public:
 	virtual int32 GetCurrentWave();
 
 	virtual int32 GetTotalEnemyThisWaveCount();
+/*
+	UPROPERTY(BlueprintReadWrite)
+	class AMYPlayerController* LocalPlayerController;
+	*/
 };

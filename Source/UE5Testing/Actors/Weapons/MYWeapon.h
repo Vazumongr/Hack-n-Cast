@@ -28,10 +28,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	bool bIsClient = false;
+
 	UFUNCTION()
 	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UFUNCTION(Server, Reliable)
+	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetASC);
+	
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	class UAbilitySystemComponent* OwnerASC;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayEffectSpecHandle GESpecHandle;

@@ -32,6 +32,11 @@ protected:
 	TSubclassOf<class AMYRoundSpawner> SpawnerClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AMYRoundSpawner* Spawner;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class AMYRoundSpawner> LootSpawnerClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AMYRoundSpawner* LootSpawner;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class AActor> LootClass;
 };

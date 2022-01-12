@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/Characters/MYPlayerCharacter.h"
+#include "UE5Testing/GameStates/MYSurvivalGameState.h"
 #include "UE5Testing/UI/MYHUD.h"
 #include "Blueprint/UserWidget.h"
 
@@ -21,7 +22,6 @@ AMYPlayerController::AMYPlayerController()
 void AMYPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

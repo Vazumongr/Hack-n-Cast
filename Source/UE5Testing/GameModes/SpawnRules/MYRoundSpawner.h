@@ -44,6 +44,8 @@ protected:
 	FTimerHandle SpawnerTimerHandle;
 
 	bool bAllEnemiesSpawned = false;
+	UPROPERTY(EditAnywhere)
+	bool bShouldDebugLog = false;
 
 	/** Current wave **/
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
