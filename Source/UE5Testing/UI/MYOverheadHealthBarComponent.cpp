@@ -8,6 +8,8 @@
 UMYOverheadHealthBarComponent::UMYOverheadHealthBarComponent()
 {
 	SetTickMode(ETickMode::Automatic);
+	SetGenerateOverlapEvents(false);
+	CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No;
 }
 
 void UMYOverheadHealthBarComponent::TickComponent(float DeltaTime, ELevelTick Tick,

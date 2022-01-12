@@ -36,7 +36,6 @@ void AMYCharacterBase::BeginPlay()
 	{
 		SpawnWeapons();
 	}
-	//SpawnWeapons();
 }
 
 /**
@@ -65,21 +64,41 @@ void AMYCharacterBase::Die_Implementation()
 
 void AMYCharacterBase::ActivateRightHandWeapon()
 {
+	if(RightHandWeapon == nullptr)
+	{
+		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		return;
+	}
 	ActivateWeapon(RightHandWeapon);
 }
 
 void AMYCharacterBase::ActivateLeftHandWeapon()
 {
+	if(LeftHandWeapon == nullptr)
+	{
+		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		return;
+	}
 	ActivateWeapon(LeftHandWeapon);
 }
 
 void AMYCharacterBase::DeactivateRightHandWeapon()
 {
+	if(RightHandWeapon == nullptr)
+	{
+		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		return;
+	}
 	DeactivateWeapon(RightHandWeapon);
 }
 
 void AMYCharacterBase::DeactivateLeftHandWeapon()
 {
+	if(LeftHandWeapon == nullptr)
+	{
+		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		return;
+	}
 	DeactivateWeapon(LeftHandWeapon);
 }
 
@@ -87,10 +106,6 @@ void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
 {
 	if(WeaponActor != nullptr)
 		WeaponActor->Activate();
-	else
-		UKismetSystemLibrary::PrintString(this, TEXT("WeaponActor is null!"));
-
-	//UKismetSystemLibrary::PrintString(this, TEXT("Activate Weapon Called!"));
 }
 
 void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
@@ -120,7 +135,6 @@ UMYAttributeSet* AMYCharacterBase::GetAttributeSet() const
 void AMYCharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	//UKismetSystemLibrary::PrintString(this, TEXT("PossessedBy()"));
 
 	// Since the ASC exists on the pawn, we initialize the server side here
 	if(AbilitySystemComponent)
@@ -298,13 +312,11 @@ void AMYCharacterBase::SetupDelegates()
 void AMYCharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
-	//UKismetSystemLibrary::PrintString(this, TEXT("Controller OnRep!"));
 
 }
 
 void AMYCharacterBase::SpawnWeapons()
 {
-	//UKismetSystemLibrary::PrintString(this, TEXT("SpawningWeapons!!"));
 	if(RightHandWeaponClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
