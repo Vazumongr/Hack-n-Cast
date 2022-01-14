@@ -7,6 +7,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
+#include "UE5Testing/DataAssets/MYStartingKitBaseDA.h"
 
 AMYPlayerCharacter::AMYPlayerCharacter()
 {
@@ -136,6 +137,28 @@ void AMYPlayerCharacter::ToggleLeftHand_Server_Implementation()
 	RightHandWeaponClass = Weapon.WeaponClass;
 	LeftHandWeaponClass = Weapon.WeaponClass;
 	SpawnWeapons();
+}
+
+void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)
+{
+	if(!ensureAlways(AbilitySystemComponent) && !ensureAlways(InStartingKit)) return;
+
+	if(PrimaryAbilityHandle.IsValid())
+		AbilitySystemComponent->ClearAbility(PrimaryAbilityHandle);
+	if(SecondaryAbilityHandle.IsValid())
+		AbilitySystemComponent->ClearAbility(SecondaryAbilityHandle);
+
+	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InStartingKit->GetAttackAbility()));
+	SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InStartingKit->GetSpellAbility()));
+	RightHandWeaponClass = InStartingKit->GetWeaponClass();
+	LeftHandWeaponClass = InStartingKit->GetWeaponClass();
+	SpawnWeapons();
+		
+}
+
+void AMYPlayerCharacter::SetStartingKit(UMYStartingKitBaseDA* InStartingKit)
+{
+	SetStartingKit_Server(InStartingKit);
 }
 
 void AMYPlayerCharacter::LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

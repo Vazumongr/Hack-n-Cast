@@ -37,6 +37,10 @@ protected:
 	virtual void ToggleRightHand_Server();
 	UFUNCTION(Server, Reliable)
 	virtual void ToggleLeftHand_Server();
+	UFUNCTION(BlueprintCallable)
+	virtual void SetStartingKit(class UMYStartingKitBaseDA* InStartingKit);
+	UFUNCTION(Server, Reliable)
+	virtual void SetStartingKit_Server(class UMYStartingKitBaseDA* InStartingKit);
 
 	UFUNCTION()
 	virtual void LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
