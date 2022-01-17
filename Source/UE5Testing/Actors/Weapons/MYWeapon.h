@@ -7,6 +7,11 @@
 #include "Engine/StaticMeshActor.h"
 #include "MYWeapon.generated.h"
 
+class AMYWeapon;
+class UAbilitySystemComponent;
+class AMYCharacterBase;
+class UBoxComponent;
+
 UCLASS()
 class UE5TESTING_API AMYWeapon : public AStaticMeshActor
 {
@@ -32,7 +37,7 @@ protected:
 
 	UFUNCTION()
 	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetASC);
 	
@@ -44,6 +49,11 @@ protected:
 	bool bActiveHitbox = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AActor*> HitActors;
+	UPROPERTY(BlueprintReadOnly)
+	class AMYWeapon* OwningWeapon;
+
+	const TArray<AActor*>* HitActorsRef;
+	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;

@@ -4,8 +4,8 @@
 #include "UE5Testing/GameInstances/MYGameInstance.h"
 
 #include "Blueprint/UserWidget.h"
-#include "UE5Testing/UI/MYInGameMenuWidget.h"
-#include "UE5Testing/UI/MYMainMenuWidget.h"
+#include "UE5Testing/UI/Menus/MYInGameMenuWidget.h"
+#include "UE5Testing/UI/Menus/MYMainMenuWidget.h"
 #include "UE5Testing/UI/MYHUD.h"
 
 UMYGameInstance::UMYGameInstance()
