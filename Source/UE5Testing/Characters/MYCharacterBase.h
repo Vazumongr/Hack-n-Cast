@@ -6,8 +6,14 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
+#include "UE5Testing/Loot/MYLootEnums.h"
 
 #include "MYCharacterBase.generated.h"
+
+class AMYWeaponBase;
+class AMYWeapon;
+class UMYOverheadHealthBar;
+class UMYOverheadHealthBarComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatChangedDelegate, float, NewHealth);
 
@@ -134,6 +140,11 @@ protected:
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
+
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	class AMYWeaponBase* WeaponItemThing;
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	class TSubclassOf<AMYWeaponBase> WeaponClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;

@@ -7,6 +7,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/Actors/Weapons/MYWeapon.h"
+#include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/GameModes/MYSurvivalGameMode.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
@@ -41,6 +42,11 @@ void AMYCharacterBase::BeginPlay()
 		InventoryComponent->AddItem(FInventoryWeapon(RightHandWeaponClass));
 		InventoryComponent->AddItem(FInventoryWeapon(LeftHandWeaponClass));
 	}
+	if(WeaponClass!=nullptr)
+	{
+		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
+	}
+	
 }
 
 /**

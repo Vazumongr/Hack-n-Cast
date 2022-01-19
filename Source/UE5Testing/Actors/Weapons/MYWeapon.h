@@ -7,7 +7,6 @@
 #include "Engine/StaticMeshActor.h"
 #include "MYWeapon.generated.h"
 
-class AMYWeapon;
 class UAbilitySystemComponent;
 class AMYCharacterBase;
 class UBoxComponent;

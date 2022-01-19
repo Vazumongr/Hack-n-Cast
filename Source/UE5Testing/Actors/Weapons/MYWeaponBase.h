@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameplayEffectTypes.h"
 #include "UE5Testing/Loot/MYLootEnums.h"
+#include "UE5Testing/Actors/Weapons/MYItemBase.h"
 
 #include "MYWeaponBase.generated.h"
 
@@ -15,7 +16,7 @@ class UStaticMeshComponent;
 class UStaticMesh;
 
 UCLASS(Abstract, NotPlaceable, Blueprintable, BlueprintType)
-class UE5TESTING_API AMYWeaponBase : public AActor
+class UE5TESTING_API AMYWeaponBase : public AMYItemBase
 {
 	GENERATED_BODY()
 
@@ -43,6 +44,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
 	
+	/*
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText WeaponName;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -51,11 +53,12 @@ protected:
 	TArray<TSubclassOf<class UMYGameplayAbility>> AdditionalAbilities;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EItemRarity ItemRarity;
+	*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EWeaponType WeaponType;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UStaticMesh* RightHandWeaponMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UStaticMesh* LeftHandWeaponMesh;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeapon* RightHandWeapon;
