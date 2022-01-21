@@ -113,6 +113,7 @@ protected:
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
 	virtual void SpawnWeapons();
+	virtual void SpawnWeapon();
 	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation);
 	UFUNCTION(Client, Reliable)
 	virtual void SpawnWeapons_Client();
@@ -144,7 +145,7 @@ protected:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeaponBase* WeaponItemThing;
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	class TSubclassOf<AMYWeaponBase> WeaponClass;
+	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;

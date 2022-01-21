@@ -8,6 +8,7 @@
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/UE5Testing.h"
 #include "Engine.h"
+#include "MYWeaponBase.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -35,6 +36,16 @@ void AMYWeapon::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
 		return;
 	}
 	OwnerASC = InOwnerASC;
+}
+
+void AMYWeapon::SetOwningWeapon(AMYWeaponBase* InOwningWeapon)
+{
+	OwningWeapon = InOwningWeapon;
+}
+
+void AMYWeapon::SetActorArrayPtr(TArray<AActor*>* InHitActorsRef)
+{
+	HitActorsRef = InHitActorsRef;
 }
 
 void AMYWeapon::Activate()
@@ -77,7 +88,9 @@ void AMYWeapon::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if(CharacterHit->bIsReady)
 	{
 		UKismetSystemLibrary::PrintString(this, TEXT("Applying effect!"));
-		ApplyEffectToTarget_Server(CharacterHit);
+		check(OwningWeapon);
+		OwningWeapon->HitCharacter(CharacterHit);
+		//ApplyEffectToTarget_Server(CharacterHit);
 	}
 }
 

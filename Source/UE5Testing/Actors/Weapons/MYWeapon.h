@@ -9,6 +9,7 @@
 
 class UAbilitySystemComponent;
 class AMYCharacterBase;
+class AMYWeaponBase;
 class UBoxComponent;
 
 UCLASS()
@@ -24,6 +25,9 @@ public:
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
 	UFUNCTION(BlueprintCallable)
 	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
+	UFUNCTION(BlueprintCallable)
+	void SetOwningWeapon(class AMYWeaponBase* InOwningWeapon);
+	void SetActorArrayPtr(TArray<AActor*>* InHitActorsRef);
 
 	void Activate();
 	void Deactivate();
@@ -35,11 +39,13 @@ protected:
 	bool bIsClient = false;
 
 	UFUNCTION()
-	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
+	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	                            UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep,
+	                            const FHitResult& SweepResult);
+
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetASC);
-	
+
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	class UAbilitySystemComponent* OwnerASC;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -49,10 +55,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AActor*> HitActors;
 	UPROPERTY(BlueprintReadOnly)
-	class AMYWeapon* OwningWeapon;
+	class AMYWeaponBase* OwningWeapon;
 
-	const TArray<AActor*>* HitActorsRef;
-	
+	TArray<AActor*>* HitActorsRef;
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;

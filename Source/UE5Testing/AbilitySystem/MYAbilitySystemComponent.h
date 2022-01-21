@@ -13,6 +13,8 @@ class UE5TESTING_API UMYAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 
+	UMYAbilitySystemComponent();
+
 public:
 	UPROPERTY(VisibleAnywhere, Category="Ability System")
 	bool bAbilitiesInitialized = false;

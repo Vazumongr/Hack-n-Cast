@@ -15,16 +15,15 @@
 
 AMYCharacterBase::AMYCharacterBase()
 {
-	AbilitySystemComponent = CreateDefaultSubobject<UMYAbilitySystemComponent>(TEXT("Ability System Component"));
-	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent = CreateDefaultSubobject<UMYAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->ReplicationMode = EGameplayEffectReplicationMode::Mixed;
 
-	AttributeSet = CreateDefaultSubobject<UMYAttributeSet>(TEXT("Attribute Set"));
+	AttributeSet = CreateDefaultSubobject<UMYAttributeSet>(TEXT("AttributeSet"));
 
-	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBarComponent>(TEXT("Overhead Health Bar"));
+	OverheadHealthBar = CreateDefaultSubobject<UMYOverheadHealthBarComponent>(TEXT("OverheadHealthBar"));
 	OverheadHealthBar->SetupAttachment(RootComponent);
 
-	InventoryComponent = CreateDefaultSubobject<UMYInventoryComponent>(TEXT("Inventory Component"));
+	InventoryComponent = CreateDefaultSubobject<UMYInventoryComponent>(TEXT("InventoryComponent"));
 }
 
 void AMYCharacterBase::Tick(float DeltaSeconds)
@@ -36,17 +35,13 @@ void AMYCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
-	if(HasAuthority())
+	if (HasAuthority())
 	{
 		SpawnWeapons();
+		SpawnWeapon();
 		InventoryComponent->AddItem(FInventoryWeapon(RightHandWeaponClass));
 		InventoryComponent->AddItem(FInventoryWeapon(LeftHandWeaponClass));
 	}
-	if(WeaponClass!=nullptr)
-	{
-		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
-	}
-	
 }
 
 /**
@@ -56,11 +51,11 @@ void AMYCharacterBase::BeginPlay()
 void AMYCharacterBase::Destroyed()
 {
 	UWorld* World = GetWorld();
-	if(World != nullptr)
+	if (World != nullptr)
 	{
 		AGameModeBase* GameModeBase = World->GetAuthGameMode();
 		AMYSurvivalGameMode* SurvivalGameMode = Cast<AMYSurvivalGameMode>(GameModeBase);
-		if(SurvivalGameMode != nullptr)
+		if (SurvivalGameMode != nullptr)
 		{
 			SurvivalGameMode->ActorDied(this);
 		}
@@ -75,9 +70,10 @@ void AMYCharacterBase::Die_Implementation()
 
 void AMYCharacterBase::ActivateRightHandWeapon()
 {
-	if(RightHandWeapon == nullptr)
+	if (RightHandWeapon == nullptr)
 	{
-		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		UKismetSystemLibrary::PrintString(
+			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
 	ActivateWeapon(RightHandWeapon);
@@ -85,9 +81,10 @@ void AMYCharacterBase::ActivateRightHandWeapon()
 
 void AMYCharacterBase::ActivateLeftHandWeapon()
 {
-	if(LeftHandWeapon == nullptr)
+	if (LeftHandWeapon == nullptr)
 	{
-		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		UKismetSystemLibrary::PrintString(
+			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
 	ActivateWeapon(LeftHandWeapon);
@@ -95,9 +92,10 @@ void AMYCharacterBase::ActivateLeftHandWeapon()
 
 void AMYCharacterBase::DeactivateRightHandWeapon()
 {
-	if(RightHandWeapon == nullptr)
+	if (RightHandWeapon == nullptr)
 	{
-		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		UKismetSystemLibrary::PrintString(
+			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
 	DeactivateWeapon(RightHandWeapon);
@@ -105,9 +103,10 @@ void AMYCharacterBase::DeactivateRightHandWeapon()
 
 void AMYCharacterBase::DeactivateLeftHandWeapon()
 {
-	if(LeftHandWeapon == nullptr)
+	if (LeftHandWeapon == nullptr)
 	{
-		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
+		UKismetSystemLibrary::PrintString(
+			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
 	DeactivateWeapon(LeftHandWeapon);
@@ -115,21 +114,21 @@ void AMYCharacterBase::DeactivateLeftHandWeapon()
 
 void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
 {
-	if(WeaponActor != nullptr)
+	if (WeaponActor != nullptr)
 		WeaponActor->Activate();
 }
 
 void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
 {
-	if(WeaponActor != nullptr)
+	if (WeaponActor != nullptr)
 		WeaponActor->Deactivate();
 }
 
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
 {
-	if(RightHandWeapon != nullptr)
+	if (RightHandWeapon != nullptr)
 		RightHandWeapon->SetGameplayEffect(InGESpecHandle);
-	if(LeftHandWeapon != nullptr)
+	if (LeftHandWeapon != nullptr)
 		LeftHandWeapon->SetGameplayEffect(InGESpecHandle);
 }
 
@@ -148,7 +147,7 @@ void AMYCharacterBase::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	// Since the ASC exists on the pawn, we initialize the server side here
-	if(AbilitySystemComponent)
+	if (AbilitySystemComponent)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
 		AbilitySystemComponent->SetOwnerActor(this);
@@ -164,7 +163,7 @@ void AMYCharacterBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	if(AbilitySystemComponent)
+	if (AbilitySystemComponent)
 	{
 		AbilitySystemComponent->AddSet<UMYAttributeSet>();
 	}
@@ -182,7 +181,7 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* InWidget)
 {
-	if(InWidget != nullptr)
+	if (InWidget != nullptr)
 	{
 		OverheadHealthBarWidget = InWidget;
 	}
@@ -190,7 +189,7 @@ void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* In
 
 float AMYCharacterBase::GetHealth() const
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 	{
 		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetHealthAttribute());
 	}
@@ -199,7 +198,7 @@ float AMYCharacterBase::GetHealth() const
 
 float AMYCharacterBase::GetMaxHealth() const
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 	{
 		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetMaxHealthAttribute());
 	}
@@ -208,7 +207,7 @@ float AMYCharacterBase::GetMaxHealth() const
 
 float AMYCharacterBase::GetAttackPower() const
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 	{
 		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetMaxHealthAttribute());
 	}
@@ -217,7 +216,7 @@ float AMYCharacterBase::GetAttackPower() const
 
 float AMYCharacterBase::GetAbilityPower() const
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 	{
 		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetAbilityPowerAttribute());
 	}
@@ -226,7 +225,7 @@ float AMYCharacterBase::GetAbilityPower() const
 
 float AMYCharacterBase::GetCharacterLevel() const
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 	{
 		return AbilitySystemComponent->GetNumericAttribute(UMYAttributeSet::GetCharacterLevelAttribute());
 	}
@@ -235,63 +234,72 @@ float AMYCharacterBase::GetCharacterLevel() const
 
 void AMYCharacterBase::InitializeAttributes()
 {
-	if(AbilitySystemComponent == nullptr)
+	if (AbilitySystemComponent == nullptr)
 		return;
-	if(DefaultLevel == nullptr)
+	if (DefaultLevel == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		UE_LOG(LogAbilitySystem, Warning,
+		       TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint."),
+		       *FString(__FUNCTION__), *GetName());
 		return;
 	}
 
 	// Can run on Server and Client
 	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
-	
-	if(DefaultLevel)
+
+	if (DefaultLevel)
 	{
-		const FGameplayEffectSpecHandle Handle = AbilitySystemComponent->MakeOutgoingSpec(DefaultLevel, 1, EffectContext);
-        if(Handle.IsValid())
-        {
-        	FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*Handle.Data.Get(), AbilitySystemComponent);
-        }
+		const FGameplayEffectSpecHandle Handle = AbilitySystemComponent->MakeOutgoingSpec(
+			DefaultLevel, 1, EffectContext);
+		if (Handle.IsValid())
+		{
+			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
+				*Handle.Data.Get(), AbilitySystemComponent);
+		}
 	}
-	
 }
 
 void AMYCharacterBase::InitializeAbilities()
 {
-	if(GetLocalRole() != ROLE_Authority || !AbilitySystemComponent || AbilitySystemComponent->bAbilitiesInitialized)
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent || AbilitySystemComponent->bAbilitiesInitialized)
 		return;
-	
+
 	FGameplayAbilitySpec AbilitySpec;
-	
-	if(PrimaryAbility == nullptr)
+
+	if (PrimaryAbility == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing PrimaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		UE_LOG(LogAbilitySystem, Warning,
+		       TEXT("%s() Missing PrimaryAbility for %s. Please fill in the character's Blueprint."),
+		       *FString(__FUNCTION__), *GetName());
 	}
 	else
 	{
-		AbilitySpec = FGameplayAbilitySpec(PrimaryAbility,1,INDEX_NONE,this);
+		AbilitySpec = FGameplayAbilitySpec(PrimaryAbility, 1, INDEX_NONE, this);
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
-	
-	if(SecondaryAbility == nullptr)
+
+	if (SecondaryAbility == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		UE_LOG(LogAbilitySystem, Warning,
+		       TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."),
+		       *FString(__FUNCTION__), *GetName());
 	}
 	else
 	{
-		AbilitySpec = FGameplayAbilitySpec(SecondaryAbility,1,INDEX_NONE,this);
+		AbilitySpec = FGameplayAbilitySpec(SecondaryAbility, 1, INDEX_NONE, this);
 		SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
-	
-	if(DownedAbility == nullptr)
+
+	if (DownedAbility == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
+		UE_LOG(LogAbilitySystem, Warning,
+		       TEXT("%s() Missing SecondaryAbility for %s. Please fill in the character's Blueprint."),
+		       *FString(__FUNCTION__), *GetName());
 	}
 	else
 	{
-		AbilitySpec = FGameplayAbilitySpec(DownedAbility,1,INDEX_NONE,this);
+		AbilitySpec = FGameplayAbilitySpec(DownedAbility, 1, INDEX_NONE, this);
 		AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
 
@@ -300,35 +308,41 @@ void AMYCharacterBase::InitializeAbilities()
 
 void AMYCharacterBase::SetupAttributeCallbacks()
 {
-	if(AttributeSet == nullptr)
+	if (AttributeSet == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Error, TEXT("%s AttributeSet is null inside %s()!"), *GetName(), *FString(__FUNCTION__));
+		UE_LOG(LogAbilitySystem, Error, TEXT("%s AttributeSet is null inside %s()!"), *GetName(),
+		       *FString(__FUNCTION__));
 		return;
 	}
-	if(AbilitySystemComponent == nullptr)
+	if (AbilitySystemComponent == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Error, TEXT("%s AbilitySystemComponent is null inside %s()!"), *GetName(), *FString(__FUNCTION__));
+		UE_LOG(LogAbilitySystem, Error, TEXT("%s AbilitySystemComponent is null inside %s()!"), *GetName(),
+		       *FString(__FUNCTION__));
 		return;
 	}
-	AttributeHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &AMYCharacterBase::HealthChanged);
-	AttributeMaxHealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxHealthAttribute()).AddUObject(this, &AMYCharacterBase::MaxHealthChanged);
-	
+	AttributeHealthChangedDelegateHandle = AbilitySystemComponent->
+	                                       GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).
+	                                       AddUObject(this, &AMYCharacterBase::HealthChanged);
+	AttributeMaxHealthChangedDelegateHandle = AbilitySystemComponent->
+	                                          GetGameplayAttributeValueChangeDelegate(
+		                                          AttributeSet->GetMaxHealthAttribute()).AddUObject(
+		                                          this, &AMYCharacterBase::MaxHealthChanged);
 }
 
 void AMYCharacterBase::SetupDelegates()
 {
-	AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Downed"))).AddUObject(this, &AMYCharacterBase::DownedTagAddedOrRemoved);
+	AbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag(FName("State.Downed"))).
+	                        AddUObject(this, &AMYCharacterBase::DownedTagAddedOrRemoved);
 }
 
 void AMYCharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
-
 }
 
 void AMYCharacterBase::SpawnWeapons()
 {
-	if(RightHandWeaponClass == nullptr)
+	if (RightHandWeaponClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
 	}
@@ -336,8 +350,8 @@ void AMYCharacterBase::SpawnWeapons()
 	{
 		SpawnWeapon(RightHandWeapon, RightHandWeaponClass, RightSocketName, RightHandWeaponRotation);
 	}
-	
-	if(LeftHandWeaponClass == nullptr)
+
+	if (LeftHandWeaponClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s does not have LeftHandWeaponClass set."), *GetName());
 	}
@@ -347,27 +361,37 @@ void AMYCharacterBase::SpawnWeapons()
 	}
 }
 
-void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation)
+void AMYCharacterBase::SpawnWeapon()
+{
+	if (WeaponClass != nullptr)
+	{
+		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
+		WeaponItemThing->SetOwningCharacter(this);
+	}
+}
+
+void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName,
+                                   FRotator SpawnWeaponRotation)
 {
 	UWorld* World = GetWorld();
-	if(!ensure(World)) return;
+	if (!ensure(World)) return;
 	FTransform Transform = FTransform(SpawnWeaponRotation);
-	
-	if(IsValid(WeaponActor)) WeaponActor->Destroy();
-	
-	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass,Transform);
-	if(WeaponActor == nullptr)
+
+	if (IsValid(WeaponActor)) WeaponActor->Destroy();
+
+	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass, Transform);
+	if (WeaponActor == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RightHandWeapon spawning failed!"));
 		return;
 	}
-	WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform,InSocketName);
+	WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, InSocketName);
 	WeaponActor->SetOwner(this);
 	WeaponActor->SetInstigator(this);
-	if(AbilitySystemComponent == nullptr)
+	if (AbilitySystemComponent == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__), *GetName());
-
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
+		       *GetName());
 	}
 	WeaponActor->SetOwnerASC(AbilitySystemComponent);
 }
@@ -385,12 +409,11 @@ void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, i
 void AMYCharacterBase::HealthChanged(const FOnAttributeChangeData& Data)
 {
 	HealthChangedDelegate.Broadcast(Data.NewValue);
-	if(Data.NewValue <= 0)
+	if (Data.NewValue <= 0)
 	{
 		bWasKilled = true;
 		AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Downed")));
 	}
-		
 }
 
 void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
@@ -400,6 +423,6 @@ void AMYCharacterBase::MaxHealthChanged(const FOnAttributeChangeData& Data)
 
 void AMYCharacterBase::ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle)
 {
-	if(AbilitySystemComponent != nullptr)
+	if (AbilitySystemComponent != nullptr)
 		AbilitySystemComponent->TryActivateAbility(InHandle);
 }

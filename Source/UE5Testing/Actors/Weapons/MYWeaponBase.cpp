@@ -22,8 +22,9 @@ void AMYWeaponBase::BeginPlay()
 	Super::BeginPlay();
 	UWorld* World = GetWorld();
 	check(World);
-	RightHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
-	LeftHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
+	SpawnWeapons();
+	//RightHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
+	//LeftHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
 }
 
 void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle)
@@ -33,12 +34,23 @@ void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecH
 
 void AMYWeaponBase::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
 {
-	if(InOwnerASC == nullptr)
+	if (InOwnerASC == nullptr)
 	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__), *GetName());
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
+		       *GetName());
 		return;
 	}
 	OwnerASC = InOwnerASC;
+}
+
+void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
+{
+	ApplyEffectToTarget_Server(TargetCharacter);
+}
+
+void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
+{
+	OwningCharacter = InOwningCharacter;
 }
 
 void AMYWeaponBase::ActivateRightHandWeapon()
@@ -65,11 +77,40 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
+void AMYWeaponBase::SpawnWeapons()
+{
+	UWorld* World = GetWorld();
+	if (World == nullptr) return;
+	if (RHWeaponClass != nullptr)
+	{
+		RightHandWeapon = World->SpawnActor<AMYWeapon>(RHWeaponClass);
+		check(RightHandWeapon);
+		
+		RightHandWeapon->AttachToActor(OwningCharacter,FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->RightSocketName);
+		RightHandWeapon->SetOwningWeapon(this);
+		RightHandWeapon->SetActorArrayPtr(&HitActors);
+		if (RightHandWeaponMesh != nullptr)
+			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(RightHandWeaponMesh);
+	}
+	if (LHWeaponClass != nullptr)
+	{
+		LeftHandWeapon = World->SpawnActor<AMYWeapon>(LHWeaponClass);
+		check(LeftHandWeapon);
+		
+		LeftHandWeapon->AttachToActor(OwningCharacter,FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->LeftSocketName);
+		LeftHandWeapon->SetOwningWeapon(this);
+		LeftHandWeapon->SetActorArrayPtr(&HitActors);
+		if (LeftHandWeaponMesh != nullptr)
+			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(LeftHandWeaponMesh);
+	}
+}
+
 void AMYWeaponBase::ApplyEffectToTarget_Server_Implementation(AMYCharacterBase* TargetCharacter)
 {
-	if(ensureAlways(TargetCharacter) && ensureAlways(OwnerASC))
+	if (ensureAlways(TargetCharacter) && ensureAlways(OwnerASC))
 	{
-		OwnerASC->ApplyGameplayEffectSpecToTarget(*GESpecHandle.Data.Get(),TargetCharacter->GetAbilitySystemComponent());
+		OwnerASC->ApplyGameplayEffectSpecToTarget(*GESpecHandle.Data.Get(),
+		                                          TargetCharacter->GetAbilitySystemComponent());
 	}
 }
 

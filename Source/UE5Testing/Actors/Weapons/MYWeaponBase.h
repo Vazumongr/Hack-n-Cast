@@ -11,6 +11,7 @@
 #include "MYWeaponBase.generated.h"
 
 class AMYWeapon;
+class AMYCharacterBase;
 class UMYGameplayAbility;
 class UStaticMeshComponent;
 class UStaticMesh;
@@ -34,6 +35,10 @@ public:
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
 	UFUNCTION(BlueprintCallable)
 	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
+	UFUNCTION(BlueprintCallable)
+	void HitCharacter(class AMYCharacterBase* TargetCharacter);
+	UFUNCTION(BlueprintCallable)
+	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
 
 	void ActivateRightHandWeapon();
 	void ActivateLeftHandWeapon();
@@ -43,6 +48,8 @@ public:
 protected:
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
+
+	virtual void SpawnWeapons();
 	
 	/*
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -60,14 +67,20 @@ protected:
 	class UStaticMesh* RightHandWeaponMesh;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UStaticMesh* LeftHandWeaponMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AMYWeapon> RHWeaponClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AMYWeapon> LHWeaponClass;
+	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeapon* RightHandWeapon;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeapon* LeftHandWeapon;
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	class UAbilitySystemComponent* OwnerASC;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	FGameplayEffectSpecHandle GESpecHandle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AActor*> HitActors;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class AMYCharacterBase* OwningCharacter;
 };
