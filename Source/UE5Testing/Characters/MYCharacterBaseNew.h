@@ -8,25 +8,25 @@
 #include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
 #include "UE5Testing/Loot/MYLootEnums.h"
 
-#include "MYCharacterBase.generated.h"
+#include "MYCharacterBaseNew.generated.h"
 
 class AMYWeaponBase;
 class AMYWeapon;
 class UMYOverheadHealthBar;
 class UMYOverheadHealthBarComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatChangedDelegate, float, NewHealth);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatChangedDelegate, float, NewHealth);
 
 /**
  * This is the base class for all characters implementing an ability system
  */
 UCLASS()
-class UE5TESTING_API AMYCharacterBase : public ACharacter, public IAbilitySystemInterface
+class UE5TESTING_API AMYCharacterBaseNew : public ACharacter, public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
 public:
-	AMYCharacterBase();
+	AMYCharacterBaseNew();
 
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -91,10 +91,10 @@ public:
 
 	FDelegateHandle AttributeHealthChangedDelegateHandle;
 	FDelegateHandle AttributeMaxHealthChangedDelegateHandle;
-	UPROPERTY(BlueprintAssignable)
-	FStatChangedDelegate HealthChangedDelegate;
-	UPROPERTY(BlueprintAssignable)
-	FStatChangedDelegate MaxHealthChangedDelegate;
+	//UPROPERTY(BlueprintAssignable)
+	//FStatChangedDelegate HealthChangedDelegate;
+	//UPROPERTY(BlueprintAssignable)
+	//FStatChangedDelegate MaxHealthChangedDelegate;
 
 	UPROPERTY(EditAnywhere, Category="Setup")
 	FRotator RightHandWeaponRotation;
@@ -128,42 +128,42 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|UI")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|UI")
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	TSubclassOf<class AMYWeapon> RightHandWeaponClass;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	class AMYWeapon* RightHandWeapon;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	TSubclassOf<class AMYWeapon> LeftHandWeaponClass;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	class AMYWeapon* LeftHandWeapon;
 	
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	class AMYWeaponBase* WeaponItemThing;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Combat")
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	class UMYAttributeSet* AttributeSet;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	TSubclassOf<class UGameplayEffect> DefaultLevel;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	TSubclassOf<class UGameplayEffect> LevelUpGameplayEffect;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	TSubclassOf<class UMYGameplayAbility> SecondaryAbility;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System")
 	TSubclassOf<class UMYGameplayAbility> DownedAbility;
-	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBase|Ability System", Replicated)
+	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System", Replicated)
 	FGameplayAbilitySpecHandle PrimaryAbilityHandle;
-	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBase|Ability System", Replicated)
+	UPROPERTY(BlueprintReadOnly, Category="MYCharacterBaseNew|Ability System", Replicated)
 	FGameplayAbilitySpecHandle SecondaryAbilityHandle;
 	/* All the solely related GAS stuff ENDS here */
 };
