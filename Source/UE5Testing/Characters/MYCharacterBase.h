@@ -59,8 +59,8 @@ public:
 	void ActivateWeapon(class AMYWeapon* WeaponActor);
 	void DeactivateWeapon(class AMYWeapon* WeaponActor);
 	
-	UFUNCTION(BlueprintCallable)
-	class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }
+	//UFUNCTION(BlueprintCallable)
+	//class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }
 
 	UFUNCTION(BlueprintCallable)
 	class UMYInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
@@ -130,20 +130,22 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|UI")
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	
+	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeapon> RightHandWeaponClass;
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeapon* RightHandWeapon;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeapon> LeftHandWeaponClass;
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	class AMYWeapon* LeftHandWeapon;
+	class AMYWeapon* LeftHandWeapon;*/
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
-
+	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeaponBase* WeaponItemThing;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	

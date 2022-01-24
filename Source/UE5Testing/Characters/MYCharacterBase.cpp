@@ -39,8 +39,10 @@ void AMYCharacterBase::BeginPlay()
 	{
 		SpawnWeapons();
 		SpawnWeapon();
+		/*
 		InventoryComponent->AddItem(FInventoryWeapon(RightHandWeaponClass));
 		InventoryComponent->AddItem(FInventoryWeapon(LeftHandWeaponClass));
+		*/
 	}
 }
 
@@ -70,46 +72,46 @@ void AMYCharacterBase::Die_Implementation()
 
 void AMYCharacterBase::ActivateRightHandWeapon()
 {
-	if (RightHandWeapon == nullptr)
+	/*if (RightHandWeapon == nullptr)
 	{
 		UKismetSystemLibrary::PrintString(
 			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
-	ActivateWeapon(RightHandWeapon);
+	ActivateWeapon(RightHandWeapon);*/
 }
 
 void AMYCharacterBase::ActivateLeftHandWeapon()
 {
-	if (LeftHandWeapon == nullptr)
+	/*if (LeftHandWeapon == nullptr)
 	{
 		UKismetSystemLibrary::PrintString(
 			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
-	ActivateWeapon(LeftHandWeapon);
+	ActivateWeapon(LeftHandWeapon);*/
 }
 
 void AMYCharacterBase::DeactivateRightHandWeapon()
 {
-	if (RightHandWeapon == nullptr)
+	/*if (RightHandWeapon == nullptr)
 	{
 		UKismetSystemLibrary::PrintString(
 			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
-	DeactivateWeapon(RightHandWeapon);
+	DeactivateWeapon(RightHandWeapon);*/
 }
 
 void AMYCharacterBase::DeactivateLeftHandWeapon()
 {
-	if (LeftHandWeapon == nullptr)
+	/*if (LeftHandWeapon == nullptr)
 	{
 		UKismetSystemLibrary::PrintString(
 			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
 		return;
 	}
-	DeactivateWeapon(LeftHandWeapon);
+	DeactivateWeapon(LeftHandWeapon);*/
 }
 
 void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
@@ -126,10 +128,12 @@ void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
 
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
 {
+	/*
 	if (RightHandWeapon != nullptr)
 		RightHandWeapon->SetGameplayEffect(InGESpecHandle);
 	if (LeftHandWeapon != nullptr)
 		LeftHandWeapon->SetGameplayEffect(InGESpecHandle);
+		*/
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -175,8 +179,8 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, bIsReady);
-	DOREPLIFETIME(AMYCharacterBase, RightHandWeapon);
-	DOREPLIFETIME(AMYCharacterBase, LeftHandWeapon);
+	/*DOREPLIFETIME(AMYCharacterBase, RightHandWeapon);
+	DOREPLIFETIME(AMYCharacterBase, LeftHandWeapon);*/
 }
 
 void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* InWidget)
@@ -342,6 +346,7 @@ void AMYCharacterBase::OnRep_Controller()
 
 void AMYCharacterBase::SpawnWeapons()
 {
+	/*
 	if (RightHandWeaponClass == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
@@ -359,6 +364,7 @@ void AMYCharacterBase::SpawnWeapons()
 	{
 		SpawnWeapon(LeftHandWeapon, LeftHandWeaponClass, LeftSocketName, LeftHandWeaponRotation);
 	}
+	*/
 }
 
 void AMYCharacterBase::SpawnWeapon()
@@ -366,7 +372,7 @@ void AMYCharacterBase::SpawnWeapon()
 	if (WeaponClass != nullptr)
 	{
 		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
-		WeaponItemThing->SetOwningCharacter(this);
+		//WeaponItemThing->SetOwningCharacter(this);
 	}
 }
 

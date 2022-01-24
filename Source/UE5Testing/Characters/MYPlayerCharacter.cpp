@@ -125,8 +125,8 @@ void AMYPlayerCharacter::ToggleRightHand_Server_Implementation()
 {
 	FInventoryWeapon Weapon;
 	InventoryComponent->GetInventoryWeaponAtIndex(Weapon,0);
-	RightHandWeaponClass = Weapon.WeaponClass;
-	LeftHandWeaponClass = Weapon.WeaponClass;
+	//RightHandWeaponClass = Weapon.WeaponClass;
+	//LeftHandWeaponClass = Weapon.WeaponClass;
 	SpawnWeapons();
 }
 
@@ -134,8 +134,8 @@ void AMYPlayerCharacter::ToggleLeftHand_Server_Implementation()
 {
 	FInventoryWeapon Weapon;
 	InventoryComponent->GetInventoryWeaponAtIndex(Weapon,1);
-	RightHandWeaponClass = Weapon.WeaponClass;
-	LeftHandWeaponClass = Weapon.WeaponClass;
+	//RightHandWeaponClass = Weapon.WeaponClass;
+	//LeftHandWeaponClass = Weapon.WeaponClass;
 	SpawnWeapons();
 }
 
@@ -150,8 +150,8 @@ void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBase
 
 	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InStartingKit->GetAttackAbility()));
 	SecondaryAbilityHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(InStartingKit->GetSpellAbility()));
-	RightHandWeaponClass = InStartingKit->GetWeaponClass();
-	LeftHandWeaponClass = InStartingKit->GetWeaponClass();
+	//RightHandWeaponClass = InStartingKit->GetWeaponClass();
+	//LeftHandWeaponClass = InStartingKit->GetWeaponClass();
 	SpawnWeapons();
 		
 }

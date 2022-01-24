@@ -1,0 +1,21 @@
+Weirdest bug ever.
+Occurs on UE5EA and UE5.1
+
+The bug:
+Upon reloading an BP asset inheriting from AMYCharacterBase or any of its children, if the WeaponClass property is set, it will set it to none and set the RightHandWeaponClass property to whatever the WeaponClass property was set too. WeaponClass and RightHandWeaponClass are of TSubclassOf<>. The class inside the angle brackets is irrelevant. It will always set RightHandWeaponClass to whatever WeaponClass was.
+
+Causes:
+No fucking clue.
+
+Fixes:
+- Duplicate the class. Literally just copy paste it and change the name and the problem no longer occurs.
+- Rename the WeaponClass property and boom, no problems.
+- Move the WeaponItemThing property declaration so it's no longer above it and boom, no problems.
+
+Things that do nothing:
+- Moving of RightHandWeaponClass declaration doesn't change anything.
+- Changing the class type inside the TSubclassOf<>
+- Removing the property's, building, then adding them back in. The issue will persist.
+- Making a new BP inheriting from AMYCharacterBase or any of its children.
+- Doing a full clean rebuild of the project
+- Doing a full clean rebuild of the engine
