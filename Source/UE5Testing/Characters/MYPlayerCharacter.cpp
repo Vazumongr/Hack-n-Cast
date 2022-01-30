@@ -1,7 +1,9 @@
 ﻿// Troy Records Jr. 2021
 #include "MYPlayerCharacter.h"
 
+#include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
@@ -14,6 +16,12 @@ AMYPlayerCharacter::AMYPlayerCharacter()
 	LootPickerUpper = CreateDefaultSubobject<USphereComponent>("LootPickerUpper");
 	LootPickerUpper->SetupAttachment(GetMesh());
 	LootPickerUpper->OnComponentBeginOverlap.AddDynamic(this, &AMYPlayerCharacter::LootPickUp);
+
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
+	CameraBoom->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	Camera->SetupAttachment(CameraBoom);
 }
 
 void AMYPlayerCharacter::AddControllerPitchInput(float Val)
@@ -74,6 +82,7 @@ void AMYPlayerCharacter::MoveForward(float InValue)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 		AddMovementInput(Direction, InValue * MovementSpeed);
 	}
 }
@@ -88,6 +97,7 @@ void AMYPlayerCharacter::MoveRight(float InValue)
 	
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 		// add movement in that direction
 		AddMovementInput(Direction, InValue * MovementSpeed);
 	}

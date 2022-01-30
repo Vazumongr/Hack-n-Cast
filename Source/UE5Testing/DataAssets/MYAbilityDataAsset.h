@@ -5,7 +5,9 @@
 #include "Engine/DataAsset.h"
 #include "MYAbilityDataAsset.generated.h"
 
-/** A seed file that is created to mark referenced assets as part of this primary asset */
+/** 
+ * 
+ */
 UCLASS(BlueprintType)
 class UE5TESTING_API UMYAbilityDataAsset : public UDataAsset
 {

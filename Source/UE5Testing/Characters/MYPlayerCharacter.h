@@ -5,6 +5,10 @@
 
 #include "MYPlayerCharacter.generated.h"
 
+class UCameraComponent;
+class UMYStartingKitBaseDA;
+class USphereComponent;
+class USpringArmComponent;
 
 /**
  * This is the base class for all characters implementing an ability system
@@ -45,8 +49,13 @@ protected:
 	UFUNCTION()
 	virtual void LootPickUp(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	class USphereComponent* LootPickerUpper;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	class USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	class UCameraComponent* Camera;
+	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated)
 	uint8 AttackChainCounter{0};

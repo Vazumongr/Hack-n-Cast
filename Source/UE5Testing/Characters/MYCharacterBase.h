@@ -145,7 +145,6 @@ protected:
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	class AMYWeaponBase* WeaponItemThing;
-	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	

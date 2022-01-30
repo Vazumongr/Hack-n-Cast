@@ -372,7 +372,7 @@ void AMYCharacterBase::SpawnWeapon()
 	if (WeaponClass != nullptr)
 	{
 		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
-		//WeaponItemThing->SetOwningCharacter(this);
+		WeaponItemThing->SetOwningCharacter(this);
 	}
 }
 

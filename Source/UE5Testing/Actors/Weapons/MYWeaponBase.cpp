@@ -7,6 +7,7 @@
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Actors/Weapons/MYWeapon.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
+#include "UE5Testing/DataAssets/MYWeaponSMADA.h"
 
 
 // Sets default values
@@ -22,7 +23,7 @@ void AMYWeaponBase::BeginPlay()
 	Super::BeginPlay();
 	UWorld* World = GetWorld();
 	check(World);
-	SpawnWeapons();
+	//SpawnWeapons();
 	//RightHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
 	//LeftHandWeapon = World->SpawnActor<AMYWeapon>(AMYWeapon::StaticClass());
 }
@@ -51,6 +52,7 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
+	SpawnWeapons();
 }
 
 void AMYWeaponBase::ActivateRightHandWeapon()
@@ -79,6 +81,7 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 
 void AMYWeaponBase::SpawnWeapons()
 {
+	check(OwningCharacter);
 	UWorld* World = GetWorld();
 	if (World == nullptr) return;
 	if (RHWeaponClass != nullptr)
@@ -86,22 +89,22 @@ void AMYWeaponBase::SpawnWeapons()
 		RightHandWeapon = World->SpawnActor<AMYWeapon>(RHWeaponClass);
 		check(RightHandWeapon);
 		
-		RightHandWeapon->AttachToActor(OwningCharacter,FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->RightSocketName);
+		RightHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->RightSocketName);
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetActorArrayPtr(&HitActors);
-		if (RightHandWeaponMesh != nullptr)
-			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(RightHandWeaponMesh);
+		if (WeaponSMADA != nullptr)
+			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponSMADA->GetPrimaryStaticMesh());
 	}
 	if (LHWeaponClass != nullptr)
 	{
 		LeftHandWeapon = World->SpawnActor<AMYWeapon>(LHWeaponClass);
 		check(LeftHandWeapon);
 		
-		LeftHandWeapon->AttachToActor(OwningCharacter,FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->LeftSocketName);
+		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetActorArrayPtr(&HitActors);
-		if (LeftHandWeaponMesh != nullptr)
-			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(LeftHandWeaponMesh);
+		if (WeaponSMADA != nullptr)
+			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponSMADA->GetSecondaryStaticMesh());
 	}
 }
 
