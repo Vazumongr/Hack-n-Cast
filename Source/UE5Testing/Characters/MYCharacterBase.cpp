@@ -70,48 +70,9 @@ void AMYCharacterBase::Die_Implementation()
 	Destroy();
 }
 
-void AMYCharacterBase::ActivateRightHandWeapon()
+void AMYCharacterBase::Die_Server_Implementation()
 {
-	/*if (RightHandWeapon == nullptr)
-	{
-		UKismetSystemLibrary::PrintString(
-			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
-		return;
-	}
-	ActivateWeapon(RightHandWeapon);*/
-}
-
-void AMYCharacterBase::ActivateLeftHandWeapon()
-{
-	/*if (LeftHandWeapon == nullptr)
-	{
-		UKismetSystemLibrary::PrintString(
-			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
-		return;
-	}
-	ActivateWeapon(LeftHandWeapon);*/
-}
-
-void AMYCharacterBase::DeactivateRightHandWeapon()
-{
-	/*if (RightHandWeapon == nullptr)
-	{
-		UKismetSystemLibrary::PrintString(
-			this, FString::Printf(TEXT("RightHandWeapon is null in %s"), *FString(__FUNCTION__)));
-		return;
-	}
-	DeactivateWeapon(RightHandWeapon);*/
-}
-
-void AMYCharacterBase::DeactivateLeftHandWeapon()
-{
-	/*if (LeftHandWeapon == nullptr)
-	{
-		UKismetSystemLibrary::PrintString(
-			this, FString::Printf(TEXT("LeftHandWeapon is null in %s"), *FString(__FUNCTION__)));
-		return;
-	}
-	DeactivateWeapon(LeftHandWeapon);*/
+	Destroy();
 }
 
 void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
@@ -134,6 +95,7 @@ void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHan
 	if (LeftHandWeapon != nullptr)
 		LeftHandWeapon->SetGameplayEffect(InGESpecHandle);
 		*/
+	WeaponItemThing->SetGameplayEffect(InGESpecHandle);
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -373,6 +335,7 @@ void AMYCharacterBase::SpawnWeapon()
 	{
 		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
 		WeaponItemThing->SetOwningCharacter(this);
+		WeaponItemThing->SetOwnerASC(AbilitySystemComponent);
 	}
 }
 

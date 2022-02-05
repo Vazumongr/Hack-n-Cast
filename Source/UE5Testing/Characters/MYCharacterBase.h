@@ -48,14 +48,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void Die();
 	
-	UFUNCTION(BlueprintCallable)
-	void ActivateRightHandWeapon();
-	UFUNCTION(BlueprintCallable)
-	void ActivateLeftHandWeapon();
-	UFUNCTION(BlueprintCallable)
-	void DeactivateRightHandWeapon();
-	UFUNCTION(BlueprintCallable)
-	void DeactivateLeftHandWeapon();
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void Die_Server();
+	
 	void ActivateWeapon(class AMYWeapon* WeaponActor);
 	void DeactivateWeapon(class AMYWeapon* WeaponActor);
 	
@@ -70,6 +65,8 @@ public:
 	/* All the solely related to GAS stuff STARTS here */
     virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     virtual class UMYAttributeSet* GetAttributeSet() const;
+
+	virtual class AMYWeaponBase* GetWeapon() const { return WeaponItemThing; };
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void PostInitializeComponents() override;

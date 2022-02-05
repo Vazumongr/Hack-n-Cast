@@ -82,7 +82,6 @@ void AMYPlayerCharacter::MoveForward(float InValue)
 
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 		AddMovementInput(Direction, InValue * MovementSpeed);
 	}
 }
@@ -97,7 +96,6 @@ void AMYPlayerCharacter::MoveRight(float InValue)
 	
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 		// add movement in that direction
 		AddMovementInput(Direction, InValue * MovementSpeed);
 	}

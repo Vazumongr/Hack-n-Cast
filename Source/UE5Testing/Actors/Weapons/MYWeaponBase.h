@@ -43,9 +43,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
 
+	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();
+	UFUNCTION(BlueprintCallable)
 	void ActivateLeftHandWeapon();
+	UFUNCTION(BlueprintCallable)
 	void DeactivateRightHandWeapon();
+	UFUNCTION(BlueprintCallable)
 	void DeactivateLeftHandWeapon();
 
 protected:
