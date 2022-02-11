@@ -42,6 +42,8 @@ public:
 	void HitCharacter(class AMYCharacterBase* TargetCharacter);
 	UFUNCTION(BlueprintCallable)
 	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
+	UFUNCTION(BlueprintCallable)
+	void Deactivate();
 
 	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();

@@ -34,7 +34,7 @@ public:
 
 	virtual void Destroyed() override;
 
-	void MyDestroy();
+	virtual void DestroyPrep();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

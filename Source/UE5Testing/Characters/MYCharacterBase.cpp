@@ -65,6 +65,12 @@ void AMYCharacterBase::Destroyed()
 	Super::Destroyed();
 }
 
+void AMYCharacterBase::DestroyPrep()
+{
+	WeaponItemThing->Deactivate();
+	Destroy();
+}
+
 void AMYCharacterBase::Die_Implementation()
 {
 	Destroy();
@@ -73,7 +79,7 @@ void AMYCharacterBase::Die_Implementation()
 void AMYCharacterBase::Die_Server_Implementation()
 {
 	AbilitySystemComponent->CancelAllAbilities();
-	GetWorldTimerManager().SetTimerForNextTick([this]() { Destroy(); });
+	GetWorldTimerManager().SetTimerForNextTick([this]() { DestroyPrep(); });
 }
 
 void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)

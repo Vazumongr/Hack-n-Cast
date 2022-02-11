@@ -55,6 +55,13 @@ void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 	SpawnWeapons();
 }
 
+void AMYWeaponBase::Deactivate()
+{
+	RightHandWeapon->Destroy();
+	LeftHandWeapon->Destroy();
+	Destroy();
+}
+
 void AMYWeaponBase::ActivateRightHandWeapon()
 {
 	check(RightHandWeapon);
