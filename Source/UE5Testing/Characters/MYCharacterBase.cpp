@@ -72,7 +72,8 @@ void AMYCharacterBase::Die_Implementation()
 
 void AMYCharacterBase::Die_Server_Implementation()
 {
-	Destroy();
+	AbilitySystemComponent->CancelAllAbilities();
+	GetWorldTimerManager().SetTimerForNextTick([this]() { Destroy(); });
 }
 
 void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)

@@ -34,6 +34,8 @@ public:
 
 	virtual void Destroyed() override;
 
+	void MyDestroy();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMYOverheadHealthBarComponent* OverheadHealthBar;

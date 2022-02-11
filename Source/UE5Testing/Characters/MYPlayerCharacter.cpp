@@ -61,10 +61,10 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMYPlayerCharacter::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
 {
+	//FGameplayTagContainer TagContainer;
+	//TagContainer.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Downed")));
+	//AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 	Super::DownedTagAddedOrRemoved(CallbackTag, NewCount);
-	FGameplayTagContainer TagContainer;
-	TagContainer.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Downed")));
-	AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 }
 
 void AMYPlayerCharacter::HealthChanged(const FOnAttributeChangeData & Data)

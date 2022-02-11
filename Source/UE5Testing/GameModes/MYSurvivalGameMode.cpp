@@ -7,6 +7,7 @@
 #include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
+#include "UE5Testing/Characters/MYPlayerCharacter.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 
 void AMYSurvivalGameMode::BeginPlay()
@@ -49,7 +50,21 @@ void AMYSurvivalGameMode::SpawnDrops()
 
 void AMYSurvivalGameMode::ActorDied(AActor* DeadActor)
 {
-	Spawner->ActorDied(DeadActor);
+	if(DeadActor->IsA(AMYPlayerCharacter::StaticClass()))
+	{
+		if(--PlayersAlive==0)
+			AllPlayersDead();
+	}
+	else
+	{
+		Spawner->ActorDied(DeadActor);
+	}
+}
+
+void AMYSurvivalGameMode::AllPlayersDead()
+{
+	AllPlayersDeadDelegate.Broadcast();
+	UE_LOG(LogSpawn,Warning,TEXT("AllPlayersDead"));
 }
 
 void AMYSurvivalGameMode::WaveStarted(int32 InWave)
@@ -68,4 +83,13 @@ void AMYSurvivalGameMode::WaveEnded(int32 InWave)
 	{
 		SurvivalGameState->WaveEnded_Multicast(InWave);
 	}
+}
+
+APawn* AMYSurvivalGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer,
+	const FTransform& SpawnTransform)
+{
+	APawn* SpawnedPawn = Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
+	if(SpawnedPawn->IsA(AMYPlayerCharacter::StaticClass()))
+		PlayersAlive++;
+	return SpawnedPawn;
 }

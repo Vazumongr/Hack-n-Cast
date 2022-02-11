@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "MYSurvivalGameMode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FAllPlayersDeadDelegate);
+
 /**
  * 
  */
@@ -21,12 +23,20 @@ public:
 
 	virtual void ActorDied(AActor* DeadActor);
 
+	virtual void AllPlayersDead();
+
 	void WaveStarted(int32 InWave);
 	void WaveEnded(int32 InWave);
+
+	virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) override;
+
+	FAllPlayersDeadDelegate AllPlayersDeadDelegate;
 
 protected:
 	UPROPERTY(EditAnywhere)
 	uint8 CharNumber = 0;
+
+	uint8 PlayersAlive{0};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class AMYRoundSpawner> SpawnerClass;
