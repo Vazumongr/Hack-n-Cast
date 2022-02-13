@@ -20,6 +20,11 @@ void AMYSurvivalGameState::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AMYSurvivalGameState::GameOver_Implementation()
+{
+	GameOverDelegate.Broadcast();
+}
+
 void AMYSurvivalGameState::WaveStarted_Multicast_Implementation(int32 CurrentWave)
 {
 	UE_LOG(LogTemp, Error, TEXT("Wave Started on Client GameState!!"));
@@ -31,29 +36,7 @@ void AMYSurvivalGameState::WaveEnded_Multicast_Implementation(int32 CurrentWave)
 	UE_LOG(LogTemp, Error, TEXT("Wave Ended on Client GameState!!"));
 	WaveEnded_BIE(CurrentWave);
 }
-/*
-void AMYSurvivalGameState::PrintPlayerController_Server_Implementation()
-{
-	PrintPlayerController_Multicast();
-}
 
-void AMYSurvivalGameState::PrintPlayerController_Multicast_Implementation()
-{
-	if(LocalPlayerController == nullptr)
-	{
-		UKismetSystemLibrary::PrintString(this, TEXT("LocalPlayerController is nullptr"));
-	}
-	else
-	{
-		UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("LocalPlayerController: %s"), *LocalPlayerController->GetName()));
-	}
-}
-
-void AMYSurvivalGameState::PrintPlayerController()
-{
-	PrintPlayerController_Server();
-}
-*/
 int32 AMYSurvivalGameState::GetCurrentWave()
 {
 	return 0;

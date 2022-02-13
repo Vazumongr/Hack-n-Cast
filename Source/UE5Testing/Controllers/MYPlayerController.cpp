@@ -22,6 +22,9 @@ AMYPlayerController::AMYPlayerController()
 void AMYPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
+	check(GameState)
+	GameState->GameOverDelegate.AddUObject(this, &AMYPlayerController::GameOver);
 }
 
 // Called every frame
@@ -63,5 +66,13 @@ void AMYPlayerController::AcknowledgePossession(APawn* P)
 		CharacterBase->GetAbilitySystemComponent()->SetOwnerActor(CharacterBase);
 	}
 	
+}
+
+void AMYPlayerController::GameOver()
+{
+	if(!ensureAlways(GameOverMessageClass)) return;
+	UUserWidget* GameOverMessage = CreateWidget(this, GameOverMessageClass);
+	check(GameOverMessage);
+	GameOverMessage->AddToViewport();
 }
 

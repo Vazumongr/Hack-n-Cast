@@ -17,7 +17,6 @@ void AMYSurvivalGameMode::BeginPlay()
 	if(Spawner != nullptr)
 	{
 		Spawner->Spawner_BeginPlay();
-		//Spawner->BindToWaveStartedDelegate(this, &AMYSurvivalGameMode::WaveStarted);
 		Spawner->GetWaveStartedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveStarted);
 		Spawner->GetWaveEndedDelegate().AddUObject(this, &AMYSurvivalGameMode::WaveEnded);
 	}
@@ -64,6 +63,11 @@ void AMYSurvivalGameMode::ActorDied(AActor* DeadActor)
 void AMYSurvivalGameMode::AllPlayersDead()
 {
 	AllPlayersDeadDelegate.Broadcast();
+	AMYSurvivalGameState* SurvivalGameState = GetGameState<AMYSurvivalGameState>();
+	if(SurvivalGameState != nullptr)
+	{
+		SurvivalGameState->GameOver();
+	}
 	UE_LOG(LogSpawn,Warning,TEXT("AllPlayersDead"));
 }
 

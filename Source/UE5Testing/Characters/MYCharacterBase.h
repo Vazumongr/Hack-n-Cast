@@ -36,6 +36,8 @@ public:
 
 	virtual void DestroyPrep();
 
+	virtual void GameOver();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMYOverheadHealthBarComponent* OverheadHealthBar;

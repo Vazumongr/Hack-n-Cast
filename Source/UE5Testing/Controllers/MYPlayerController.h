@@ -25,12 +25,17 @@ public:
 
 	virtual void AcknowledgePossession(APawn* P) override;
 
+	virtual void GameOver();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UMYHUD> HUDClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UUserWidget> GameOverMessageClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UMYHUD* HUDWidget;

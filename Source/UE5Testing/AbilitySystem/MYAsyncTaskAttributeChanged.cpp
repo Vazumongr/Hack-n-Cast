@@ -53,7 +53,7 @@ void UMYAsyncTaskAttributeChanged::EndTask()
 	}
 
 	SetReadyToDestroy();
-	MarkPendingKill();
+	MarkAsGarbage();
 }
 
 void UMYAsyncTaskAttributeChanged::AttributeChanged(const FOnAttributeChangeData & Data)

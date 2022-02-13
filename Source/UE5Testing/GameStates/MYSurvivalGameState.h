@@ -6,6 +6,8 @@
 #include "GameFramework/GameStateBase.h"
 #include "MYSurvivalGameState.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FGameOverDelegate);
+
 UCLASS()
 class UE5TESTING_API AMYSurvivalGameState : public AGameStateBase
 {
@@ -26,6 +28,9 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void WaveEnded_Multicast(int32 CurrentWave);
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void GameOver();
 /*
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
 	virtual void PrintPlayerController_Multicast();
@@ -45,6 +50,8 @@ public:
 	virtual int32 GetCurrentWave();
 
 	virtual int32 GetTotalEnemyThisWaveCount();
+
+	FGameOverDelegate GameOverDelegate;
 /*
 	UPROPERTY(BlueprintReadWrite)
 	class AMYPlayerController* LocalPlayerController;

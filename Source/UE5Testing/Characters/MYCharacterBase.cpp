@@ -10,6 +10,7 @@
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/GameModes/MYSurvivalGameMode.h"
+#include "UE5Testing/GameStates/MYSurvivalGameState.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
 #include "UE5Testing/UI/MYOverheadHealthBarWidget.h"
 
@@ -39,11 +40,10 @@ void AMYCharacterBase::BeginPlay()
 	{
 		SpawnWeapons();
 		SpawnWeapon();
-		/*
-		InventoryComponent->AddItem(FInventoryWeapon(RightHandWeaponClass));
-		InventoryComponent->AddItem(FInventoryWeapon(LeftHandWeaponClass));
-		*/
 	}
+	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
+	check(GameState)
+	GameState->GameOverDelegate.AddUObject(this, &AMYCharacterBase::GameOver);
 }
 
 /**
@@ -69,6 +69,11 @@ void AMYCharacterBase::DestroyPrep()
 {
 	WeaponItemThing->Deactivate();
 	Destroy();
+}
+
+void AMYCharacterBase::GameOver()
+{
+	
 }
 
 void AMYCharacterBase::Die_Implementation()
