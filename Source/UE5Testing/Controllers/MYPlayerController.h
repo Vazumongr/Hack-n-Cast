@@ -27,6 +27,9 @@ public:
 
 	virtual void GameOver();
 
+	// Will only be called if GameOver is called on the dedicated server
+	virtual void GameOver_DedicatedServer();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

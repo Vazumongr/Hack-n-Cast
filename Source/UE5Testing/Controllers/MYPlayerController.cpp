@@ -70,9 +70,20 @@ void AMYPlayerController::AcknowledgePossession(APawn* P)
 
 void AMYPlayerController::GameOver()
 {
+	if(GetNetMode() == NM_DedicatedServer)
+	{
+		GameOver_DedicatedServer();
+		return;
+	}
+	if(!IsLocalPlayerController()) return;
 	if(!ensureAlways(GameOverMessageClass)) return;
 	UUserWidget* GameOverMessage = CreateWidget(this, GameOverMessageClass);
-	check(GameOverMessage);
+	if(!ensureAlways(GameOverMessage)) return;
 	GameOverMessage->AddToViewport();
+}
+
+void AMYPlayerController::GameOver_DedicatedServer()
+{
+	
 }
 
