@@ -25,6 +25,8 @@ public:
 
 	virtual void AcknowledgePossession(APawn* P) override;
 
+	virtual void PawnDied();
+
 	virtual void GameOver();
 	void StartSpectating();
 

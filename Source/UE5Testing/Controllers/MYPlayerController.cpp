@@ -69,6 +69,12 @@ void AMYPlayerController::AcknowledgePossession(APawn* P)
 	
 }
 
+void AMYPlayerController::PawnDied()
+{
+	if(HasAuthority())
+		StartSpectating();
+}
+
 void AMYPlayerController::GameOver()
 {
 	if(HasAuthority())

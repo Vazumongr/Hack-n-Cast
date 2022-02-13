@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
+#include "UE5Testing/Controllers/MYPlayerController.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 #include "UE5Testing/DataAssets/MYStartingKitBaseDA.h"
 
@@ -57,6 +58,15 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AMYPlayerCharacter::Destroyed()
+{
+	AMYPlayerController* PlayerController = Cast<AMYPlayerController>(GetController());
+	if(PlayerController)
+		PlayerController->PawnDied();
+	
+	Super::Destroyed();
 }
 
 void AMYPlayerCharacter::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
