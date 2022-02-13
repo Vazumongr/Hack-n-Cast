@@ -34,6 +34,8 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const { return Ability; };
+
 	UFUNCTION(BlueprintCallable)
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
 	UFUNCTION(BlueprintCallable)

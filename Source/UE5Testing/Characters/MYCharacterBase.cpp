@@ -9,6 +9,7 @@
 #include "UE5Testing/Actors/Weapons/MYWeapon.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
+#include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
 #include "UE5Testing/GameModes/MYSurvivalGameMode.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 #include "UE5Testing/UI/MYOverheadHealthBarComponent.h"
@@ -320,25 +321,6 @@ void AMYCharacterBase::OnRep_Controller()
 
 void AMYCharacterBase::SpawnWeapons()
 {
-	/*
-	if (RightHandWeaponClass == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s does not have RightHandWeaponClass set."), *GetName());
-	}
-	else
-	{
-		SpawnWeapon(RightHandWeapon, RightHandWeaponClass, RightSocketName, RightHandWeaponRotation);
-	}
-
-	if (LeftHandWeaponClass == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s does not have LeftHandWeaponClass set."), *GetName());
-	}
-	else
-	{
-		SpawnWeapon(LeftHandWeapon, LeftHandWeaponClass, LeftSocketName, LeftHandWeaponRotation);
-	}
-	*/
 }
 
 void AMYCharacterBase::SpawnWeapon()
@@ -348,6 +330,11 @@ void AMYCharacterBase::SpawnWeapon()
 		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
 		WeaponItemThing->SetOwningCharacter(this);
 		WeaponItemThing->SetOwnerASC(AbilitySystemComponent);
+		UMYAbilityDataAsset* ADA = WeaponItemThing->GetAbilityDataAsset();
+		check(ADA);
+		FGameplayAbilitySpec AbilitySpec;
+		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
 }
 
