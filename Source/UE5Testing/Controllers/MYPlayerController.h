@@ -26,6 +26,7 @@ public:
 	virtual void AcknowledgePossession(APawn* P) override;
 
 	virtual void GameOver();
+	void StartSpectating();
 
 	// Will only be called if GameOver is called on the dedicated server
 	virtual void GameOver_DedicatedServer();
@@ -42,4 +43,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UMYHUD* HUDWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class ASpectatorPawn> SpectatorPawnClass;
 };

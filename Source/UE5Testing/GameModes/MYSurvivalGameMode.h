@@ -29,6 +29,7 @@ public:
 	void WaveEnded(int32 InWave);
 
 	virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) override;
+	void AllPlayersSpawned();
 
 	FAllPlayersDeadDelegate AllPlayersDeadDelegate;
 

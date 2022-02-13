@@ -94,6 +94,17 @@ APawn* AMYSurvivalGameMode::SpawnDefaultPawnAtTransform_Implementation(AControll
 {
 	APawn* SpawnedPawn = Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
 	if(SpawnedPawn->IsA(AMYPlayerCharacter::StaticClass()))
-		PlayersAlive++;
+	{
+		if(++PlayersAlive == GetNumPlayers())
+		{
+			AllPlayersSpawned();
+		}
+	}
+		
 	return SpawnedPawn;
+}
+
+void AMYSurvivalGameMode::AllPlayersSpawned()
+{
+	UE_LOG(LogSpawn, Warning, TEXT("All players have spawned."));
 }

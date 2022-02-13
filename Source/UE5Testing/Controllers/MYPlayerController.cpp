@@ -9,6 +9,7 @@
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 #include "UE5Testing/UI/MYHUD.h"
 #include "Blueprint/UserWidget.h"
+#include "GameFramework/SpectatorPawn.h"
 
 
 // Sets default values
@@ -70,6 +71,8 @@ void AMYPlayerController::AcknowledgePossession(APawn* P)
 
 void AMYPlayerController::GameOver()
 {
+	if(HasAuthority())
+		StartSpectating();
 	if(GetNetMode() == NM_DedicatedServer)
 	{
 		GameOver_DedicatedServer();
@@ -81,6 +84,15 @@ void AMYPlayerController::GameOver()
 	if(!ensureAlways(GameOverMessage)) return;
 	GameOverMessage->AddToViewport();
 }
+
+void AMYPlayerController::StartSpectating()
+{
+	ASpectatorPawn* PawnForSpectating = GetWorld()->SpawnActor<ASpectatorPawn>(SpectatorPawnClass);
+	check(PawnForSpectating);
+	//SetSpectatorPawn(PawnForSpectating);
+	Possess(PawnForSpectating);
+}
+
 
 void AMYPlayerController::GameOver_DedicatedServer()
 {
