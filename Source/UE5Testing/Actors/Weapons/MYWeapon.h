@@ -20,11 +20,10 @@ class UE5TESTING_API AMYWeapon : public AStaticMeshActor
 public:
 	// Sets default values for this actor's properties
 	AMYWeapon();
+	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
-	UFUNCTION(BlueprintCallable)
-	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
 	UFUNCTION(BlueprintCallable)
 	void SetOwningWeapon(class AMYWeaponBase* InOwningWeapon);
 	void SetActorArrayPtr(TArray<AActor*>* InHitActorsRef);
@@ -36,34 +35,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	bool bIsClient = false;
-
 	UFUNCTION()
-	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	                            UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep,
+	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep,
 	                            const FHitResult& SweepResult);
 
-	UFUNCTION(Server, Reliable)
-	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetASC);
-
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	class UAbilitySystemComponent* OwnerASC;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FGameplayEffectSpecHandle GESpecHandle;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bActiveHitbox = false;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<AActor*> HitActors;
 	UPROPERTY(BlueprintReadOnly)
 	class AMYWeaponBase* OwningWeapon;
-
-	TArray<AActor*>* HitActorsRef;
-
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
+	TArray<AActor*>* HitActorsRef;
 };

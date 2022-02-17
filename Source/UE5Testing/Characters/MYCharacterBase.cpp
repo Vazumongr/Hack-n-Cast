@@ -39,7 +39,6 @@ void AMYCharacterBase::BeginPlay()
 	SetupAttributeCallbacks();
 	if (HasAuthority())
 	{
-		SpawnWeapons();
 		SpawnWeapon();
 	}
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
@@ -102,12 +101,6 @@ void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
 
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
 {
-	/*
-	if (RightHandWeapon != nullptr)
-		RightHandWeapon->SetGameplayEffect(InGESpecHandle);
-	if (LeftHandWeapon != nullptr)
-		LeftHandWeapon->SetGameplayEffect(InGESpecHandle);
-		*/
 	WeaponItemThing->SetGameplayEffect(InGESpecHandle);
 }
 
@@ -154,8 +147,6 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, bIsReady);
-	/*DOREPLIFETIME(AMYCharacterBase, RightHandWeapon);
-	DOREPLIFETIME(AMYCharacterBase, LeftHandWeapon);*/
 }
 
 void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* InWidget)
@@ -319,10 +310,6 @@ void AMYCharacterBase::OnRep_Controller()
 	Super::OnRep_Controller();
 }
 
-void AMYCharacterBase::SpawnWeapons()
-{
-}
-
 void AMYCharacterBase::SpawnWeapon()
 {
 	if (WeaponClass != nullptr)
@@ -336,32 +323,6 @@ void AMYCharacterBase::SpawnWeapon()
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
-}
-
-void AMYCharacterBase::SpawnWeapon(AMYWeapon*& WeaponActor, TSubclassOf<AMYWeapon>& RefClass, FName InSocketName,
-                                   FRotator SpawnWeaponRotation)
-{
-	UWorld* World = GetWorld();
-	if (!ensure(World)) return;
-	FTransform Transform = FTransform(SpawnWeaponRotation);
-
-	if (IsValid(WeaponActor)) WeaponActor->Destroy();
-
-	WeaponActor = World->SpawnActor<AMYWeapon>(RefClass, Transform);
-	if (WeaponActor == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("RightHandWeapon spawning failed!"));
-		return;
-	}
-	WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, InSocketName);
-	WeaponActor->SetOwner(this);
-	WeaponActor->SetInstigator(this);
-	if (AbilitySystemComponent == nullptr)
-	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
-		       *GetName());
-	}
-	WeaponActor->SetOwnerASC(AbilitySystemComponent);
 }
 
 void AMYCharacterBase::SpawnWeapons_Client_Implementation()

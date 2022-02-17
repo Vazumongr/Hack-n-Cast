@@ -15,22 +15,22 @@ UCLASS(BlueprintType)
 class UE5TESTING_API UMYWeaponSMADA : public UDataAsset
 {
 public:
-	[[nodiscard]] FRotator GetPrimaryMeshSpawnRotation() const
+	FRotator GetPrimaryMeshSpawnRotation() const
 	{
 		return PrimaryMeshSpawnRotation;
 	}
 
-	[[nodiscard]] UStaticMesh* GetPrimaryStaticMesh() const
+	UStaticMesh* GetPrimaryStaticMesh() const
 	{
 		return PrimaryStaticMesh;
 	}
 
-	[[nodiscard]] FRotator GetSecondaryMeshSpawnRotation() const
+	FRotator GetSecondaryMeshSpawnRotation() const
 	{
 		return SecondaryMeshSpawnRotation;
 	}
 
-	[[nodiscard]] UStaticMesh* GetSecondaryStaticMesh() const
+	UStaticMesh* GetSecondaryStaticMesh() const
 	{
 		return SecondaryStaticMesh;
 	}

@@ -37,12 +37,7 @@ public:
 	virtual void DestroyPrep();
 
 	virtual void GameOver();
-
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UMYOverheadHealthBarComponent* OverheadHealthBar;
-
-public:
+	
 	bool bWasKilled{false};
 	
 	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
@@ -58,15 +53,14 @@ public:
 	void ActivateWeapon(class AMYWeapon* WeaponActor);
 	void DeactivateWeapon(class AMYWeapon* WeaponActor);
 	
-	//UFUNCTION(BlueprintCallable)
-	//class AMYWeapon* GetWeaponActor() const { return RightHandWeapon; }
 
 	UFUNCTION(BlueprintCallable)
 	class UMYInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle);
-	/* All the solely related to GAS stuff STARTS here */
+	
+	
     virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     virtual class UMYAttributeSet* GetAttributeSet() const;
 
@@ -113,9 +107,7 @@ protected:
 	virtual void SetupAttributeCallbacks();
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
-	virtual void SpawnWeapons();
 	virtual void SpawnWeapon();
-	virtual void SpawnWeapon(class AMYWeapon*& WeaponActor, TSubclassOf<class AMYWeapon>& RefClass, FName InSocketName, FRotator SpawnWeaponRotation);
 	UFUNCTION(Client, Reliable)
 	virtual void SpawnWeapons_Client();
 
@@ -129,17 +121,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UMYOverheadHealthBarComponent* OverheadHealthBar;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|UI")
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
-	
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	TSubclassOf<class AMYWeapon> RightHandWeaponClass;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	class AMYWeapon* RightHandWeapon;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	TSubclassOf<class AMYWeapon> LeftHandWeaponClass;
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	class AMYWeapon* LeftHandWeapon;*/
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
