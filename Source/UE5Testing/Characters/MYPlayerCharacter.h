@@ -29,6 +29,7 @@ protected:
 	virtual void Destroyed() override;
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount) override;
 	virtual void HealthChanged(const FOnAttributeChangeData & Data) override;
+	virtual void BeginPlay() override;
 
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);

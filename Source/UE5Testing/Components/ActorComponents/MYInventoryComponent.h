@@ -15,13 +15,13 @@ struct FInventoryWeapon
 	
 	FInventoryWeapon(){};
 	
-	FInventoryWeapon(TSubclassOf<class AMYWeapon> InClass)
+	FInventoryWeapon(TSubclassOf<class AMYWeaponBase> InClass)
 	{
 		WeaponClass = InClass;
 	}
 
 	UPROPERTY()
-	TSubclassOf<class AMYWeapon> WeaponClass;
+	TSubclassOf<class AMYWeaponBase> WeaponClass;
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -47,7 +47,7 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FInventoryWeapon> InventoryWeapons;
 
-	UPROPERTY(VisibleAnywhere, Replicated)
-	TArray<class UMYItemData*> InventoryObjects;
+	UPROPERTY(EditDefaultsOnly, Replicated, Instanced)
+	TArray<TObjectPtr<class UMYItemData>> InventoryItems;
 public:
 };

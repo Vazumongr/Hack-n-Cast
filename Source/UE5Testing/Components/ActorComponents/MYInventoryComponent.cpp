@@ -3,6 +3,7 @@
 
 #include "MYInventoryComponent.h"
 
+#include "UE5Testing/DataTypes/MYWeaponData.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -22,7 +23,9 @@ void UMYInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	UMYWeaponData* TestData = NewObject<UMYWeaponData>(this, UMYWeaponData::StaticClass());
+	TestData->ItemName = FText::FromString("I am test data!");
+	InventoryItems.Add(TestData);
 	
 }
 

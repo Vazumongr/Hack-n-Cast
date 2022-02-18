@@ -82,6 +82,11 @@ void AMYPlayerCharacter::HealthChanged(const FOnAttributeChangeData & Data)
 	Super::HealthChanged(Data);
 }
 
+void AMYPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AMYPlayerCharacter::MoveForward(float InValue)
 {
 	if ((Controller != nullptr) && (InValue != 0.0f))

@@ -6,7 +6,6 @@
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
-#include "UE5Testing/Actors/Weapons/MYWeapon.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
@@ -85,18 +84,6 @@ void AMYCharacterBase::Die_Server_Implementation()
 {
 	AbilitySystemComponent->CancelAllAbilities();
 	GetWorldTimerManager().SetTimerForNextTick([this]() { DestroyPrep(); });
-}
-
-void AMYCharacterBase::ActivateWeapon(AMYWeapon* WeaponActor)
-{
-	if (WeaponActor != nullptr)
-		WeaponActor->Activate();
-}
-
-void AMYCharacterBase::DeactivateWeapon(AMYWeapon* WeaponActor)
-{
-	if (WeaponActor != nullptr)
-		WeaponActor->Deactivate();
 }
 
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)

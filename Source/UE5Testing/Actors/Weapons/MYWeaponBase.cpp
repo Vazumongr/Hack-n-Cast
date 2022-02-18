@@ -47,7 +47,7 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
-	SpawnWeaponsActors();
+	//SpawnWeaponsActors();
 }
 
 void AMYWeaponBase::SetWeaponData(UMYWeaponData* InWeaponData)

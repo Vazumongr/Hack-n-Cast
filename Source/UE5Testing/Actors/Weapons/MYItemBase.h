@@ -27,8 +27,8 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Instanced)
-	class UMYItemData* ItemData;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
+	TObjectPtr<class UMYItemData> ItemData;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText WeaponName;

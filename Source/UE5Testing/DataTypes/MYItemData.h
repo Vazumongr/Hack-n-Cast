@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(Abstract, DefaultToInstanced, EditInlineNew, Blueprintable)
 class UE5TESTING_API UMYItemData : public UObject
 {
 	GENERATED_BODY()

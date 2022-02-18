@@ -19,7 +19,7 @@ class UE5TESTING_API UMYStartingKitBaseDA : public UDataAsset
 	
 public:
 	FName GetStartingKitName() const { return StartingKitName; }
-	TSubclassOf<class AMYWeapon> GetWeaponClass() const { return WeaponClass; }
+	TSubclassOf<class AMYWeaponBase> GetWeaponClass() const { return WeaponClass; }
 	TSubclassOf<class UMYGameplayAbility> GetAttackAbility() const { return AttackAbility; }
 	TSubclassOf<class UMYGameplayAbility> GetSpellAbility() const { return SpellAbility; }
 
@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FName StartingKitName;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TSubclassOf<class AMYWeapon> WeaponClass;
+	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSubclassOf<class UMYGameplayAbility> AttackAbility;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)

@@ -49,10 +49,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void Die_Server();
-	
-	void ActivateWeapon(class AMYWeapon* WeaponActor);
-	void DeactivateWeapon(class AMYWeapon* WeaponActor);
-	
 
 	UFUNCTION(BlueprintCallable)
 	class UMYInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
