@@ -139,4 +139,7 @@ void AMYWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMYWeaponBase, OwnerASC);
+	DOREPLIFETIME(AMYWeaponBase, RightHandWeapon);
+	DOREPLIFETIME(AMYWeaponBase, LeftHandWeapon);
+	DOREPLIFETIME(AMYWeaponBase, GESpecHandle);
 }
