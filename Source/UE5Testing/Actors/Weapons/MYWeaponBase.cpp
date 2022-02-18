@@ -8,6 +8,7 @@
 #include "UE5Testing/Actors/Weapons/MYWeaponActor.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/DataAssets/MYWeaponSMADA.h"
+#include "UE5Testing/DataTypes/MYWeaponData.h"
 
 
 // Sets default values
@@ -15,6 +16,11 @@ AMYWeaponBase::AMYWeaponBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+}
+
+UMYAbilityDataAsset* AMYWeaponBase::GetAbilityDataAsset() const
+{
+	return WeaponData->AbilityDataAsset;
 }
 
 void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle)
@@ -41,7 +47,12 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
-	SpawnWeapons();
+	SpawnWeaponsActors();
+}
+
+void AMYWeaponBase::SetWeaponData(UMYWeaponData* InWeaponData)
+{
+	WeaponData = InWeaponData;
 }
 
 void AMYWeaponBase::Deactivate()
@@ -75,32 +86,33 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
-void AMYWeaponBase::SpawnWeapons()
+void AMYWeaponBase::SpawnWeaponsActors()
 {
 	check(OwningCharacter);
+	check(WeaponData);
 	UWorld* World = GetWorld();
 	if (World == nullptr) return;
-	if (RHWeaponClass != nullptr)
+	if (WeaponData->RHWeaponClass != nullptr)
 	{
-		RightHandWeapon = World->SpawnActor<AMYWeaponActor>(RHWeaponClass);
+		RightHandWeapon = World->SpawnActor<AMYWeaponActor>(WeaponData->RHWeaponClass);
 		check(RightHandWeapon);
 		
 		RightHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->RightSocketName);
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetActorArrayPtr(&HitActors);
-		if (WeaponSMADA != nullptr)
-			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponSMADA->GetPrimaryStaticMesh());
+		if (WeaponData->WeaponSMADA != nullptr)
+			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetPrimaryStaticMesh());
 	}
-	if (LHWeaponClass != nullptr)
+	if (WeaponData->LHWeaponClass != nullptr)
 	{
-		LeftHandWeapon = World->SpawnActor<AMYWeaponActor>(LHWeaponClass);
+		LeftHandWeapon = World->SpawnActor<AMYWeaponActor>(WeaponData->LHWeaponClass);
 		check(LeftHandWeapon);
 		
 		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetActorArrayPtr(&HitActors);
-		if (WeaponSMADA != nullptr)
-			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponSMADA->GetSecondaryStaticMesh());
+		if (WeaponData->WeaponSMADA != nullptr)
+			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetSecondaryStaticMesh());
 	}
 }
 

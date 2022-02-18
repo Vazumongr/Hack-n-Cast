@@ -9,27 +9,7 @@
 #include "MYItemBase.generated.h"
 
 class UMYGameplayAbility;
-
-/* Base struct used for creating weapons */
-USTRUCT(BlueprintType)
-struct FItemData
-{
-	GENERATED_BODY();
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FText WeaponName;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class UMYGameplayAbility>> AdditionalAbilities;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EItemRarity ItemRarity;
-};
-
-class UMYGameplayAbility;
+class UMYItemData;
 
 UCLASS(Abstract, NotPlaceable, Blueprintable, BlueprintType)
 class UE5TESTING_API AMYItemBase : public AActor
@@ -47,8 +27,8 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FItemData ItemData;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Instanced)
+	class UMYItemData* ItemData;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText WeaponName;

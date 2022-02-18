@@ -19,28 +19,6 @@ class UMYWeaponSMADA;
 class UStaticMeshComponent;
 class UStaticMesh;
 
-/* Extension of ItemData for weapon specific data */
-USTRUCT()
-struct FWeaponData : public FItemData
-{
-	GENERATED_BODY();
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EWeaponType WeaponType;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYWeaponSMADA* WeaponSMADA;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYAbilityDataAsset* Ability;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class AMYWeaponActor> RHWeaponClass;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class AMYWeaponActor> LHWeaponClass;
-};
-
 UCLASS(Abstract, NotPlaceable, Blueprintable, BlueprintType)
 class UE5TESTING_API AMYWeaponBase : public AMYItemBase
 {
@@ -50,7 +28,7 @@ public:
 	// Sets default values for this actor's properties
 	AMYWeaponBase();
 
-	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const { return Ability; };
+	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
@@ -60,6 +38,8 @@ public:
 	void HitCharacter(class AMYCharacterBase* TargetCharacter);
 	UFUNCTION(BlueprintCallable)
 	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponData(class UMYWeaponData* InWeaponData);
 	UFUNCTION(BlueprintCallable)
 	void Deactivate();
 
@@ -76,9 +56,12 @@ protected:
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
 
-	virtual void SpawnWeapons();
+	virtual void SpawnWeaponsActors();
 
-	/* begin struct data */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMYWeaponData* WeaponData;
+
+	/* begin struct data 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EWeaponType WeaponType;
 	

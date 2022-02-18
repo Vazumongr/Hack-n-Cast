@@ -6,7 +6,7 @@
 #include "Components/SceneComponent.h"
 #include "MYInventoryComponent.generated.h"
 
-struct FItemData;
+class UMYItemData;
 
 USTRUCT()
 struct FInventoryWeapon
@@ -47,6 +47,7 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FInventoryWeapon> InventoryWeapons;
 
-	TArray<struct FItemData*> InventoryItems;
+	UPROPERTY(VisibleAnywhere, Replicated)
+	TArray<class UMYItemData*> InventoryObjects;
 public:
 };
