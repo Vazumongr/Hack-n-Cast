@@ -37,6 +37,7 @@ void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecH
 
 void AMYWeaponBase::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
 {
+	check(InOwnerASC);
 	if (InOwnerASC == nullptr)
 	{
 		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
@@ -54,16 +55,17 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
-	SpawnWeaponsActors();
 }
 
-void AMYWeaponBase::SetWeaponData(class UMYWeaponData* InWeaponData)
+void AMYWeaponBase::Initialize()
 {
-	WeaponData = InWeaponData;
+	SpawnWeaponActors();
 }
 
 void AMYWeaponBase::Deactivate()
 {
+	check(RightHandWeapon);
+	check(LeftHandWeapon);
 	RightHandWeapon->Destroy();
 	LeftHandWeapon->Destroy();
 	Destroy();
@@ -93,9 +95,10 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
-void AMYWeaponBase::SpawnWeaponsActors()
+void AMYWeaponBase::SpawnWeaponActors()
 {
 	check(OwningCharacter);
+	const UMYWeaponData* WeaponData = Cast<UMYWeaponData>(ItemData);
 	check(WeaponData);
 	UWorld* World = GetWorld();
 	if (World == nullptr) return;

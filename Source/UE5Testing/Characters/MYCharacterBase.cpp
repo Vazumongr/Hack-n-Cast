@@ -307,6 +307,7 @@ void AMYCharacterBase::SpawnWeapon()
 		Weapon->SetOwningCharacter(this);
 		Weapon->SetOwnerASC(AbilitySystemComponent);
 		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
+		Weapon->Initialize();
 		
 		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
 		check(ADA);

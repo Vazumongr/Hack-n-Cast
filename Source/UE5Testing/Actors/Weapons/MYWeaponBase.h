@@ -41,7 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
 	UFUNCTION(BlueprintCallable)
-	void SetWeaponData(class UMYWeaponData* InWeaponData);
+	void Initialize();
 	UFUNCTION(BlueprintCallable)
 	void Deactivate();
 
@@ -58,10 +58,7 @@ protected:
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
 
-	virtual void SpawnWeaponsActors();
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYWeaponData* WeaponData;
+	virtual void SpawnWeaponActors();
 	
 	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeaponActor* RightHandWeapon;

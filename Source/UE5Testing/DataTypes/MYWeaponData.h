@@ -24,9 +24,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UMYWeaponSMADA* WeaponSMADA;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYAbilityDataAsset* AbilityDataAsset;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class AMYWeaponActor> RHWeaponClass;
