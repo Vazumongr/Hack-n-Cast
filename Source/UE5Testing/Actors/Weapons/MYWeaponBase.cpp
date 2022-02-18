@@ -16,6 +16,8 @@ AMYWeaponBase::AMYWeaponBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
+	bAlwaysRelevant = true;
 }
 
 UMYAbilityDataAsset* AMYWeaponBase::GetAbilityDataAsset() const
@@ -118,7 +120,7 @@ void AMYWeaponBase::SpawnWeaponActors()
 		LeftHandWeapon = World->SpawnActor<AMYWeaponActor>(WeaponData->LHWeaponClass);
 		check(LeftHandWeapon);
 		
-		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::KeepRelativeTransform, OwningCharacter->LeftSocketName);
+		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetActorArrayPtr(&HitActors);
 		if (WeaponData->WeaponSMADA != nullptr)
