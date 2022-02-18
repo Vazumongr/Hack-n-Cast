@@ -14,12 +14,13 @@ class AMYCharacterBase;
 class AMYWeaponActor;
 class UMYAbilityDataAsset;
 class UMYGameplayAbility;
+class UMYWeaponData;
 class UMYWeaponSMADA;
 
 class UStaticMeshComponent;
 class UStaticMesh;
 
-UCLASS(Abstract, NotPlaceable, Blueprintable, BlueprintType)
+UCLASS(NotPlaceable, Blueprintable, BlueprintType)
 class UE5TESTING_API AMYWeaponBase : public AMYItemBase
 {
 	GENERATED_BODY()
@@ -29,6 +30,7 @@ public:
 	AMYWeaponBase();
 
 	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const;
+	virtual class UMYAbilityDataAsset* GetPrimaryAbilityAsset() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
@@ -60,23 +62,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UMYWeaponData* WeaponData;
-
-	/* begin struct data 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EWeaponType WeaponType;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYWeaponSMADA* WeaponSMADA;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMYAbilityDataAsset* Ability;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AMYWeaponActor> RHWeaponClass;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AMYWeaponActor> LHWeaponClass;
-	/* end struct data */
 	
 	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeaponActor* RightHandWeapon;

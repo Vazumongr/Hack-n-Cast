@@ -20,7 +20,14 @@ AMYWeaponBase::AMYWeaponBase()
 
 UMYAbilityDataAsset* AMYWeaponBase::GetAbilityDataAsset() const
 {
-	return WeaponData->AbilityDataAsset;
+	check(ItemData);
+	return ItemData->PrimaryAbilityDataAsset;
+}
+
+UMYAbilityDataAsset* AMYWeaponBase::GetPrimaryAbilityAsset() const
+{
+	check(ItemData);
+	return ItemData->PrimaryAbilityDataAsset;
 }
 
 void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle)
@@ -47,10 +54,10 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
 {
 	OwningCharacter = InOwningCharacter;
-	//SpawnWeaponsActors();
+	SpawnWeaponsActors();
 }
 
-void AMYWeaponBase::SetWeaponData(UMYWeaponData* InWeaponData)
+void AMYWeaponBase::SetWeaponData(class UMYWeaponData* InWeaponData)
 {
 	WeaponData = InWeaponData;
 }

@@ -18,6 +18,11 @@ void AMYItemBase::BeginPlay()
 	
 }
 
+void AMYItemBase::SetItemData(TObjectPtr<UMYItemData> InItemData)
+{
+	ItemData = InItemData;
+}
+
 // Called every frame
 void AMYItemBase::Tick(float DeltaTime)
 {

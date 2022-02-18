@@ -40,6 +40,8 @@ public:
 	virtual void AddItem(FInventoryWeapon InInventoryWeapon);
 	virtual bool GetInventoryWeaponAtIndex(FInventoryWeapon& OutInventoryWeapon, int32 InIdx) const;
 
+	TObjectPtr<class UMYItemData> GetItemDataAtIndex(int8 InIdx) const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

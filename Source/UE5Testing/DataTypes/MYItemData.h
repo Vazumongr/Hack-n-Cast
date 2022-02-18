@@ -8,6 +8,9 @@
 
 #include "MYItemData.generated.h"
 
+class UMYAbilityDataAsset;
+class UMYGameplayAbility;
+
 /**
  * 
  */
@@ -22,6 +25,12 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMYAbilityDataAsset* PrimaryAbilityDataAsset;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<class UMYAbilityDataAsset*> AdditionalAbilityDataAssets;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class UMYGameplayAbility>> AdditionalAbilities;

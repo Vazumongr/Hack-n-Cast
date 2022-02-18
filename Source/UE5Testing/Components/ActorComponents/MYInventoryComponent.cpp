@@ -60,3 +60,8 @@ bool UMYInventoryComponent::GetInventoryWeaponAtIndex(FInventoryWeapon& OutInven
 	return false;
 }
 
+TObjectPtr<UMYItemData> UMYInventoryComponent::GetItemDataAtIndex(int8 InIdx) const
+{
+	return InIdx <= InventoryItems.Num() ? InventoryItems[InIdx] : nullptr;
+}
+

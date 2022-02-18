@@ -26,17 +26,11 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SetItemData(TObjectPtr<class UMYItemData> InItemData);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
 	TObjectPtr<class UMYItemData> ItemData;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FText WeaponName;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class UMYGameplayAbility>> AdditionalAbilities;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EItemRarity ItemRarity;
 
 };

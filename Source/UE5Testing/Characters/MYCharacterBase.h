@@ -37,12 +37,6 @@ public:
 	virtual void DestroyPrep();
 
 	virtual void GameOver();
-	
-	bool bWasKilled{false};
-	
-	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
-	UPROPERTY(Replicated)
-	bool bIsReady{false};
 
 	UFUNCTION(BlueprintNativeEvent)
 	void Die();
@@ -60,7 +54,7 @@ public:
     virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     virtual class UMYAttributeSet* GetAttributeSet() const;
 
-	virtual class AMYWeaponBase* GetWeapon() const { return WeaponItemThing; };
+	virtual class AMYWeaponBase* GetWeapon() const { return Weapon; };
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void PostInitializeComponents() override;
@@ -86,7 +80,13 @@ public:
 	FStatChangedDelegate HealthChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FStatChangedDelegate MaxHealthChangedDelegate;
-
+	
+	bool bWasKilled{false};
+	
+	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
+	UPROPERTY(Replicated)
+	bool bIsReady{false};
+	
 	UPROPERTY(EditAnywhere, Category="Setup")
 	FRotator RightHandWeaponRotation;
 	UPROPERTY(EditAnywhere, Category="Setup")
@@ -104,8 +104,6 @@ protected:
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
 	virtual void SpawnWeapon();
-	UFUNCTION(Client, Reliable)
-	virtual void SpawnWeapons_Client();
 
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	UFUNCTION(BlueprintImplementableEvent)
@@ -123,12 +121,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|UI")
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
 	
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")
-	class AMYWeaponBase* WeaponItemThing;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
+	class AMYWeaponBase* Weapon;
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")

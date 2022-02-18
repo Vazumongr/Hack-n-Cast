@@ -66,7 +66,7 @@ void AMYCharacterBase::Destroyed()
 
 void AMYCharacterBase::DestroyPrep()
 {
-	WeaponItemThing->Deactivate();
+	Weapon->Deactivate();
 	Destroy();
 }
 
@@ -88,7 +88,7 @@ void AMYCharacterBase::Die_Server_Implementation()
 
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
 {
-	WeaponItemThing->SetGameplayEffect(InGESpecHandle);
+	Weapon->SetGameplayEffect(InGESpecHandle);
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
@@ -301,19 +301,19 @@ void AMYCharacterBase::SpawnWeapon()
 {
 	if (WeaponClass != nullptr)
 	{
-		WeaponItemThing = GetWorld()->SpawnActor<AMYWeaponBase>(WeaponClass);
-		WeaponItemThing->SetOwningCharacter(this);
-		WeaponItemThing->SetOwnerASC(AbilitySystemComponent);
-		UMYAbilityDataAsset* ADA = WeaponItemThing->GetAbilityDataAsset();
+		check(InventoryComponent);
+		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
+		check(Weapon);
+		Weapon->SetOwningCharacter(this);
+		Weapon->SetOwnerASC(AbilitySystemComponent);
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
+		
+		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
 		check(ADA);
 		FGameplayAbilitySpec AbilitySpec;
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
-}
-
-void AMYCharacterBase::SpawnWeapons_Client_Implementation()
-{
 }
 
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
