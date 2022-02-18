@@ -44,6 +44,7 @@ public:
 	void Initialize();
 	UFUNCTION(BlueprintCallable)
 	void Deactivate();
+	virtual void Deconstruct() override;
 
 	UFUNCTION(BlueprintCallable)
 	void ActivateRightHandWeapon();

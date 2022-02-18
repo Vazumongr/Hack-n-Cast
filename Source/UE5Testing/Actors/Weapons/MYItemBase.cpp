@@ -23,6 +23,11 @@ void AMYItemBase::SetItemData(TObjectPtr<UMYItemData> InItemData)
 	ItemData = InItemData;
 }
 
+void AMYItemBase::Deconstruct()
+{
+	Destroy();
+}
+
 // Called every frame
 void AMYItemBase::Tick(float DeltaTime)
 {

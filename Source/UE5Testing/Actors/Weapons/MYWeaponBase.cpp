@@ -73,6 +73,14 @@ void AMYWeaponBase::Deactivate()
 	Destroy();
 }
 
+/* Delayed super call because super calls Destroy() */
+void AMYWeaponBase::Deconstruct()
+{
+	RightHandWeapon->Destroy();
+	LeftHandWeapon->Destroy();
+	Super::Deconstruct();
+}
+
 void AMYWeaponBase::ActivateRightHandWeapon()
 {
 	check(RightHandWeapon);

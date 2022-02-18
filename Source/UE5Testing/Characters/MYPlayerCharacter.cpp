@@ -7,8 +7,10 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
+#include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/Controllers/MYPlayerController.h"
+#include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 #include "UE5Testing/DataAssets/MYStartingKitBaseDA.h"
 
@@ -53,6 +55,8 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::MyInteract);
 	PlayerInputComponent->BindAction("ToggleRightHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleRightHand);
 	PlayerInputComponent->BindAction("ToggleLeftHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleLeftHand);
+	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectFirstWeapon);
+	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectSecondWeapon);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
@@ -85,6 +89,50 @@ void AMYPlayerCharacter::HealthChanged(const FOnAttributeChangeData & Data)
 void AMYPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AMYPlayerCharacter::SelectFirstWeapon()
+{
+	if (WeaponClass != nullptr)
+	{
+		Weapon->Deactivate();
+		Weapon = nullptr;
+		check(InventoryComponent);
+		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
+		check(Weapon);
+		Weapon->SetOwningCharacter(this);
+		Weapon->SetOwnerASC(AbilitySystemComponent);
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
+		Weapon->Initialize();
+		
+		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
+		check(ADA);
+		FGameplayAbilitySpec AbilitySpec;
+		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
+}
+
+void AMYPlayerCharacter::SelectSecondWeapon()
+{
+	if (WeaponClass != nullptr)
+	{
+		Weapon->Deactivate();
+		Weapon = nullptr;
+		check(InventoryComponent);
+		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
+		check(Weapon);
+		Weapon->SetOwningCharacter(this);
+		Weapon->SetOwnerASC(AbilitySystemComponent);
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(1));
+		Weapon->Initialize();
+		
+		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
+		check(ADA);
+		FGameplayAbilitySpec AbilitySpec;
+		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+	}
 }
 
 void AMYPlayerCharacter::MoveForward(float InValue)

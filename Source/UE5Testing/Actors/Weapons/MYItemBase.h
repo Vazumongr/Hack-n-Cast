@@ -28,6 +28,8 @@ public:
 
 	void SetItemData(TObjectPtr<class UMYItemData> InItemData);
 
+	virtual void Deconstruct();
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
 	TObjectPtr<class UMYItemData> ItemData;
