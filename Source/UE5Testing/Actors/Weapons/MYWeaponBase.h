@@ -10,14 +10,36 @@
 
 #include "MYWeaponBase.generated.h"
 
-class AMYWeapon;
-class UMYAbilityDataAsset;
 class AMYCharacterBase;
+class AMYWeaponActor;
+class UMYAbilityDataAsset;
 class UMYGameplayAbility;
 class UMYWeaponSMADA;
 
 class UStaticMeshComponent;
 class UStaticMesh;
+
+/* Extension of ItemData for weapon specific data */
+USTRUCT()
+struct FWeaponData : public FItemData
+{
+	GENERATED_BODY();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	EWeaponType WeaponType;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMYWeaponSMADA* WeaponSMADA;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMYAbilityDataAsset* Ability;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class AMYWeaponActor> RHWeaponClass;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class AMYWeaponActor> LHWeaponClass;
+};
 
 UCLASS(Abstract, NotPlaceable, Blueprintable, BlueprintType)
 class UE5TESTING_API AMYWeaponBase : public AMYItemBase
@@ -27,12 +49,6 @@ class UE5TESTING_API AMYWeaponBase : public AMYItemBase
 public:
 	// Sets default values for this actor's properties
 	AMYWeaponBase();
-	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const { return Ability; };
 
@@ -62,7 +78,7 @@ protected:
 
 	virtual void SpawnWeapons();
 
-	
+	/* begin struct data */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EWeaponType WeaponType;
 	
@@ -73,16 +89,17 @@ protected:
 	class UMYAbilityDataAsset* Ability;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AMYWeapon> RHWeaponClass;
+	TSubclassOf<AMYWeaponActor> RHWeaponClass;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<AMYWeapon> LHWeaponClass;
+	TSubclassOf<AMYWeaponActor> LHWeaponClass;
+	/* end struct data */
 	
 	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
-	class AMYWeapon* RightHandWeapon;
+	class AMYWeaponActor* RightHandWeapon;
 	
 	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
-	class AMYWeapon* LeftHandWeapon;
+	class AMYWeaponActor* LeftHandWeapon;
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	class UAbilitySystemComponent* OwnerASC;
