@@ -311,7 +311,7 @@ void AMYCharacterBase::SpawnWeapon()
 		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
 		Weapon->Initialize();
 		
-		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
+		UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
 		check(ADA);
 		FGameplayAbilitySpec AbilitySpec;
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);

@@ -93,27 +93,15 @@ void AMYPlayerCharacter::BeginPlay()
 
 void AMYPlayerCharacter::SelectFirstWeapon()
 {
-	if (WeaponClass != nullptr)
-	{
-		Weapon->Deactivate();
-		Weapon = nullptr;
-		check(InventoryComponent);
-		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
-		check(Weapon);
-		Weapon->SetOwningCharacter(this);
-		Weapon->SetOwnerASC(AbilitySystemComponent);
-		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
-		Weapon->Initialize();
-		
-		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
-		check(ADA);
-		FGameplayAbilitySpec AbilitySpec;
-		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
-		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-	}
+	SelectWeapon_Server(0);
 }
 
 void AMYPlayerCharacter::SelectSecondWeapon()
+{
+	SelectWeapon_Server(1);
+}
+
+void AMYPlayerCharacter::SelectWeapon_Server_Implementation(int8 WeaponIdx)
 {
 	if (WeaponClass != nullptr)
 	{
@@ -124,10 +112,10 @@ void AMYPlayerCharacter::SelectSecondWeapon()
 		check(Weapon);
 		Weapon->SetOwningCharacter(this);
 		Weapon->SetOwnerASC(AbilitySystemComponent);
-		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(1));
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(WeaponIdx));
 		Weapon->Initialize();
 		
-		UMYAbilityDataAsset* ADA = Weapon->GetAbilityDataAsset();
+		UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
 		check(ADA);
 		FGameplayAbilitySpec AbilitySpec;
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);

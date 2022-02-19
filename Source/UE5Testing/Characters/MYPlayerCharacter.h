@@ -32,6 +32,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SelectFirstWeapon();
 	virtual void SelectSecondWeapon();
+	UFUNCTION(Server, Reliable)
+	virtual void SelectWeapon_Server(int8 WeaponIdx);
 
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);

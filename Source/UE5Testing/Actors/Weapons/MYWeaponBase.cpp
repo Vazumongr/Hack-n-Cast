@@ -20,12 +20,6 @@ AMYWeaponBase::AMYWeaponBase()
 	bAlwaysRelevant = true;
 }
 
-UMYAbilityDataAsset* AMYWeaponBase::GetAbilityDataAsset() const
-{
-	check(ItemData);
-	return ItemData->PrimaryAbilityDataAsset;
-}
-
 UMYAbilityDataAsset* AMYWeaponBase::GetPrimaryAbilityAsset() const
 {
 	check(ItemData);

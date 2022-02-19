@@ -22,18 +22,12 @@ class UE5TESTING_API UMYItemData : public UObject
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText ItemName;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class UMYGameplayAbility> PrimaryAbility;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UMYAbilityDataAsset* PrimaryAbilityDataAsset;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<class UMYAbilityDataAsset*> AdditionalAbilityDataAssets;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class UMYGameplayAbility>> AdditionalAbilities;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	EItemRarity ItemRarity;

@@ -29,7 +29,6 @@ public:
 	// Sets default values for this actor's properties
 	AMYWeaponBase();
 
-	virtual class UMYAbilityDataAsset* GetAbilityDataAsset() const;
 	virtual class UMYAbilityDataAsset* GetPrimaryAbilityAsset() const;
 
 	UFUNCTION(BlueprintCallable)
