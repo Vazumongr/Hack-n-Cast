@@ -183,13 +183,13 @@ void AMYPlayerCharacter::ToggleLeftHand()
 void AMYPlayerCharacter::ToggleRightHand_Server_Implementation()
 {
 	FInventoryWeapon InvWeapon;
-	InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,0);
+	//InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,0);
 }
 
 void AMYPlayerCharacter::ToggleLeftHand_Server_Implementation()
 {
 	FInventoryWeapon InvWeapon;
-	InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,1);
+	//InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,1);
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

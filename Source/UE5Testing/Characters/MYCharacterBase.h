@@ -104,6 +104,8 @@ protected:
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
 	virtual void SpawnWeapon();
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void SpawnDefaultWeapon_Multicast();
 
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	UFUNCTION(BlueprintImplementableEvent)
@@ -121,7 +123,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|UI")
 	class UMYOverheadHealthBarWidget* OverheadHealthBarWidget;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Inventory")
 	class UMYInventoryComponent* InventoryComponent;
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Combat")

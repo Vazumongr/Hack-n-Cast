@@ -25,6 +25,10 @@ AMYCharacterBase::AMYCharacterBase()
 	OverheadHealthBar->SetupAttachment(RootComponent);
 
 	InventoryComponent = CreateDefaultSubobject<UMYInventoryComponent>(TEXT("InventoryComponent"));
+	if(InventoryComponent)
+	{
+		InventoryComponent->SetIsReplicated(true);
+	}
 }
 
 void AMYCharacterBase::Tick(float DeltaSeconds)
@@ -38,7 +42,7 @@ void AMYCharacterBase::BeginPlay()
 	SetupAttributeCallbacks();
 	if (HasAuthority())
 	{
-		SpawnWeapon();
+		SpawnDefaultWeapon_Multicast();
 	}
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
 	check(GameState)
@@ -317,6 +321,11 @@ void AMYCharacterBase::SpawnWeapon()
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 	}
+}
+
+void AMYCharacterBase::SpawnDefaultWeapon_Multicast_Implementation()
+{
+	SpawnWeapon();
 }
 
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)

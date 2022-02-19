@@ -37,17 +37,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual void AddItem(FInventoryWeapon InInventoryWeapon);
-	virtual bool GetInventoryWeaponAtIndex(FInventoryWeapon& OutInventoryWeapon, int32 InIdx) const;
+	UFUNCTION(Server, Reliable)
+	void AddItemToInventory_Server(class UMYItemData* InItemData);
 
 	TObjectPtr<class UMYItemData> GetItemDataAtIndex(int8 InIdx) const;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(Replicated)
-	TArray<FInventoryWeapon> InventoryWeapons;
 
 	UPROPERTY(EditDefaultsOnly, Replicated, Instanced)
 	TArray<TObjectPtr<class UMYItemData>> InventoryItems;

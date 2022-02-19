@@ -38,6 +38,6 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;
-	
+
 	TArray<AActor*>* HitActorsRef;
 };

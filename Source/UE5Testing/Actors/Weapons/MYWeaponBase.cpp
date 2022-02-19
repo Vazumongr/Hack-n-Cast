@@ -16,7 +16,7 @@ AMYWeaponBase::AMYWeaponBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	bReplicates = true;
+	SetReplicates(true);
 	bAlwaysRelevant = true;
 }
 
@@ -128,6 +128,11 @@ void AMYWeaponBase::SpawnWeaponActors()
 		if (WeaponData->WeaponSMADA != nullptr)
 			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetSecondaryStaticMesh());
 	}
+}
+
+void AMYWeaponBase::SpawnWeaponActors_Multicast_Implementation()
+{
+	SpawnWeaponActors();
 }
 
 void AMYWeaponBase::ApplyEffectToTarget_Server_Implementation(AMYCharacterBase* TargetCharacter)

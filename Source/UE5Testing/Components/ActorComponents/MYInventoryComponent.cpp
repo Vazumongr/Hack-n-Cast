@@ -12,8 +12,9 @@ UMYInventoryComponent::UMYInventoryComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
+	SetIsReplicatedByDefault(true);
 	// ...
 }
 
@@ -23,10 +24,10 @@ void UMYInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(GetOwnerRole() != ROLE_Authority) return;
 	UMYWeaponData* TestData = NewObject<UMYWeaponData>(this, UMYWeaponData::StaticClass());
 	TestData->ItemName = FText::FromString("I am test data!");
 	InventoryItems.Add(TestData);
-	
 }
 
 
@@ -39,25 +40,15 @@ void UMYInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
+void UMYInventoryComponent::AddItemToInventory_Server_Implementation(UMYItemData* InItemData)
+{
+	InventoryItems.Add(InItemData);
+}
+
 void UMYInventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(UMYInventoryComponent, InventoryWeapons);
-}
-
-void UMYInventoryComponent::AddItem(FInventoryWeapon InInventoryWeapon)
-{
-	InventoryWeapons.Add(InInventoryWeapon);
-}
-
-bool UMYInventoryComponent::GetInventoryWeaponAtIndex(FInventoryWeapon& OutInventoryWeapon, int32 InIdx) const
-{
-	if(InventoryWeapons.Num() > InIdx)
-	{
-		OutInventoryWeapon = InventoryWeapons[InIdx];
-		return true;
-	}
-	return false;
+	DOREPLIFETIME(UMYInventoryComponent, InventoryItems);
 }
 
 TObjectPtr<UMYItemData> UMYInventoryComponent::GetItemDataAtIndex(int8 InIdx) const

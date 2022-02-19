@@ -59,6 +59,8 @@ protected:
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
 
 	virtual void SpawnWeaponActors();
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void SpawnWeaponActors_Multicast();
 	
 	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
 	class AMYWeaponActor* RightHandWeapon;
