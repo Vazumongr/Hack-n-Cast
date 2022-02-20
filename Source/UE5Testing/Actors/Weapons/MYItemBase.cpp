@@ -3,6 +3,9 @@
 
 #include "MYItemBase.h"
 
+#include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
+#include "Net/UnrealNetwork.h"
+
 
 // Sets default values
 AMYItemBase::AMYItemBase()
@@ -18,11 +21,35 @@ void AMYItemBase::BeginPlay()
 	
 }
 
+void AMYItemBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION(AMYItemBase, OwnerASC, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(AMYItemBase, OwningCharacter, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(AMYItemBase, ItemData, COND_InitialOnly);
+}
+
 void AMYItemBase::SetItemData(TObjectPtr<UMYItemData> InItemData)
 {
 	ItemData = InItemData;
 }
 
+void AMYItemBase::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
+{
+	check(InOwnerASC);
+	if (InOwnerASC == nullptr)
+	{
+		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
+			   *GetName());
+		return;
+	}
+	OwnerASC = InOwnerASC;
+}
+
+void AMYItemBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
+{
+	OwningCharacter = InOwningCharacter;
+}
 void AMYItemBase::Deconstruct()
 {
 	Destroy();

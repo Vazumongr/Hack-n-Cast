@@ -2,6 +2,7 @@
 
 #include "UE5Testing/Characters/MYCharacterBase.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
@@ -40,10 +41,12 @@ void AMYCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
+	
 	if (HasAuthority())
 	{
-		SpawnDefaultWeapon_Multicast();
+		SpawnWeaponsOnServer(0);
 	}
+	//SpawnDefaultWeapon();
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
 	check(GameState)
 	GameState->GameOverDelegate.AddUObject(this, &AMYCharacterBase::GameOver);
@@ -138,7 +141,6 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, bIsReady);
-	DOREPLIFETIME(AMYCharacterBase, Weapon);
 	DOREPLIFETIME(AMYCharacterBase, WeaponClass);
 }
 
@@ -303,10 +305,16 @@ void AMYCharacterBase::OnRep_Controller()
 	Super::OnRep_Controller();
 }
 
-void AMYCharacterBase::SpawnWeapon()
+void AMYCharacterBase::SpawnWeapon(int8 WeaponIdx)
 {
 	if (WeaponClass != nullptr)
 	{
+		if(Weapon!=nullptr) // A weapon already exists
+		{
+			Weapon->Deactivate();
+            Weapon = nullptr;
+		}
+		
 		check(InventoryComponent);
 		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
 		check(Weapon);
@@ -314,18 +322,55 @@ void AMYCharacterBase::SpawnWeapon()
 		Weapon->SetOwnerASC(AbilitySystemComponent);
 		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
 		Weapon->Initialize();
+
+		if(HasAuthority())
+		{
+			UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
+            check(ADA);
+            FGameplayAbilitySpec AbilitySpec;
+            AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+            PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+		}
+
+	}
+}
+
+void AMYCharacterBase::SpawnDefaultWeapon()
+{
+	SpawnWeapon(0);
+}
+
+void AMYCharacterBase::SpawnDefaultWeapon_Multicast_Implementation()
+{
+	SpawnWeapon(0);
+}
+
+void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
+{
+	if (WeaponClass != nullptr)
+	{
+		if(Weapon!=nullptr) // A weapon already exists
+		{
+			Weapon->Deactivate();
+			Weapon = nullptr;
+		}
+		
+		check(InventoryComponent);
+		Weapon = GetWorld()->SpawnActorDeferred<AMYWeaponBase>(AMYWeaponBase::StaticClass(),FTransform::Identity,this);
+		check(Weapon);
+		Weapon->SetOwningCharacter(this);
+		Weapon->SetOwnerASC(AbilitySystemComponent);
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
+		Weapon->SetReplicates(true);
+		UGameplayStatics::FinishSpawningActor(Weapon, FTransform::Identity);
 		
 		UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
 		check(ADA);
 		FGameplayAbilitySpec AbilitySpec;
 		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-	}
-}
 
-void AMYCharacterBase::SpawnDefaultWeapon_Multicast_Implementation()
-{
-	SpawnWeapon();
+	}
 }
 
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)

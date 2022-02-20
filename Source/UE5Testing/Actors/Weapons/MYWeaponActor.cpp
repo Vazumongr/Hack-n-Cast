@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "Engine.h"
+#include "Net/UnrealNetwork.h"
 
 
 // Sets default values
@@ -46,6 +47,7 @@ void AMYWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMYWeaponActor::OnBeginOverlap);
+	HitActorsRef = OwningWeapon->GetHitActors();
 }
 
 void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex,
@@ -76,4 +78,10 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 void AMYWeaponActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AMYWeaponActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION(AMYWeaponActor, OwningWeapon, COND_InitialOnly);
 }

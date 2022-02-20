@@ -3,6 +3,7 @@
 
 #include "MYWeaponBase.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponActor.h"
@@ -16,8 +17,17 @@ AMYWeaponBase::AMYWeaponBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	SetReplicates(true);
+	bReplicates = true;
 	bAlwaysRelevant = true;
+}
+
+void AMYWeaponBase::BeginPlay()
+{
+	Super::BeginPlay();
+	if(HasAuthority())
+	{
+		SpawnWeaponActors();
+	}
 }
 
 UMYAbilityDataAsset* AMYWeaponBase::GetPrimaryAbilityAsset() const
@@ -31,26 +41,11 @@ void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecH
 	GESpecHandle = InGESpecHandle;
 }
 
-void AMYWeaponBase::SetOwnerASC(UAbilitySystemComponent* InOwnerASC)
-{
-	check(InOwnerASC);
-	if (InOwnerASC == nullptr)
-	{
-		UE_LOG(LogAbilitySystem, Warning, TEXT("%s was called with a null ASC on %s"), *FString(__FUNCTION__),
-		       *GetName());
-		return;
-	}
-	OwnerASC = InOwnerASC;
-}
+
 
 void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 {
 	ApplyEffectToTarget_Server(TargetCharacter);
-}
-
-void AMYWeaponBase::SetOwningCharacter(AMYCharacterBase* InOwningCharacter)
-{
-	OwningCharacter = InOwningCharacter;
 }
 
 void AMYWeaponBase::Initialize()
@@ -99,6 +94,11 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
+TArray<AActor*>* AMYWeaponBase::GetHitActors()
+{
+	return &HitActors;
+}
+
 void AMYWeaponBase::SpawnWeaponActors()
 {
 	check(OwningCharacter);
@@ -106,27 +106,35 @@ void AMYWeaponBase::SpawnWeaponActors()
 	check(WeaponData);
 	UWorld* World = GetWorld();
 	if (World == nullptr) return;
+	
 	if (WeaponData->RHWeaponClass != nullptr)
 	{
-		RightHandWeapon = World->SpawnActor<AMYWeaponActor>(WeaponData->RHWeaponClass);
+		RightHandWeapon = World->SpawnActorDeferred<AMYWeaponActor>(WeaponData->RHWeaponClass, FTransform::Identity);
 		check(RightHandWeapon);
 		
 		RightHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->RightSocketName);
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetActorArrayPtr(&HitActors);
+		RightHandWeapon->SetReplicates(true);
+		
 		if (WeaponData->WeaponSMADA != nullptr)
 			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetPrimaryStaticMesh());
+		UGameplayStatics::FinishSpawningActor(RightHandWeapon, FTransform::Identity);
 	}
+	
 	if (WeaponData->LHWeaponClass != nullptr)
 	{
-		LeftHandWeapon = World->SpawnActor<AMYWeaponActor>(WeaponData->LHWeaponClass);
+		LeftHandWeapon = World->SpawnActorDeferred<AMYWeaponActor>(WeaponData->LHWeaponClass, FTransform::Identity);
 		check(LeftHandWeapon);
 		
 		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetActorArrayPtr(&HitActors);
+		LeftHandWeapon->SetReplicates(true);
+		
 		if (WeaponData->WeaponSMADA != nullptr)
 			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetSecondaryStaticMesh());
+		UGameplayStatics::FinishSpawningActor(LeftHandWeapon, FTransform::Identity);
 	}
 }
 
@@ -147,7 +155,6 @@ void AMYWeaponBase::ApplyEffectToTarget_Server_Implementation(AMYCharacterBase* 
 void AMYWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AMYWeaponBase, OwnerASC);
 	DOREPLIFETIME(AMYWeaponBase, RightHandWeapon);
 	DOREPLIFETIME(AMYWeaponBase, LeftHandWeapon);
 	DOREPLIFETIME(AMYWeaponBase, GESpecHandle);

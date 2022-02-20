@@ -33,11 +33,13 @@ protected:
 	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex, bool bFromSweep,
 								const FHitResult& SweepResult);
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Replicated)
 	class AMYWeaponBase* OwningWeapon;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;
 
 	TArray<AActor*>* HitActorsRef;
+
+	TWeakPtr<AActor> WeakActr;
 };

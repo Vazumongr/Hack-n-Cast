@@ -103,6 +103,17 @@ void AMYPlayerCharacter::SelectSecondWeapon()
 
 void AMYPlayerCharacter::SelectWeapon_Server_Implementation(int8 WeaponIdx)
 {
+	SelectWeapon_Multicast(WeaponIdx);
+}
+
+void AMYPlayerCharacter::SelectWeapon_Multicast_Implementation(int8 WeaponIdx)
+{
+	SpawnWeapon(WeaponIdx);
+}
+
+/*
+void AMYPlayerCharacter::SpawnWeapon(int8 WeaponIdx)
+{
 	if (WeaponClass != nullptr)
 	{
 		Weapon->Deactivate();
@@ -114,14 +125,18 @@ void AMYPlayerCharacter::SelectWeapon_Server_Implementation(int8 WeaponIdx)
 		Weapon->SetOwnerASC(AbilitySystemComponent);
 		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(WeaponIdx));
 		Weapon->Initialize();
-		
-		UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
-		check(ADA);
-		FGameplayAbilitySpec AbilitySpec;
-		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
-		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+
+		if(HasAuthority())
+		{
+			UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
+			check(ADA);
+			FGameplayAbilitySpec AbilitySpec;
+			AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+			PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
+		}
 	}
 }
+*/
 
 void AMYPlayerCharacter::MoveForward(float InValue)
 {

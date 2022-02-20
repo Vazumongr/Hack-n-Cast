@@ -29,16 +29,14 @@ public:
 	// Sets default values for this actor's properties
 	AMYWeaponBase();
 
+	virtual void BeginPlay() override;
+
 	virtual class UMYAbilityDataAsset* GetPrimaryAbilityAsset() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
 	UFUNCTION(BlueprintCallable)
-	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
-	UFUNCTION(BlueprintCallable)
 	void HitCharacter(class AMYCharacterBase* TargetCharacter);
-	UFUNCTION(BlueprintCallable)
-	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
 	UFUNCTION(BlueprintCallable)
 	void Initialize();
 	UFUNCTION(BlueprintCallable)
@@ -54,6 +52,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeactivateLeftHandWeapon();
 
+	TArray<AActor*>* GetHitActors();
+
 protected:
 	UFUNCTION(Server, Reliable)
 	virtual void ApplyEffectToTarget_Server(class AMYCharacterBase* TargetCharacter);
@@ -62,14 +62,11 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void SpawnWeaponActors_Multicast();
 	
-	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Replicated)
 	class AMYWeaponActor* RightHandWeapon;
 	
-	UPROPERTY(Replicated, VisibleDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Replicated)
 	class AMYWeaponActor* LeftHandWeapon;
-	
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
-	class UAbilitySystemComponent* OwnerASC;
 	
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	FGameplayEffectSpecHandle GESpecHandle;
@@ -77,6 +74,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<AActor*> HitActors;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class AMYCharacterBase* OwningCharacter;
 };

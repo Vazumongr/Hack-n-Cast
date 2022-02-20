@@ -27,12 +27,24 @@ public:
 	virtual void BeginPlay() override;
 
 	void SetItemData(TObjectPtr<class UMYItemData> InItemData);
+	UFUNCTION(BlueprintCallable)
+	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
+	UFUNCTION(BlueprintCallable)
+	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
 
 	virtual void Deconstruct();
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Replicated)
 	TObjectPtr<class UMYItemData> ItemData;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Replicated)
+	TObjectPtr<class UMYItemData> NonInstancedItemData;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	class AMYCharacterBase* OwningCharacter;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	class UAbilitySystemComponent* OwnerASC;
 	
 
 };
