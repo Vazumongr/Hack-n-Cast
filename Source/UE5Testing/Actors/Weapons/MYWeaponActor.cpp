@@ -28,26 +28,28 @@ void AMYWeaponActor::SetOwningWeapon(AMYWeaponBase* InOwningWeapon)
 
 void AMYWeaponActor::SetActorArrayPtr(TArray<AActor*>* InHitActorsRef)
 {
-	HitActorsRef = InHitActorsRef;
+	
 }
 
 void AMYWeaponActor::Activate()
 {
 	BoxCollider->SetGenerateOverlapEvents(true);
-	HitActorsRef->Empty();
+	TArray<AActor*> HA;
+	OwningWeapon->GetHitActors(HA)->Empty();
 }
 
 void AMYWeaponActor::Deactivate()
 {
 	BoxCollider->SetGenerateOverlapEvents(false);
-	HitActorsRef->Empty();
+	TArray<AActor*> HA;
+	OwningWeapon->GetHitActors(HA);
+	HA.Empty();
 }
 
 void AMYWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMYWeaponActor::OnBeginOverlap);
-	HitActorsRef = OwningWeapon->GetHitActors();
 }
 
 void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex,
@@ -64,9 +66,12 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	}
 
 
+	TArray<AActor*> HA;
+	TArray<AActor*>* PTA = OwningWeapon->GetHitActors(HA);
+	OwningWeapon->GetHitActors(HA);
 	
-	if(HitActorsRef->Contains(OtherActor)) return;
-	HitActorsRef->Add(OtherActor);
+	if(HA.Contains(OtherActor)) return;
+	OwningWeapon->GetHitActors(HA)->Add(OtherActor);
 	
 	AMYCharacterBase* CharacterHit = Cast<AMYCharacterBase>(OtherActor);
 	if(!IsValid(CharacterHit)) return;

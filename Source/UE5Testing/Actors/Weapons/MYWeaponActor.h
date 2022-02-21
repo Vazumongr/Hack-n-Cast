@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;
 
-	TArray<AActor*>* HitActorsRef;
+	TWeakPtr<TArray<AActor*>> HitActorsRef;
 
 	TWeakPtr<AActor> WeakActr;
 };

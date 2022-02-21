@@ -52,7 +52,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeactivateLeftHandWeapon();
 
-	TArray<AActor*>* GetHitActors();
+	TArray<AActor*>* GetHitActors(TArray<AActor*>& OutHitActors);
 
 protected:
 	UFUNCTION(Server, Reliable)
@@ -68,7 +68,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Replicated)
 	class AMYWeaponActor* LeftHandWeapon;
 	
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGameplayEffectSpecHandle GESpecHandle;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

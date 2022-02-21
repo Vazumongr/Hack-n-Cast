@@ -94,8 +94,9 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
-TArray<AActor*>* AMYWeaponBase::GetHitActors()
+TArray<AActor*>* AMYWeaponBase::GetHitActors(TArray<AActor*>& OutHitActors)
 {
+	OutHitActors = HitActors;
 	return &HitActors;
 }
 
@@ -157,5 +158,4 @@ void AMYWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AMYWeaponBase, RightHandWeapon);
 	DOREPLIFETIME(AMYWeaponBase, LeftHandWeapon);
-	DOREPLIFETIME(AMYWeaponBase, GESpecHandle);
 }
