@@ -62,6 +62,8 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		UE_LOG(LogCollision, Warning, TEXT("Overlapping: %s"), *OtherComponent->GetName());
 		if(!OtherComponent->IsA(UCapsuleComponent::StaticClass())) return;
 	}
+
+
 	
 	if(HitActorsRef->Contains(OtherActor)) return;
 	HitActorsRef->Add(OtherActor);

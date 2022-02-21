@@ -27,6 +27,7 @@ void AMYItemBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME_CONDITION(AMYItemBase, OwnerASC, COND_InitialOnly);
 	DOREPLIFETIME_CONDITION(AMYItemBase, OwningCharacter, COND_InitialOnly);
 	DOREPLIFETIME_CONDITION(AMYItemBase, ItemData, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(AMYItemBase, NonInstancedItemData, COND_InitialOnly);
 }
 
 void AMYItemBase::SetItemData(TObjectPtr<UMYItemData> InItemData)

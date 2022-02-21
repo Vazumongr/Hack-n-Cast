@@ -141,6 +141,7 @@ void AMYCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(AMYCharacterBase, PrimaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, SecondaryAbilityHandle);
 	DOREPLIFETIME(AMYCharacterBase, bIsReady);
+	DOREPLIFETIME(AMYCharacterBase, Weapon);
 	DOREPLIFETIME(AMYCharacterBase, WeaponClass);
 }
 
