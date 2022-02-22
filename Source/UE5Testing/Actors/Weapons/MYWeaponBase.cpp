@@ -131,9 +131,9 @@ void AMYWeaponBase::SpawnWeaponActors()
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetReplicates(true);
 		
+		UGameplayStatics::FinishSpawningActor(RightHandWeapon, FTransform::Identity);
 		if (WeaponData->WeaponSMADA != nullptr)
 			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetPrimaryStaticMesh());
-		UGameplayStatics::FinishSpawningActor(RightHandWeapon, FTransform::Identity);
 	}
 	
 	if (WeaponData->LHWeaponClass != nullptr)
@@ -145,9 +145,9 @@ void AMYWeaponBase::SpawnWeaponActors()
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetReplicates(true);
 		
+		UGameplayStatics::FinishSpawningActor(LeftHandWeapon, FTransform::Identity);
 		if (WeaponData->WeaponSMADA != nullptr)
 			LeftHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetSecondaryStaticMesh());
-		UGameplayStatics::FinishSpawningActor(LeftHandWeapon, FTransform::Identity);
 	}
 }
 

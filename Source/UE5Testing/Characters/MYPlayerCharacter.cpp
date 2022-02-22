@@ -93,12 +93,12 @@ void AMYPlayerCharacter::BeginPlay()
 
 void AMYPlayerCharacter::SelectFirstWeapon()
 {
-	SelectWeapon_Server(0);
+	SpawnWeaponsOnServer_Server(0);
 }
 
 void AMYPlayerCharacter::SelectSecondWeapon()
 {
-	SelectWeapon_Server(1);
+	SpawnWeaponsOnServer_Server(1);
 }
 
 void AMYPlayerCharacter::SelectWeapon_Server_Implementation(int8 WeaponIdx)

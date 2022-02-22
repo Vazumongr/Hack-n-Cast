@@ -109,6 +109,8 @@ protected:
 	virtual void SpawnDefaultWeapon_Multicast();
 
 	virtual void SpawnWeaponsOnServer(int8 WeaponIdx);
+	UFUNCTION(Server, Reliable)
+	virtual void SpawnWeaponsOnServer_Server(int8 WeaponIdx);
 
 	virtual void DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount);
 	UFUNCTION(BlueprintImplementableEvent)

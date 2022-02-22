@@ -361,7 +361,7 @@ void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 		check(Weapon);
 		Weapon->SetOwningCharacter(this);
 		Weapon->SetOwnerASC(AbilitySystemComponent);
-		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
+		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(WeaponIdx));
 		Weapon->SetReplicates(true);
 		UGameplayStatics::FinishSpawningActor(Weapon, FTransform::Identity);
 		
@@ -372,6 +372,11 @@ void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 
 	}
+}
+
+void AMYCharacterBase::SpawnWeaponsOnServer_Server_Implementation(int8 WeaponIdx)
+{
+	SpawnWeaponsOnServer(WeaponIdx);
 }
 
 void AMYCharacterBase::DownedTagAddedOrRemoved(const FGameplayTag CallbackTag, int32 NewCount)
