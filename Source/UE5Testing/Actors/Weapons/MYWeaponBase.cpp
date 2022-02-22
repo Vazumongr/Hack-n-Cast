@@ -48,6 +48,26 @@ void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 	ApplyEffectToTarget_Server(TargetCharacter);
 }
 
+void AMYWeaponBase::AddHitActor(AActor* InHitActor)
+{
+	if(!IsValid(InHitActor))
+	{
+		UE_LOG(LogCollision, Error, TEXT("A nullptr was passed into %s on %s!"), *FString(__FUNCTION__), *GetName());
+		return;
+	}
+	HitActors.Add(InHitActor);
+}
+
+bool AMYWeaponBase::HasHitActor(AActor* InHitActor) const
+{
+	return HitActors.Contains(InHitActor);
+}
+
+void AMYWeaponBase::ClearHitActors()
+{
+	HitActors.Empty();
+}
+
 void AMYWeaponBase::Initialize()
 {
 	SpawnWeaponActors();
@@ -94,12 +114,6 @@ void AMYWeaponBase::DeactivateLeftHandWeapon()
 	LeftHandWeapon->Deactivate();
 }
 
-TArray<AActor*>* AMYWeaponBase::GetHitActors(TArray<AActor*>& OutHitActors)
-{
-	OutHitActors = HitActors;
-	return &HitActors;
-}
-
 void AMYWeaponBase::SpawnWeaponActors()
 {
 	check(OwningCharacter);
@@ -115,7 +129,6 @@ void AMYWeaponBase::SpawnWeaponActors()
 		
 		RightHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->RightSocketName);
 		RightHandWeapon->SetOwningWeapon(this);
-		RightHandWeapon->SetActorArrayPtr(&HitActors);
 		RightHandWeapon->SetReplicates(true);
 		
 		if (WeaponData->WeaponSMADA != nullptr)
@@ -130,7 +143,6 @@ void AMYWeaponBase::SpawnWeaponActors()
 		
 		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
-		LeftHandWeapon->SetActorArrayPtr(&HitActors);
 		LeftHandWeapon->SetReplicates(true);
 		
 		if (WeaponData->WeaponSMADA != nullptr)

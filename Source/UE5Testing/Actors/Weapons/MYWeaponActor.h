@@ -6,6 +6,8 @@
 #include "Engine/StaticMeshActor.h"
 #include "MYWeaponActor.generated.h"
 
+class AMYWeaponBase;
+
 UCLASS()
 class UE5TESTING_API AMYWeaponActor : public AStaticMeshActor
 {
@@ -20,7 +22,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetOwningWeapon(class AMYWeaponBase* InOwningWeapon);
-	void SetActorArrayPtr(TArray<AActor*>* InHitActorsRef);
 
 	void Activate();
 	void Deactivate();
@@ -38,8 +39,4 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UBoxComponent* BoxCollider;
-
-	TWeakPtr<TArray<AActor*>> HitActorsRef;
-
-	TWeakPtr<AActor> WeakActr;
 };

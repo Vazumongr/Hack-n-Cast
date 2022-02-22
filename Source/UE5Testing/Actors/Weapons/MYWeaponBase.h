@@ -37,6 +37,9 @@ public:
 	void SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecHandle);
 	UFUNCTION(BlueprintCallable)
 	void HitCharacter(class AMYCharacterBase* TargetCharacter);
+	void AddHitActor(AActor* InHitActor);
+	bool HasHitActor(AActor* InHitActor) const;
+	void ClearHitActors();
 	UFUNCTION(BlueprintCallable)
 	void Initialize();
 	UFUNCTION(BlueprintCallable)
@@ -51,8 +54,6 @@ public:
 	void DeactivateRightHandWeapon();
 	UFUNCTION(BlueprintCallable)
 	void DeactivateLeftHandWeapon();
-
-	TArray<AActor*>* GetHitActors(TArray<AActor*>& OutHitActors);
 
 protected:
 	UFUNCTION(Server, Reliable)
