@@ -32,10 +32,6 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SelectFirstWeapon();
 	virtual void SelectSecondWeapon();
-	UFUNCTION(Server, Reliable)
-	virtual void SelectWeapon_Server(int8 WeaponIdx);
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void SelectWeapon_Multicast(int8 WeaponIdx);
 	//virtual void SpawnWeapon(int8 WeaponIdx);
 
 	virtual void MoveForward(float InputValue);

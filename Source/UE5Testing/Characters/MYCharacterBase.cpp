@@ -306,46 +306,6 @@ void AMYCharacterBase::OnRep_Controller()
 	Super::OnRep_Controller();
 }
 
-void AMYCharacterBase::SpawnWeapon(int8 WeaponIdx)
-{
-	if (WeaponClass != nullptr)
-	{
-		if(Weapon!=nullptr) // A weapon already exists
-		{
-			Weapon->Deactivate();
-            Weapon = nullptr;
-		}
-		
-		check(InventoryComponent);
-		Weapon = GetWorld()->SpawnActor<AMYWeaponBase>(AMYWeaponBase::StaticClass());
-		check(Weapon);
-		Weapon->SetOwningCharacter(this);
-		Weapon->SetOwnerASC(AbilitySystemComponent);
-		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(0));
-		Weapon->Initialize();
-
-		if(HasAuthority())
-		{
-			UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
-            check(ADA);
-            FGameplayAbilitySpec AbilitySpec;
-            AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
-            PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-		}
-
-	}
-}
-
-void AMYCharacterBase::SpawnDefaultWeapon()
-{
-	SpawnWeapon(0);
-}
-
-void AMYCharacterBase::SpawnDefaultWeapon_Multicast_Implementation()
-{
-	SpawnWeapon(0);
-}
-
 void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 {
 	if (WeaponClass != nullptr)

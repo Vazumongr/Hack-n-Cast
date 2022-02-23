@@ -101,16 +101,6 @@ void AMYPlayerCharacter::SelectSecondWeapon()
 	SpawnWeaponsOnServer_Server(1);
 }
 
-void AMYPlayerCharacter::SelectWeapon_Server_Implementation(int8 WeaponIdx)
-{
-	SelectWeapon_Multicast(WeaponIdx);
-}
-
-void AMYPlayerCharacter::SelectWeapon_Multicast_Implementation(int8 WeaponIdx)
-{
-	SpawnWeapon(WeaponIdx);
-}
-
 /*
 void AMYPlayerCharacter::SpawnWeapon(int8 WeaponIdx)
 {

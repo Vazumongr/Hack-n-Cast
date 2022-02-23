@@ -103,10 +103,6 @@ protected:
 	virtual void SetupAttributeCallbacks();
 	virtual void SetupDelegates();
 	virtual void OnRep_Controller() override;
-	virtual void SpawnWeapon(int8 WeaponIdx);
-	virtual void SpawnDefaultWeapon();
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void SpawnDefaultWeapon_Multicast();
 
 	virtual void SpawnWeaponsOnServer(int8 WeaponIdx);
 	UFUNCTION(Server, Reliable)
