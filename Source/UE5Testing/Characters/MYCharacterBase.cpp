@@ -308,6 +308,11 @@ void AMYCharacterBase::OnRep_Controller()
 
 void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 {
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTagFast(FGameplayTag::RequestGameplayTag(FName("State.Blocked")));
+	if(AbilitySystemComponent->HasAnyMatchingGameplayTags(TagContainer)) return;
+
+	
 	AttackChainCounter = 0;
 	if (WeaponClass != nullptr)
 	{
