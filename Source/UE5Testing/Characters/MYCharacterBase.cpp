@@ -308,6 +308,7 @@ void AMYCharacterBase::OnRep_Controller()
 
 void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 {
+	AttackChainCounter = 0;
 	if (WeaponClass != nullptr)
 	{
 		if(Weapon!=nullptr) // A weapon already exists

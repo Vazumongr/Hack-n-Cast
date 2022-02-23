@@ -59,10 +59,6 @@ protected:
 	class USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	class UCameraComponent* Camera;
-	
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated)
-	uint8 AttackChainCounter{0};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float MovementSpeed;

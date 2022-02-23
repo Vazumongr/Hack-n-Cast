@@ -131,6 +131,8 @@ protected:
 	class AMYWeaponBase* Weapon;
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category="MYCharacterBase|Combat")
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated)
+	uint8 AttackChainCounter{0};
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;
