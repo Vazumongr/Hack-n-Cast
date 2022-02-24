@@ -27,5 +27,6 @@ protected:
 	// Will only be called if GameOver is called on the dedicated server
 	virtual void GameOver_DedicatedServer();
 
-public:
+	UPROPERTY(EditAnywhere)
+	class UBehaviorTree* AIBehaviorTree;
 };

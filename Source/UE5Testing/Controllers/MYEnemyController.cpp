@@ -3,6 +3,7 @@
 
 #include "MYEnemyController.h"
 
+#include "BehaviorTree/BlackboardComponent.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 
 
@@ -21,6 +22,11 @@ void AMYEnemyController::BeginPlay()
 	check(GameState)
 	GameState->GameOverDelegate.AddUObject(this, &AMYEnemyController::GameOver);
 	
+	if(AIBehaviorTree)
+	{
+		RunBehaviorTree(AIBehaviorTree);
+	}
+		
 }
 
 void AMYEnemyController::GameOver()
