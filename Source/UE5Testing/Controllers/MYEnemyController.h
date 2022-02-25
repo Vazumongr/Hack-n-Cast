@@ -6,6 +6,9 @@
 #include "AIController.h"
 #include "MYEnemyController.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogAI, All, All);
+
+
 UCLASS()
 class UE5TESTING_API AMYEnemyController : public AAIController
 {
@@ -17,6 +20,10 @@ public:
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void ActivatePrimaryAbility() const;
+
+	virtual void OnPossess(APawn* InPawn) override;
 
 protected:
 	// Called when the game starts or when spawned

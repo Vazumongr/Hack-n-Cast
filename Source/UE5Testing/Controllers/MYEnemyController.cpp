@@ -7,6 +7,8 @@
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 
+DEFINE_LOG_CATEGORY(LogAI);
+
 
 // Sets default values
 AMYEnemyController::AMYEnemyController()
@@ -22,18 +24,29 @@ void AMYEnemyController::BeginPlay()
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
 	check(GameState)
 	GameState->GameOverDelegate.AddUObject(this, &AMYEnemyController::GameOver);
-	
+}
+
+
+
+void AMYEnemyController::ActivatePrimaryAbility() const
+{
+	if(IsValid(BaseCharacter))
+		BaseCharacter->ActivatePrimaryAbility();
+}
+
+void AMYEnemyController::OnPossess(APawn* InPawn)
+{
+	BaseCharacter = Cast<AMYCharacterBase>(InPawn);
+	if(BaseCharacter == nullptr)
+	{
+		UE_LOG(LogAI, Error, TEXT("%s is trying to possess a pawn that is not of AMYCharacterBase!"), *GetName());
+		return;
+	}
+	Super::OnPossess(InPawn);
 	if(AIBehaviorTree)
 	{
 		RunBehaviorTree(AIBehaviorTree);
 	}
-
-	BaseCharacter = Cast<AMYCharacterBase>(GetPawn());
-	if(BaseCharacter)
-	{
-		BaseCharacter->ActivatePrimaryAbility();
-	}
-		
 }
 
 void AMYEnemyController::GameOver()
