@@ -3,7 +3,6 @@
 #include "UE5Testing/Characters/MYCharacterBase.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
@@ -151,6 +150,11 @@ void AMYCharacterBase::SetOverheadHealthBarWidget(UMYOverheadHealthBarWidget* In
 	{
 		OverheadHealthBarWidget = InWidget;
 	}
+}
+
+void AMYCharacterBase::ActivatePrimaryAbility()
+{
+	ActivateAbilityByHandle(PrimaryAbilityHandle);
 }
 
 float AMYCharacterBase::GetHealth() const
@@ -314,30 +318,26 @@ void AMYCharacterBase::SpawnWeaponsOnServer(int8 WeaponIdx)
 
 	
 	AttackChainCounter = 0;
-	if (WeaponClass != nullptr)
+	if(Weapon!=nullptr) // A weapon already exists
 	{
-		if(Weapon!=nullptr) // A weapon already exists
-		{
-			Weapon->Deactivate();
-			Weapon = nullptr;
-		}
-		
-		check(InventoryComponent);
-		Weapon = GetWorld()->SpawnActorDeferred<AMYWeaponBase>(AMYWeaponBase::StaticClass(),FTransform::Identity,this);
-		check(Weapon);
-		Weapon->SetOwningCharacter(this);
-		Weapon->SetOwnerASC(AbilitySystemComponent);
-		Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(WeaponIdx));
-		Weapon->SetReplicates(true);
-		UGameplayStatics::FinishSpawningActor(Weapon, FTransform::Identity);
-		
-		UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
-		check(ADA);
-		FGameplayAbilitySpec AbilitySpec;
-		AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
-		PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
-
+		Weapon->Deactivate();
+		Weapon = nullptr;
 	}
+	
+	check(InventoryComponent);
+	Weapon = GetWorld()->SpawnActorDeferred<AMYWeaponBase>(AMYWeaponBase::StaticClass(),FTransform::Identity,this);
+	check(Weapon);
+	Weapon->SetOwningCharacter(this);
+	Weapon->SetOwnerASC(AbilitySystemComponent);
+	Weapon->SetItemData(InventoryComponent->GetItemDataAtIndex(WeaponIdx));
+	Weapon->SetReplicates(true);
+	UGameplayStatics::FinishSpawningActor(Weapon, FTransform::Identity);
+	
+	UMYAbilityDataAsset* ADA = Weapon->GetPrimaryAbilityAsset();
+	check(ADA);
+	FGameplayAbilitySpec AbilitySpec;
+	AbilitySpec = FGameplayAbilitySpec(ADA->Ability, 1, INDEX_NONE, this);
+	PrimaryAbilityHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 }
 
 void AMYCharacterBase::SpawnWeaponsOnServer_Server_Implementation(int8 WeaponIdx)

@@ -62,6 +62,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void SetOverheadHealthBarWidget(class UMYOverheadHealthBarWidget* InWidget);
 
+	void ActivatePrimaryAbility();
+
 	/* Attribute Getters */
 	UFUNCTION(BlueprintCallable)
 	float GetHealth() const;

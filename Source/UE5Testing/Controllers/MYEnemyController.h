@@ -29,4 +29,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* AIBehaviorTree;
+
+	UPROPERTY()
+	class AMYCharacterBase* BaseCharacter;
 };

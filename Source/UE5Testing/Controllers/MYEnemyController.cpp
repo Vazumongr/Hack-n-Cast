@@ -4,6 +4,7 @@
 #include "MYEnemyController.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
+#include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
 
 
@@ -25,6 +26,12 @@ void AMYEnemyController::BeginPlay()
 	if(AIBehaviorTree)
 	{
 		RunBehaviorTree(AIBehaviorTree);
+	}
+
+	BaseCharacter = Cast<AMYCharacterBase>(GetPawn());
+	if(BaseCharacter)
+	{
+		BaseCharacter->ActivatePrimaryAbility();
 	}
 		
 }
