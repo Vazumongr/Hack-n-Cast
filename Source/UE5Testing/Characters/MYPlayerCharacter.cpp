@@ -13,6 +13,7 @@
 #include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 #include "UE5Testing/DataAssets/MYStartingKitBaseDA.h"
+#include "UE5Testing/FileWritingTest/MYFileIO.h"
 
 AMYPlayerCharacter::AMYPlayerCharacter()
 {
