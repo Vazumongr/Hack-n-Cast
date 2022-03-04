@@ -31,6 +31,8 @@ public:
 	void SetOwnerASC(class UAbilitySystemComponent* InOwnerASC);
 	UFUNCTION(BlueprintCallable)
 	void SetOwningCharacter(class AMYCharacterBase* InOwningCharacter);
+	UFUNCTION(BlueprintPure)
+	AMYCharacterBase* GetOwningCharacter() const { return OwningCharacter; }
 
 	virtual void Deconstruct();
 
@@ -40,7 +42,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Replicated)
 	TObjectPtr<class UMYItemData> NonInstancedItemData;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated, BlueprintGetter=GetOwningCharacter)
 	class AMYCharacterBase* OwningCharacter;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)

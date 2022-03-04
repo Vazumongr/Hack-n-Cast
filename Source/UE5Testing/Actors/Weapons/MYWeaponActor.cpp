@@ -51,7 +51,7 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	check(OwningWeapon);
 	if(GetNetMode() == NM_DedicatedServer) return;
-	if(!IsValid(OtherActor) || OtherActor==GetOwner()) return;
+	if(!IsValid(OtherActor) || OtherActor==OwningWeapon->GetOwningCharacter()) return;
 	
 	if(OtherComponent!=nullptr)
 	{
