@@ -8,6 +8,7 @@
 #include "UE5Testing/AbilitySystem/AttributeSets/MYAttributeSet.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
+#include "UE5Testing/Controllers/MYEnemyController.h"
 #include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
 #include "UE5Testing/GameModes/MYSurvivalGameMode.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
@@ -40,10 +41,13 @@ void AMYCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetupAttributeCallbacks();
-	
 	if (HasAuthority())
 	{
 		SpawnWeaponsOnServer(0);
+	}
+	if(Controller != nullptr && Controller->IsA(AMYEnemyController::StaticClass()))
+	{
+		ActivatePrimaryAbility();
 	}
 	//SpawnDefaultWeapon();
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());

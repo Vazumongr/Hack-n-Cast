@@ -87,7 +87,7 @@ public:
 	
 	// This lil bugger prevents the actor from dying prematurely in the case it spawns inside of a collider
 	UPROPERTY(Replicated)
-	bool bIsReady{false};
+	bool bIsReady{true};
 	
 	UPROPERTY(EditAnywhere, Category="Setup")
 	FRotator RightHandWeaponRotation;

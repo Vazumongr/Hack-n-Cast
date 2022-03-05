@@ -43,6 +43,7 @@ void AMYEnemyController::OnPossess(APawn* InPawn)
 		return;
 	}
 	Super::OnPossess(InPawn);
+	BaseCharacter->ActivatePrimaryAbility();
 	if(AIBehaviorTree)
 	{
 		RunBehaviorTree(AIBehaviorTree);

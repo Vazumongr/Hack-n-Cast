@@ -10,6 +10,7 @@
 #include "UE5Testing/UI/MYHUD.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/SpectatorPawn.h"
+#include "UE5Testing/FileWritingTest/MYFileIO.h"
 
 
 // Sets default values
@@ -32,6 +33,17 @@ void AMYPlayerController::BeginPlay()
 void AMYPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AMYPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	InputComponent->BindAction(FName("Save"), IE_Pressed, this, &AMYPlayerController::Save);
+}
+
+void AMYPlayerController::Save()
+{
+	UMYFileIO::SaveGame();
 }
 
 void AMYPlayerController::CreateHUD()

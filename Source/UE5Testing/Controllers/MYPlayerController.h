@@ -18,6 +18,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void SetupInputComponent() override;
+
+	void Save();
+
 	UFUNCTION(BlueprintCallable)
 	void CreateHUD();
 
