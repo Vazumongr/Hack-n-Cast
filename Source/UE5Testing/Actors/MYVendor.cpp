@@ -14,11 +14,13 @@ AMYVendor::AMYVendor()
 
 void AMYVendor::Activate()
 {
+	UE_LOG(LogVendor, Warning, TEXT("Vendor Activated"));
 	SetHidden(false);
 }
 
 void AMYVendor::Deactivate()
 {
+	UE_LOG(LogVendor, Warning, TEXT("Vendor Deactivated"));
 	SetHidden(true);
 }
 

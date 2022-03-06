@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "MYSurvivalGameMode.generated.h"
 
+class AMYVendor;
+
 DECLARE_MULTICAST_DELEGATE(FAllPlayersDeadDelegate);
 
 /**
@@ -43,6 +45,10 @@ protected:
 	TSubclassOf<class AMYRoundSpawner> SpawnerClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class AMYRoundSpawner* Spawner;
+
+	TObjectPtr<class AMYVendor> Vendor;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AMYVendor> VendorClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class AMYRoundSpawner> LootSpawnerClass;
