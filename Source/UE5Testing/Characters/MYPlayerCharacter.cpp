@@ -8,9 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
-#include "UE5Testing/Components/ActorComponents/MYInventoryComponent.h"
 #include "UE5Testing/Controllers/MYPlayerController.h"
-#include "UE5Testing/DataAssets/MYAbilityDataAsset.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
 #include "UE5Testing/DataAssets/MYStartingKitBaseDA.h"
 #include "UE5Testing/FileWritingTest/MYFileIO.h"
@@ -52,10 +50,6 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMYPlayerCharacter::PrimaryAttack);
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMYPlayerCharacter::MyCrouch);
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::MyInteract);
-	PlayerInputComponent->BindAction("ToggleRightHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleRightHand);
-	PlayerInputComponent->BindAction("ToggleLeftHand", IE_Pressed, this, &AMYPlayerCharacter::ToggleLeftHand);
 	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectFirstWeapon);
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectSecondWeapon);
 	
@@ -174,28 +168,6 @@ void AMYPlayerCharacter::MyInteract()
 {
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond()));
 	UE_LOG(LogTemp, Warning, TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond());
-}
-
-void AMYPlayerCharacter::ToggleRightHand()
-{
-	ToggleRightHand_Server();
-}
-
-void AMYPlayerCharacter::ToggleLeftHand()
-{
-	ToggleLeftHand_Server();
-}
-
-void AMYPlayerCharacter::ToggleRightHand_Server_Implementation()
-{
-	FInventoryWeapon InvWeapon;
-	//InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,0);
-}
-
-void AMYPlayerCharacter::ToggleLeftHand_Server_Implementation()
-{
-	FInventoryWeapon InvWeapon;
-	//InventoryComponent->GetInventoryWeaponAtIndex(InvWeapon,1);
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

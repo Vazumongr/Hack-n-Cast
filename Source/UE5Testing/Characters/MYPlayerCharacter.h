@@ -39,12 +39,6 @@ protected:
 	virtual void PrimaryAttack();
 	virtual void MyCrouch();
 	virtual void MyInteract();
-	virtual void ToggleRightHand();
-	virtual void ToggleLeftHand();
-	UFUNCTION(Server, Reliable)
-	virtual void ToggleRightHand_Server();
-	UFUNCTION(Server, Reliable)
-	virtual void ToggleLeftHand_Server();
 	UFUNCTION(BlueprintCallable)
 	virtual void SetStartingKit(class UMYStartingKitBaseDA* InStartingKit);
 	UFUNCTION(Server, Reliable)

@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "UE5Testing/AbilitySystem/MYGameplayAbility.h"
-#include "UE5Testing/Loot/MYLootEnums.h"
 
 #include "MYCharacterBase.generated.h"
 

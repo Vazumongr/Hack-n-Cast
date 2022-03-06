@@ -228,8 +228,7 @@ void AMYCharacterBase::InitializeAttributes()
 			DefaultLevel, 1, EffectContext);
 		if (Handle.IsValid())
 		{
-			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
-				*Handle.Data.Get(), AbilitySystemComponent);
+			AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*Handle.Data.Get(), AbilitySystemComponent);
 		}
 	}
 }
