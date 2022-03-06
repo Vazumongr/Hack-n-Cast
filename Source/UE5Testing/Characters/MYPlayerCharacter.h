@@ -38,7 +38,7 @@ protected:
 	virtual void MoveRight(float InputValue);
 	virtual void PrimaryAttack();
 	virtual void MyCrouch();
-	virtual void MyInteract();
+	virtual void Interact();
 	UFUNCTION(BlueprintCallable)
 	virtual void SetStartingKit(class UMYStartingKitBaseDA* InStartingKit);
 	UFUNCTION(Server, Reliable)

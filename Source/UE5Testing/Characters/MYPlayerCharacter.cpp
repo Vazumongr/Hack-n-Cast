@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
+#include "UE5Testing/Actors/MYVendor.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Controllers/MYPlayerController.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
@@ -52,6 +53,7 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMYPlayerCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectFirstWeapon);
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectSecondWeapon);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::Interact);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
@@ -164,10 +166,17 @@ void AMYPlayerCharacter::MyCrouch()
 	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 }
 
-void AMYPlayerCharacter::MyInteract()
+void AMYPlayerCharacter::Interact()
 {
-	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond()));
-	UE_LOG(LogTemp, Warning, TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond());
+	TArray<FHitResult> Hits;
+	GetWorld()->LineTraceMultiByChannel(Hits, GetActorLocation()+FVector(0,80,0),GetActorForwardVector()*500,ECollisionChannel::ECC_Camera);
+	for(const FHitResult& Hit : Hits)
+	{
+		if(AMYVendor* Vendor = Cast<AMYVendor>(Hit.GetActor()))
+		{
+			Vendor->Interact();
+		}
+	}
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)
