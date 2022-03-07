@@ -168,15 +168,21 @@ void AMYPlayerCharacter::MyCrouch()
 
 void AMYPlayerCharacter::Interact()
 {
-	TArray<FHitResult> Hits;
-	GetWorld()->LineTraceMultiByChannel(Hits, GetActorLocation()+FVector(0,80,0),GetActorForwardVector()*500,ECollisionChannel::ECC_Camera);
-	for(const FHitResult& Hit : Hits)
+	TArray<FOverlapResult> OverlapResults;
+	const FVector Position = GetActorLocation();
+	const FQuat Rotation = FQuat::Identity;
+	FCollisionShape Shape = FCollisionShape::MakeBox(InteractShapeSize);
+	if(GetWorld()->OverlapMultiByChannel(OverlapResults, Position, Rotation, ECC_Camera, Shape))
 	{
-		if(AMYVendor* Vendor = Cast<AMYVendor>(Hit.GetActor()))
+		for(const FOverlapResult& Result : OverlapResults)
 		{
-			Vendor->Interact();
+			if(AMYVendor* Vendor = Cast<AMYVendor>(Result.GetActor()))
+			{
+				Vendor->Interact();
+			}
 		}
 	}
+	
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

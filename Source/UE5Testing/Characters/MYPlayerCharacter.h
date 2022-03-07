@@ -58,4 +58,6 @@ protected:
 	float MovementSpeed;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float MouseSensitivity = 1;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Setup")
+	FVector InteractShapeSize{50,50,50};
 };
