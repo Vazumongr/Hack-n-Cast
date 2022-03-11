@@ -63,6 +63,21 @@ void AMYPlayerController::CreateHUD()
 	HUDWidget->SetOwningController(this);
 }
 
+void AMYPlayerController::CreateVendorMenu_Implementation()
+{
+	if(!IsLocalPlayerController()) return;
+	if(!ensure(VendorMenuClass))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s() Missing HUDClass. Please fill in on the Blueprint of the PlayerController."), *FString(__FUNCTION__));
+		return;
+	}
+	if(!IsLocalPlayerController()) return;
+	VendorMenu = CreateWidget<UUserWidget>(this, VendorMenuClass);
+	if(!ensure(VendorMenu)) return;
+	VendorMenu->AddToViewport();
+	
+}
+
 UMYHUD* AMYPlayerController::GetHUD()
 {
 	return HUDWidget;

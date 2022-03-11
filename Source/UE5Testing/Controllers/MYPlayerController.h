@@ -24,6 +24,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateHUD();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void CreateVendorMenu();
 
 	class UMYHUD* GetHUD();
 
@@ -45,10 +47,16 @@ protected:
 	TSubclassOf<class UMYHUD> HUDClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UUserWidget> VendorMenuClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> GameOverMessageClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UMYHUD* HUDWidget;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UUserWidget* VendorMenu;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class ASpectatorPawn> SpectatorPawnClass;
