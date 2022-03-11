@@ -23,6 +23,8 @@ public:
 	virtual void AddControllerPitchInput(float Val) override;
 	virtual void AddControllerYawInput(float Val) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void BuffYourself();
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

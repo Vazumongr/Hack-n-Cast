@@ -6,6 +6,8 @@
 #include "Engine/StaticMeshActor.h"
 #include "MYVendor.generated.h"
 
+class AMYPlayerCharacter;
+
 DECLARE_LOG_CATEGORY_EXTERN(LogVendor, All, All);
 
 UCLASS()
@@ -19,7 +21,8 @@ public:
 
 	void Activate();
 	void Deactivate();
-	void Interact();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Interact(class AMYPlayerCharacter* InteractingCharacter);
 
 protected:
 	// Called when the game starts or when spawned

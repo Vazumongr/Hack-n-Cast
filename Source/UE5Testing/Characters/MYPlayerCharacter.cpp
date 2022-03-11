@@ -178,11 +178,16 @@ void AMYPlayerCharacter::Interact()
 		{
 			if(AMYVendor* Vendor = Cast<AMYVendor>(Result.GetActor()))
 			{
-				Vendor->Interact();
+				Vendor->Interact(this);
 			}
 		}
 	}
 	
+}
+
+void AMYPlayerCharacter::BuffYourself_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Buffed"));
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

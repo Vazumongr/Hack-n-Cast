@@ -3,6 +3,8 @@
 
 #include "MYVendor.h"
 
+#include "UE5Testing/Characters/MYPlayerCharacter.h"
+
 DEFINE_LOG_CATEGORY(LogVendor);
 
 // Sets default values
@@ -24,8 +26,10 @@ void AMYVendor::Deactivate()
 	SetHidden(true);
 }
 
-void AMYVendor::Interact()
+void AMYVendor::Interact_Implementation(AMYPlayerCharacter* InteractingActor)
 {
+	check(InteractingActor);
+	InteractingActor->BuffYourself();
 	UE_LOG(LogVendor, Warning, TEXT("Vendor interaction called"));
 }
 
