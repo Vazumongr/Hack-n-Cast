@@ -43,6 +43,11 @@ void AMYPlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(AMYPlayerCharacter, AttackChainCounter);
 }
 
+void AMYPlayerCharacter::BuffYourself_Server_Implementation()
+{
+	BuffYourself();
+}
+
 void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -182,7 +187,6 @@ void AMYPlayerCharacter::Interact()
 			}
 		}
 	}
-	
 }
 
 void AMYPlayerCharacter::BuffYourself_Implementation()

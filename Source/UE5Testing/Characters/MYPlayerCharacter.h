@@ -25,6 +25,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void BuffYourself();
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void BuffYourself_Server();
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
