@@ -26,6 +26,18 @@ void AMYVendor::Deactivate()
 	SetHidden(true);
 }
 
+void AMYVendor::UpgradeWeapon(AMYPlayerCharacter* InteractingCharacter) const
+{
+	check(InteractingCharacter);
+	InteractingCharacter->ApplyBuff_Server(WeaponBuffEffect);
+}
+
+void AMYVendor::UpgradeSpellTome(AMYPlayerCharacter* InteractingCharacter) const
+{
+	check(InteractingCharacter);
+	InteractingCharacter->ApplyBuff_Server(SpellTomeBuffEffect);
+}
+
 void AMYVendor::Interact_Implementation(AMYPlayerCharacter* InteractingActor)
 {
 	check(InteractingActor);
