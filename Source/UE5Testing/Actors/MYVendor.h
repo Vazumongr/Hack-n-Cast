@@ -28,6 +28,12 @@ public:
 	void UpgradeWeapon(class AMYPlayerCharacter* InteractingCharacter) const;
 	UFUNCTION(BlueprintCallable)
 	void UpgradeSpellTome(class AMYPlayerCharacter* InteractingCharacter) const;
+	UFUNCTION(BlueprintCallable)
+	void UpgradeMaxHealth(class AMYPlayerCharacter* InteractingCharacter) const;
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttackDamage(class AMYPlayerCharacter* InteractingCharacter) const;
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAbilityPower(class AMYPlayerCharacter* InteractingCharacter) const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,4 +43,10 @@ protected:
 	TSubclassOf<class UGameplayEffect> WeaponBuffEffect;
 	UPROPERTY(EditDefaultsOnly, Category="Setup")
 	TSubclassOf<class UGameplayEffect> SpellTomeBuffEffect;
+	UPROPERTY(EditDefaultsOnly, Category="Setup")
+	TSubclassOf<class UGameplayEffect> MaxHealthBuffEffect;
+	UPROPERTY(EditDefaultsOnly, Category="Setup")
+	TSubclassOf<class UGameplayEffect> AttackDamageBuffEffect;
+	UPROPERTY(EditDefaultsOnly, Category="Setup")
+	TSubclassOf<class UGameplayEffect> AbilityPowerBuffEffect;
 };

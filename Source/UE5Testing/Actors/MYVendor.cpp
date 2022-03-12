@@ -38,6 +38,24 @@ void AMYVendor::UpgradeSpellTome(AMYPlayerCharacter* InteractingCharacter) const
 	InteractingCharacter->ApplyBuff_Server(SpellTomeBuffEffect);
 }
 
+void AMYVendor::UpgradeMaxHealth(AMYPlayerCharacter* InteractingCharacter) const
+{
+	check(InteractingCharacter);
+	InteractingCharacter->ApplyBuff_Server(MaxHealthBuffEffect);
+}
+
+void AMYVendor::UpgradeAttackDamage(AMYPlayerCharacter* InteractingCharacter) const
+{
+	check(InteractingCharacter);
+	InteractingCharacter->ApplyBuff_Server(AttackDamageBuffEffect);
+}
+
+void AMYVendor::UpgradeAbilityPower(AMYPlayerCharacter* InteractingCharacter) const
+{
+	check(InteractingCharacter);
+	InteractingCharacter->ApplyBuff_Server(AbilityPowerBuffEffect);
+}
+
 void AMYVendor::Interact_Implementation(AMYPlayerCharacter* InteractingActor)
 {
 	check(InteractingActor);
