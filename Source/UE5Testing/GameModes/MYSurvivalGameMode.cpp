@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "SpawnRules/MYRoundSpawner.h"
 #include "UE5Testing/Actors/MYEnemySpawnPoint.h"
+#include "UE5Testing/Actors/MYVendor.h"
 #include "UE5Testing/Characters/MYCharacterBase.h"
 #include "UE5Testing/Characters/MYPlayerCharacter.h"
 #include "UE5Testing/GameStates/MYSurvivalGameState.h"
@@ -13,6 +14,11 @@
 void AMYSurvivalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	Vendor = GetWorld()->SpawnActor<AMYVendor>(VendorClass);
+	if(Vendor != nullptr)
+	{
+		Vendor->Deactivate();
+	}
 	Spawner = GetWorld()->SpawnActor<AMYRoundSpawner>(SpawnerClass);
 	if(Spawner != nullptr)
 	{
@@ -73,6 +79,10 @@ void AMYSurvivalGameMode::AllPlayersDead()
 
 void AMYSurvivalGameMode::WaveStarted(int32 InWave)
 {
+	if(Vendor != nullptr)
+	{
+		Vendor->Deactivate();
+	}
 	AMYSurvivalGameState* SurvivalGameState = GetGameState<AMYSurvivalGameState>();
 	if(SurvivalGameState != nullptr)
 	{
@@ -82,6 +92,10 @@ void AMYSurvivalGameMode::WaveStarted(int32 InWave)
 
 void AMYSurvivalGameMode::WaveEnded(int32 InWave)
 {
+	if(Vendor != nullptr)
+	{
+		Vendor->Activate();
+	}
 	AMYSurvivalGameState* SurvivalGameState = GetGameState<AMYSurvivalGameState>();
 	if(SurvivalGameState != nullptr)
 	{

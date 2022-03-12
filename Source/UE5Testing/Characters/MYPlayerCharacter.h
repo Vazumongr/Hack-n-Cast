@@ -23,6 +23,10 @@ public:
 	virtual void AddControllerPitchInput(float Val) override;
 	virtual void AddControllerYawInput(float Val) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ApplyBuff(TSubclassOf<UGameplayEffect> InGE);
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void ApplyBuff_Server(TSubclassOf<UGameplayEffect> InGE);
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -38,7 +42,7 @@ protected:
 	virtual void MoveRight(float InputValue);
 	virtual void PrimaryAttack();
 	virtual void MyCrouch();
-	virtual void MyInteract();
+	virtual void Interact();
 	UFUNCTION(BlueprintCallable)
 	virtual void SetStartingKit(class UMYStartingKitBaseDA* InStartingKit);
 	UFUNCTION(Server, Reliable)
@@ -58,4 +62,6 @@ protected:
 	float MovementSpeed;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float MouseSensitivity = 1;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Setup")
+	FVector InteractShapeSize{50,50,50};
 };

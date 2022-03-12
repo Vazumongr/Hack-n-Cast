@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "UE5Testing/AbilitySystem/MYAbilitySystemComponent.h"
+#include "UE5Testing/Actors/MYVendor.h"
 #include "UE5Testing/Actors/Weapons/MYWeaponBase.h"
 #include "UE5Testing/Controllers/MYPlayerController.h"
 #include "UE5Testing/Loot/MYDroppedLootBase.h"
@@ -42,6 +43,21 @@ void AMYPlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(AMYPlayerCharacter, AttackChainCounter);
 }
 
+void AMYPlayerCharacter::ApplyBuff_Implementation(TSubclassOf<UGameplayEffect> InGE)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Buffed"));
+	check(AbilitySystemComponent);
+	if(!InGE) return;
+	UGameplayEffect* GameplayEffect = InGE->GetDefaultObject<UGameplayEffect>();
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	AbilitySystemComponent->ApplyGameplayEffectToSelf(GameplayEffect, 0, EffectContext);
+}
+
+void AMYPlayerCharacter::ApplyBuff_Server_Implementation(TSubclassOf<UGameplayEffect> InGE)
+{
+	ApplyBuff(InGE);
+}
+
 void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -52,6 +68,7 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMYPlayerCharacter::PrimaryAttack);
 	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectFirstWeapon);
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectSecondWeapon);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::Interact);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);
@@ -164,10 +181,22 @@ void AMYPlayerCharacter::MyCrouch()
 	UE_LOG(LogTemp, Warning, TEXT("Crouch! Time: %i"), FDateTime::Now().GetMillisecond());
 }
 
-void AMYPlayerCharacter::MyInteract()
+void AMYPlayerCharacter::Interact()
 {
-	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,FString::Printf(TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond()));
-	UE_LOG(LogTemp, Warning, TEXT("Interact! Time: %i"), FDateTime::Now().GetMillisecond());
+	TArray<FOverlapResult> OverlapResults;
+	const FVector Position = GetActorLocation();
+	const FQuat Rotation = FQuat::Identity;
+	FCollisionShape Shape = FCollisionShape::MakeBox(InteractShapeSize);
+	if(GetWorld()->OverlapMultiByChannel(OverlapResults, Position, Rotation, ECC_Camera, Shape))
+	{
+		for(const FOverlapResult& Result : OverlapResults)
+		{
+			if(AMYVendor* Vendor = Cast<AMYVendor>(Result.GetActor()))
+			{
+				Vendor->Interact(this);
+			}
+		}
+	}
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

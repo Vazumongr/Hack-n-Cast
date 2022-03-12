@@ -18,7 +18,7 @@ bool UMYMenuWidgetBase::Setup()
 
 bool UMYMenuWidgetBase::Teardown()
 {
-	RemoveFromViewport();
+	RemoveFromParent();
 	UWorld* World = GetWorld();
 	if(!ensure(World)) return false;
 	APlayerController* PlayerController = World->GetFirstPlayerController();
