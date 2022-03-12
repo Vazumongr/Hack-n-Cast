@@ -27,6 +27,14 @@ public:
 	void BuffYourself();
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void BuffYourself_Server();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BuffAD();
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void BuffAD_Server();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BuffAP();
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void BuffAP_Server();
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

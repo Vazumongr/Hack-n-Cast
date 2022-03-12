@@ -48,6 +48,16 @@ void AMYPlayerCharacter::BuffYourself_Server_Implementation()
 	BuffYourself();
 }
 
+void AMYPlayerCharacter::BuffAD_Server_Implementation()
+{
+	BuffAD();
+}
+
+void AMYPlayerCharacter::BuffAP_Server_Implementation()
+{
+	BuffAP();
+}
+
 void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
