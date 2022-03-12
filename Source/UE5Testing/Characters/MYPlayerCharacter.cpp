@@ -46,6 +46,9 @@ void AMYPlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 void AMYPlayerCharacter::ApplyBuff_Implementation(TSubclassOf<UGameplayEffect> InGE)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Buffed"));
+	UGameplayEffect* GameplayEffect = InGE->GetDefaultObject<UGameplayEffect>();
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	AbilitySystemComponent->ApplyGameplayEffectToSelf(GameplayEffect, 0, EffectContext);
 }
 
 void AMYPlayerCharacter::ApplyBuff_Server_Implementation(TSubclassOf<UGameplayEffect> InGE)
