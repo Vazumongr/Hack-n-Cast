@@ -43,19 +43,14 @@ void AMYPlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	DOREPLIFETIME(AMYPlayerCharacter, AttackChainCounter);
 }
 
-void AMYPlayerCharacter::BuffYourself_Server_Implementation()
+void AMYPlayerCharacter::ApplyBuff_Implementation(TSubclassOf<UGameplayEffect> InGE)
 {
-	BuffYourself();
+	UE_LOG(LogTemp, Warning, TEXT("Buffed"));
 }
 
-void AMYPlayerCharacter::BuffAD_Server_Implementation()
+void AMYPlayerCharacter::ApplyBuff_Server_Implementation(TSubclassOf<UGameplayEffect> InGE)
 {
-	BuffAD();
-}
-
-void AMYPlayerCharacter::BuffAP_Server_Implementation()
-{
-	BuffAP();
+	ApplyBuff(InGE);
 }
 
 void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -197,11 +192,6 @@ void AMYPlayerCharacter::Interact()
 			}
 		}
 	}
-}
-
-void AMYPlayerCharacter::BuffYourself_Implementation()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Buffed"));
 }
 
 void AMYPlayerCharacter::SetStartingKit_Server_Implementation(UMYStartingKitBaseDA* InStartingKit)

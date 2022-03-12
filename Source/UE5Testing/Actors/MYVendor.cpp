@@ -29,7 +29,7 @@ void AMYVendor::Deactivate()
 void AMYVendor::Interact_Implementation(AMYPlayerCharacter* InteractingActor)
 {
 	check(InteractingActor);
-	InteractingActor->BuffYourself();
+	//InteractingActor->BuffYourself();
 	UE_LOG(LogVendor, Warning, TEXT("Vendor interaction called"));
 }
 

@@ -24,17 +24,9 @@ public:
 	virtual void AddControllerYawInput(float Val) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void BuffYourself();
+	void ApplyBuff(TSubclassOf<UGameplayEffect> InGE);
 	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void BuffYourself_Server();
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void BuffAD();
-	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void BuffAD_Server();
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void BuffAP();
-	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void BuffAP_Server();
+	void ApplyBuff_Server(TSubclassOf<UGameplayEffect> InGE);
 
 protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
