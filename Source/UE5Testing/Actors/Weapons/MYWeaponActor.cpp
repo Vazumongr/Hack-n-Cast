@@ -69,6 +69,10 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		UKismetSystemLibrary::PrintString(this, TEXT("Applying effect!"));
 		OwningWeapon->HitCharacter(CharacterHit);
 	}
+	
+	ENetMode NetMode = GetNetMode();
+	if(NetMode == ENetMode::NM_Client)
+		UE_LOG(LogTemp, Warning, TEXT("GFfd"));
 }
 
 void AMYWeaponActor::Tick(float DeltaTime)
