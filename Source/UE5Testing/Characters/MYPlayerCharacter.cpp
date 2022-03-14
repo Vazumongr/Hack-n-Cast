@@ -69,7 +69,7 @@ void AMYPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("SelectFirstWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectFirstWeapon);
 	PlayerInputComponent->BindAction("SelectSecondWeapon", IE_Pressed, this, &AMYPlayerCharacter::SelectSecondWeapon);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMYPlayerCharacter::Interact);
-	PlayerInputComponent->BindAction("OpenInventoryPressed", IE_Pressed, this, &AMYPlayerCharacter::OpenInventoryPressed);
+	PlayerInputComponent->BindAction("OpenInventory", IE_Pressed, this, &AMYPlayerCharacter::OpenInventoryPressed);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMYPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMYPlayerCharacter::MoveRight);

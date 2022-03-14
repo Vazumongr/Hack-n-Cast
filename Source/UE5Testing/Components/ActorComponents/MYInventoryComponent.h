@@ -7,7 +7,7 @@
 #include "MYInventoryComponent.generated.h"
 
 class UMYItemData;
-
+/** TODO remove this junk
 USTRUCT()
 struct FInventoryWeapon
 {
@@ -23,6 +23,7 @@ struct FInventoryWeapon
 	UPROPERTY()
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 };
+*/
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class UE5TESTING_API UMYInventoryComponent : public USceneComponent
@@ -41,6 +42,9 @@ public:
 	void AddItemToInventory_Server(class UMYItemData* InItemData);
 
 	TObjectPtr<class UMYItemData> GetItemDataAtIndex(int8 InIdx) const;
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UMYItemData*> GetInventoryItems() const { return InventoryItems; }
 
 protected:
 	// Called when the game starts
