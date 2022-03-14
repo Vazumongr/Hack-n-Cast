@@ -37,6 +37,8 @@ protected:
 	virtual void SelectFirstWeapon();
 	virtual void SelectSecondWeapon();
 	//virtual void SpawnWeapon(int8 WeaponIdx);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OpenInventoryPressed();
 
 	virtual void MoveForward(float InputValue);
 	virtual void MoveRight(float InputValue);

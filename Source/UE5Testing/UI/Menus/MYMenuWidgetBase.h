@@ -5,7 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "MYMenuWidgetBase.generated.h"
 /**
- * Base class for menus
+ * Base class for menus that take control away from the
+ * player and require mouse interaction
  */
 UCLASS()
 class UE5TESTING_API UMYMenuWidgetBase : public UUserWidget
