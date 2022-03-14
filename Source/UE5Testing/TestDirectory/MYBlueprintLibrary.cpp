@@ -5,12 +5,20 @@
 
 #include "GameFramework/Controller.h"
 
-AController* UMYBlueprintLibrary::GetAndCastController(APawn* TargetPawn, TSubclassOf<AController> TargetClass)
+AController* UMYBlueprintLibrary::GetAndCastController(TSubclassOf<AController> ClassType, APawn* TargetPawn)
 {
-	if(TargetPawn==nullptr) return nullptr;
-	if(TargetPawn->GetController()->IsA(TargetClass))
+	if(TargetPawn->GetController()->IsA(ClassType))
 	{
 		return TargetPawn->GetController();
+	}
+	return nullptr;
+}
+
+APawn* UMYBlueprintLibrary::GetAndCastPawn(TSubclassOf<APawn> ClassType, AController* TargetController)
+{
+	if(TargetController->GetPawn()->IsA(ClassType))
+	{
+		return TargetController->GetPawn();
 	}
 	return nullptr;
 }

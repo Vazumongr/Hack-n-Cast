@@ -17,8 +17,11 @@ class UE5TESTING_API UMYBlueprintLibrary : public UBlueprintFunctionLibrary
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category="MyPersonalLibrary")
-	static AController* GetAndCastController(APawn* TargetPawn, TSubclassOf<AController> TargetClass);
+	UFUNCTION(BlueprintCallable, Category="MyPersonalLibrary", meta=(DeterminesOutputType="ClassType", DefaultToSelf="TargetPawn"))
+	static AController* GetAndCastController(TSubclassOf<AController> ClassType, APawn* TargetPawn);
+
+	UFUNCTION(BlueprintCallable, Category="MyPersonalLibrary", meta=(DeterminesOutputType="ClassType", DefaultToSelf="TargetController"))
+	static APawn* GetAndCastPawn(TSubclassOf<APawn> ClassType, AController* TargetController);
 
 	UFUNCTION(BlueprintCallable, Category="Math|Vector")
 	static float AngleBetweenVectors(const FVector& FirstVector, const FVector& SecondVector);
