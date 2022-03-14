@@ -131,6 +131,12 @@ void AMYWeaponBase::SpawnWeaponActors()
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetReplicates(true);
 		
+
+		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy)
+		{
+			RightHandWeapon->bShouldDetect = true;
+		}
+		
 		UGameplayStatics::FinishSpawningActor(RightHandWeapon, FTransform::Identity);
 		if (WeaponData->WeaponSMADA != nullptr)
 			RightHandWeapon->GetStaticMeshComponent()->SetStaticMesh(WeaponData->WeaponSMADA->GetPrimaryStaticMesh());
@@ -144,6 +150,11 @@ void AMYWeaponBase::SpawnWeaponActors()
 		LeftHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->LeftSocketName);
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetReplicates(true);
+
+		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy)
+		{
+			LeftHandWeapon->bShouldDetect = true;
+		}
 		
 		UGameplayStatics::FinishSpawningActor(LeftHandWeapon, FTransform::Identity);
 		if (WeaponData->WeaponSMADA != nullptr)

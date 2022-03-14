@@ -50,7 +50,7 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	check(OwningWeapon);
-	if(GetNetMode() == NM_DedicatedServer) return;
+	if(GetNetMode() == NM_DedicatedServer || !bShouldDetect) return;
 	if(!IsValid(OtherActor) || OtherActor==OwningWeapon->GetOwningCharacter()) return;
 	
 	if(OtherComponent!=nullptr)
@@ -69,10 +69,6 @@ void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		UKismetSystemLibrary::PrintString(this, TEXT("Applying effect!"));
 		OwningWeapon->HitCharacter(CharacterHit);
 	}
-	
-	ENetMode NetMode = GetNetMode();
-	if(NetMode == ENetMode::NM_Client)
-		UE_LOG(LogTemp, Warning, TEXT("GFfd"));
 }
 
 void AMYWeaponActor::Tick(float DeltaTime)
