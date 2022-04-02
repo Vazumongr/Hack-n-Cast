@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "UE5Testing/Interfaces/MYMainMenuInterface.h"
 
 #include "MYGameInstance.generated.h"
@@ -19,6 +20,7 @@ class UE5TESTING_API UMYGameInstance : public UGameInstance, public IMYMainMenuI
 public:
 	UMYGameInstance();
 	virtual void Init() override;
+	void CreateSessionComplete(FName Name, bool Result);
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
@@ -28,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateHUD();
+
+	UFUNCTION(BlueprintCallable)
+	void CreateSession();
 
 	UFUNCTION(Exec)
 	void Host();
@@ -44,5 +49,7 @@ public:
 	TSubclassOf<class UUserWidget> InGameMenuClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> HUDClass;
-	
+
+protected:
+	IOnlineSessionPtr SessionInterface;
 };

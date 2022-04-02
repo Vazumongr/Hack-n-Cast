@@ -1,0 +1,62 @@
+﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  voicechat.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  VectorEntity.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Sun.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  stdafx.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  StatsAndAchievements.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  StarField.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  SpaceWarServer.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  SpaceWarEntity.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  SpaceWarClient.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Ship.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  ServerBrowser.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  RemoteStorage.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  RemotePlay.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  QuitMenu.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  PhotonBeam.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  p2pauth.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  musicplayer.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  MainMenu.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Main.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Lobby.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Generating Code...
+  Compiling...
+  Leaderboards.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  ItemStore.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Inventory.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  htmlsurface.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  gameenginewin32.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Friends.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  connectingmenu.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  clanchatroom.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  BaseMenu.cpp
+C:\UE5Projects\UE5Testing\Encrypted\sdk\steamworksexample\stdafx.h(60,10): fatal error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
+  Generating Code...

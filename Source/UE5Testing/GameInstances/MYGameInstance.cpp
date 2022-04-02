@@ -3,6 +3,8 @@
 
 #include "UE5Testing/GameInstances/MYGameInstance.h"
 
+#include "OnlineSessionSettings.h"
+#include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "UE5Testing/UI/Menus/MYInGameMenuWidget.h"
 #include "UE5Testing/UI/Menus/MYMainMenuWidget.h"
@@ -16,15 +18,38 @@ UMYGameInstance::UMYGameInstance()
 void UMYGameInstance::Init()
 {
 	Super::Init();
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if(Subsystem!=nullptr)
+	{
+		UE_LOG(LogOnline, Error, TEXT("Found subsystem %s."), *Subsystem->GetSubsystemName().ToString());
+		SessionInterface = Subsystem->GetSessionInterface();
+		if(SessionInterface.IsValid())
+		{
+			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMYGameInstance::CreateSessionComplete);
+			UE_LOG(LogOnline, Error, TEXT("Found session interface."));
+		}
+	}
+	else
+	{
+		UE_LOG(LogOnline, Error, TEXT("No subsystem found."));
+	}
 	
 }
 
-void UMYGameInstance::Host()
+void UMYGameInstance::CreateSessionComplete(FName SessionName, bool Success)
 {
+	if(!Success) return;
 	UWorld* World = GetWorld();
 	if(!ensure(World)) return;
 	World->ServerTravel("/Game/Levels/Arena?listen");
 	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Host"));
+}
+
+void UMYGameInstance::Host()
+{
+	if(!SessionInterface.IsValid()) return;
+	FOnlineSessionSettings SessionSettings;
+	SessionInterface->CreateSession(0,TEXT("My Session Game"), SessionSettings);
 }
 
 void UMYGameInstance::LoadMainMenu()
@@ -55,6 +80,11 @@ void UMYGameInstance::CreateHUD()
 	HUD->AddToViewport();
 	HUD->SetOwningController(PlayerController);
 	HUD->SetOwningPlayer(PlayerController);
+}
+
+void UMYGameInstance::CreateSession()
+{
+	
 }
 
 void UMYGameInstance::Join(FString IPAddress)

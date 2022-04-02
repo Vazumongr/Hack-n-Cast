@@ -27,6 +27,8 @@ public:
 private:
 	UFUNCTION()
 	void Host();
+	UFUNCTION(BlueprintCallable)
+	void JoinServer(FString IPAddress);
 	UFUNCTION()
 	void Join();
 	UFUNCTION()

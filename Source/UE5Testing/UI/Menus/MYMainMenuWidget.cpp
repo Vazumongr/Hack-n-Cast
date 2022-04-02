@@ -26,10 +26,15 @@ void UMYMainMenuWidget::Host()
 	MainMenuInterface->Host();
 }
 
-void UMYMainMenuWidget::Join()
+void UMYMainMenuWidget::JoinServer(FString IPAddress)
 {
 	if(!ensure(MainMenuInterface)) return;
-	MainMenuInterface->Join(TEXT("127.0.0.1"));
+	MainMenuInterface->Join(IPAddress);
+}
+
+void UMYMainMenuWidget::Join()
+{
+	JoinServer(TEXT("127.0.0.1"));
 }
 
 void UMYMainMenuWidget::Quit()
