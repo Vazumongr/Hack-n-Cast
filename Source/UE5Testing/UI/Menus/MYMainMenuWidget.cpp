@@ -6,6 +6,7 @@
 #include "OnlineSessionSettings.h"
 #include "UE5Testing/GameInstances/MYGameInstance.h"
 #include "UE5Testing/Interfaces/MYMainMenuInterface.h"
+#include "UE5Testing/UI/Menus/MenuWidgets/MYSessionRow.h"
 #include "Components/Button.h"
 #include "Components/ScrollBox.h"
 
@@ -45,9 +46,17 @@ void UMYMainMenuWidget::Join()
 
 void UMYMainMenuWidget::OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessions)
 {
-	for(const FOnlineSessionSearchResult& Session : Sessions)
+	for(FOnlineSessionSearchResult& Session : Sessions)
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *Session.GetSessionIdStr()));
+		UMYSessionRow* SessionRow = CreateWidget<UMYSessionRow>(this, SessionRowClass);
+		if(SessionRow == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to create SessionRow"));
+			return;
+		}
+		SessionRow->SetSessionName(Session.GetSessionIdStr());
+		SessionList->AddChild(SessionRow);
 	}
 }
 

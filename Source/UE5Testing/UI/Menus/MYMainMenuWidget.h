@@ -29,7 +29,7 @@ public:
 
 	void OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessions);
 
-private:
+protected:
 	UFUNCTION()
 	void Host();
 	UFUNCTION(BlueprintCallable)
@@ -39,6 +39,8 @@ private:
 	UFUNCTION()
 	void Quit();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UMYSessionRow> SessionRowClass;
 
 	
 	
