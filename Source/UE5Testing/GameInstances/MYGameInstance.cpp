@@ -123,8 +123,10 @@ void UMYGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Found Sessions"));
 	for(FOnlineSessionSearchResult SearchResult : SearchResults)
 	{
-		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *SearchResult.GetSessionIdStr()));
+		//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *SearchResult.GetSessionIdStr()));
 	}
+
+	SessionsFoundDelegate.Execute(SearchResults);
 }
 
 void UMYGameInstance::Join(FString IPAddress)

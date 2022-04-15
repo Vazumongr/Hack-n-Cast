@@ -4,6 +4,8 @@
 #include "CoreMinimal.h"
 #include "MYMainMenuInterface.generated.h"
 
+DECLARE_DELEGATE_OneParam(FSessionsFoundDelegate, TArray<FOnlineSessionSearchResult>)
+
 // This class does not need to be modified
 UINTERFACE(MinimalAPI)
 class UMYMainMenuInterface : public UInterface
@@ -20,6 +22,9 @@ class UE5TESTING_API IMYMainMenuInterface
 	
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface
 public:
+
+	FSessionsFoundDelegate SessionsFoundDelegate;
+	
 	UFUNCTION(Exec)
 	virtual void Host() = 0;
 	

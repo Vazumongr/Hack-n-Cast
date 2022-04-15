@@ -24,6 +24,11 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
 	class UButton* QuitButton;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
+	class UScrollBox* SessionList;
+
+	void OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessions);
+
 private:
 	UFUNCTION()
 	void Host();
