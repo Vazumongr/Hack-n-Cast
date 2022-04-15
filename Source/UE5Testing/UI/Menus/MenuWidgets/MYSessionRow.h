@@ -16,7 +16,11 @@ class UE5TESTING_API UMYSessionRow : public UUserWidget
 public:
 
 	void SetSessionName(FString InSessionName);
+	void SetMainMenu(class UMYMainMenuWidget* InMenu);
 	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* SessionName;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
+	class UMYMainMenuWidget* MainMenuWidget;
 };

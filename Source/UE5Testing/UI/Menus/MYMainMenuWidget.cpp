@@ -33,7 +33,24 @@ void UMYMainMenuWidget::Host()
 void UMYMainMenuWidget::JoinServer(FString IPAddress)
 {
 	if(!ensure(MainMenuInterface)) return;
-	MainMenuInterface->Join(IPAddress);
+	if(SelectedIndex.IsSet())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Selected Index: %d"), SelectedIndex.GetValue());
+	}
+	//MainMenuInterface->Join(IPAddress);
+}
+
+void UMYMainMenuWidget::AddListEntry(FString SessionName)
+{
+	UMYSessionRow* SessionRow = CreateWidget<UMYSessionRow>(this, SessionRowClass);
+	if(SessionRow == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to create SessionRow"));
+		return;
+	}
+	SessionRow->SetSessionName(SessionName);
+	SessionRow->SetMainMenu(this);
+	SessionList->AddChild(SessionRow);
 }
 
 void UMYMainMenuWidget::Join()
@@ -48,7 +65,7 @@ void UMYMainMenuWidget::OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessi
 {
 	for(FOnlineSessionSearchResult& Session : Sessions)
 	{
-		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *Session.GetSessionIdStr()));
+		/*GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *Session.GetSessionIdStr()));
 		UMYSessionRow* SessionRow = CreateWidget<UMYSessionRow>(this, SessionRowClass);
 		if(SessionRow == nullptr)
 		{
@@ -56,8 +73,14 @@ void UMYMainMenuWidget::OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessi
 			return;
 		}
 		SessionRow->SetSessionName(Session.GetSessionIdStr());
-		SessionList->AddChild(SessionRow);
+		SessionList->AddChild(SessionRow);*/
+		AddListEntry(Session.GetSessionIdStr());
 	}
+}
+
+void UMYMainMenuWidget::SetIndex(int32 InIndex)
+{
+	SelectedIndex = InIndex;
 }
 
 void UMYMainMenuWidget::Quit()

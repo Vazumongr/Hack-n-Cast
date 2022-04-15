@@ -29,11 +29,16 @@ public:
 
 	void OnSessionsFound(TArray<FOnlineSessionSearchResult> Sessions);
 
+	UFUNCTION(BlueprintCallable)
+	void SetIndex(int32 InIndex);
+
 protected:
 	UFUNCTION()
 	void Host();
 	UFUNCTION(BlueprintCallable)
 	void JoinServer(FString IPAddress);
+	UFUNCTION(BlueprintCallable)
+	void AddListEntry(FString SessionName);
 	UFUNCTION()
 	void Join();
 	UFUNCTION()
@@ -41,6 +46,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UMYSessionRow> SessionRowClass;
+
+	TOptional<uint32> SelectedIndex;
 
 	
 	

@@ -62,7 +62,6 @@ void UMYGameInstance::CreateSession()
 	SessionSettings.bIsLANMatch = true;
 	SessionSettings.NumPublicConnections = 2;
 	
-    //SessionInterface->DestroySession(SessionName);
     SessionInterface->CreateSession(0,SessionName, SessionSettings);
 }
 
@@ -155,6 +154,6 @@ void UMYGameInstance::QuitGame()
 
 void UMYGameInstance::Shutdown()
 {
-	//SessionInterface->DestroySession(SessionName);
+	SessionInterface->DestroySession(SessionName);
 	Super::Shutdown();
 }
