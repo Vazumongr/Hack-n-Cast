@@ -40,6 +40,8 @@ public:
 
 	UFUNCTION(Exec)
 	void Join(FString IPAddress);
+	void JoinSession(int32 InIndex);
+	void OnJoinSessionComplete(FName InName, EOnJoinSessionCompleteResult::Type InType);
 
 	virtual void QuitToMainMenu() override;
 	virtual void QuitGame() override;

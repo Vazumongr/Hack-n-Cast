@@ -22,7 +22,7 @@ void UMYGameInstance::Init()
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMYGameInstance::CreateSessionComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UMYGameInstance::OnDestroySessionComplete);
-			SessionSearch = MakeShareable(new FOnlineSessionSearch());
+			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UMYGameInstance::OnJoinSessionComplete);
 			UE_LOG(LogOnline, Error, TEXT("Found session interface."));
 		}
 	}
@@ -97,6 +97,8 @@ void UMYGameInstance::CreateHUD()
 
 void UMYGameInstance::FindSessions()
 {
+	
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if(!SessionInterface.IsValid()) return;
 	SessionSearch->bIsLanQuery = true;
 	//SessionSearch->QuerySettings.Set() // Interfaces with keys defined by OSS API, not FQuerySettings
@@ -133,6 +135,30 @@ void UMYGameInstance::Join(FString IPAddress)
 	APlayerController* PlayerController = GetPrimaryPlayerController();
 	if(!ensure(PlayerController)) return;
 	PlayerController->ClientTravel(IPAddress,ETravelType::TRAVEL_Absolute);
+}
+
+void UMYGameInstance::JoinSession(int32 InIndex)
+{
+	if(!SessionInterface.IsValid() || !SessionSearch.IsValid()) return;
+	FOnlineSessionSearchResult& SearchResult = SessionSearch->SearchResults[InIndex];
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Selected Index: %d"), InIndex));
+
+	//SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UMYGameInstance::OnJoinSessionComplete);
+	SessionInterface->JoinSession(0, FName(SearchResult.GetSessionIdStr()), SearchResult);
+}
+
+void UMYGameInstance::OnJoinSessionComplete(FName InName, EOnJoinSessionCompleteResult::Type InType)
+{
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,TEXT("OnJoinSessionComplete"));
+	if(InType != EOnJoinSessionCompleteResult::Success || !SessionInterface.IsValid()) return;
+	FString Address;
+	if(!SessionInterface->GetResolvedConnectString(InName, Address)) return;
+	
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Address: %s"), *Address));
+	
+	APlayerController* PlayerController = GetPrimaryPlayerController();
+	if(!ensure(PlayerController)) return;
+	PlayerController->ClientTravel(Address,ETravelType::TRAVEL_Absolute);
 }
 
 void UMYGameInstance::QuitToMainMenu()

@@ -39,6 +39,8 @@ protected:
 	void JoinServer(FString IPAddress);
 	UFUNCTION(BlueprintCallable)
 	void AddListEntry(FString SessionName);
+	void AddListEntry(FOnlineSessionSearchResult& Session);
+	void AddListEntry(FString SessionName, int32 InIndex);
 	UFUNCTION()
 	void Join();
 	UFUNCTION()
