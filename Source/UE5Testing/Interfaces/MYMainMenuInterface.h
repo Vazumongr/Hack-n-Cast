@@ -28,4 +28,6 @@ public:
 
 	virtual void QuitToMainMenu() = 0;
 	virtual void QuitGame() = 0;
+
+	virtual void FindSessions() = 0;
 };

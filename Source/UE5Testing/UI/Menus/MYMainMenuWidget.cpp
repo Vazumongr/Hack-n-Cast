@@ -34,7 +34,9 @@ void UMYMainMenuWidget::JoinServer(FString IPAddress)
 
 void UMYMainMenuWidget::Join()
 {
-	JoinServer(TEXT("127.0.0.1"));
+	//JoinServer(TEXT("127.0.0.1"));
+	if(!ensure(MainMenuInterface)) return;
+	MainMenuInterface->FindSessions();
 }
 
 void UMYMainMenuWidget::Quit()

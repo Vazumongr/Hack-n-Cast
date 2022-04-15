@@ -18,9 +18,9 @@ class UE5TESTING_API UMYGameInstance : public UGameInstance, public IMYMainMenuI
 	GENERATED_BODY()
 
 public:
-	UMYGameInstance();
 	virtual void Init() override;
-	void CreateSessionComplete(FName Name, bool Result);
+	void CreateSessionComplete(FName InSessionName, bool bResult);
+	void OnDestroySessionComplete(FName InSessionName, bool bResult);
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMainMenu();
@@ -31,17 +31,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CreateHUD();
 
-	UFUNCTION(BlueprintCallable)
-	void CreateSession();
+	virtual void FindSessions() override;
+	void OnFindSessionsComplete(bool bWasSuccessful);
 
 	UFUNCTION(Exec)
 	void Host();
-	
+	void CreateSession();
+
 	UFUNCTION(Exec)
 	void Join(FString IPAddress);
 
 	virtual void QuitToMainMenu() override;
 	virtual void QuitGame() override;
+
+	virtual void Shutdown() override;
+
+	const FName SessionName = TEXT("My Session Game");
+
+	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> MainMenuClass;

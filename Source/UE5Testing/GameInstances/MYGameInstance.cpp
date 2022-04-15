@@ -10,11 +10,6 @@
 #include "UE5Testing/UI/Menus/MYMainMenuWidget.h"
 #include "UE5Testing/UI/MYHUD.h"
 
-UMYGameInstance::UMYGameInstance()
-{
-	
-}
-
 void UMYGameInstance::Init()
 {
 	Super::Init();
@@ -26,6 +21,8 @@ void UMYGameInstance::Init()
 		if(SessionInterface.IsValid())
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UMYGameInstance::CreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UMYGameInstance::OnDestroySessionComplete);
+			SessionSearch = MakeShareable(new FOnlineSessionSearch());
 			UE_LOG(LogOnline, Error, TEXT("Found session interface."));
 		}
 	}
@@ -36,20 +33,38 @@ void UMYGameInstance::Init()
 	
 }
 
-void UMYGameInstance::CreateSessionComplete(FName SessionName, bool Success)
+void UMYGameInstance::CreateSessionComplete(FName InSessionName, bool bSuccess)
 {
-	if(!Success) return;
+	if(!bSuccess) return;
 	UWorld* World = GetWorld();
 	if(!ensure(World)) return;
 	World->ServerTravel("/Game/Levels/Arena?listen");
 	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Host"));
 }
 
+void UMYGameInstance::OnDestroySessionComplete(FName InSessionName, bool bResult)
+{
+	if(bResult)
+	UE_LOG(LogTemp, Warning, TEXT("Session Destroyed"));
+}
+
 void UMYGameInstance::Host()
 {
+	CreateSession();
+}
+
+void UMYGameInstance::CreateSession()
+{
 	if(!SessionInterface.IsValid()) return;
-	FOnlineSessionSettings SessionSettings;
-	SessionInterface->CreateSession(0,TEXT("My Session Game"), SessionSettings);
+	
+    FOnlineSessionSettings SessionSettings;
+	SessionSettings.bShouldAdvertise = true;
+	SessionSettings.bIsLANMatch = true;
+	SessionSettings.bIsDedicated = false;
+	SessionSettings.NumPublicConnections = 2;
+	
+    //SessionInterface->DestroySession(SessionName);
+    SessionInterface->CreateSession(0,SessionName, SessionSettings);
 }
 
 void UMYGameInstance::LoadMainMenu()
@@ -82,9 +97,34 @@ void UMYGameInstance::CreateHUD()
 	HUD->SetOwningPlayer(PlayerController);
 }
 
-void UMYGameInstance::CreateSession()
+void UMYGameInstance::FindSessions()
 {
+	if(!SessionInterface.IsValid()) return;
+	SessionSearch->bIsLanQuery = true;
+	//SessionSearch->QuerySettings.Set() // Interfaces with keys defined by OSS API, not FQuerySettings
+	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UMYGameInstance::OnFindSessionsComplete);
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Searching"));
+}
+
+void UMYGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
+{
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Search Complete"));
+	if(!bWasSuccessful) return;
+
+	if(!SessionSearch.IsValid()) return;
+	TArray<FOnlineSessionSearchResult> SearchResults = SessionSearch->SearchResults;
+	if(SearchResults.Num() == 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("No Sessions Found"));
+		return;
+	}
 	
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Found Sessions"));
+	for(FOnlineSessionSearchResult SearchResult : SearchResults)
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,FString::Printf(TEXT("Found Session: %s"), *SearchResult.GetSessionIdStr()));
+	}
 }
 
 void UMYGameInstance::Join(FString IPAddress)
@@ -110,4 +150,10 @@ void UMYGameInstance::QuitGame()
 	APlayerController* PlayerController = GetPrimaryPlayerController();
 	if(!ensure(PlayerController)) return;
 	PlayerController->ConsoleCommand("quit");
+}
+
+void UMYGameInstance::Shutdown()
+{
+	//SessionInterface->DestroySession(SessionName);
+	Super::Shutdown();
 }
