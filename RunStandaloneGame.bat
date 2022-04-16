@@ -1,0 +1,1 @@
+"C:\UnrealSourceBuilds\UE5Builds\ue5-main\Engine\Binaries\Win64\UnrealEditor.exe" "C:\UE5Projects\UE5Testing\UE5Testing.uproject" -game -log
