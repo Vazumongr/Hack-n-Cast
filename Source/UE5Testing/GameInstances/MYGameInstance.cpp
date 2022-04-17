@@ -17,6 +17,7 @@ void UMYGameInstance::Init()
 	if(Subsystem!=nullptr)
 	{
 		UE_LOG(LogOnline, Error, TEXT("Found subsystem %s."), *Subsystem->GetSubsystemName().ToString());
+		OSSName = Subsystem->GetSubsystemName();
 		SessionInterface = Subsystem->GetSessionInterface();
 		if(SessionInterface.IsValid())
 		{
@@ -57,10 +58,21 @@ void UMYGameInstance::CreateSession()
 {
 	if(!SessionInterface.IsValid()) return;
 	
-    FOnlineSessionSettings SessionSettings;
-	SessionSettings.bShouldAdvertise = true;
-	SessionSettings.bIsLANMatch = true;
-	SessionSettings.NumPublicConnections = 2;
+	FOnlineSessionSettings SessionSettings;
+	if(OSSName.IsEqual(FName(TEXT("NULL"))))
+	{
+		SessionSettings.bShouldAdvertise	= true;
+		SessionSettings.bIsLANMatch			= true;
+		SessionSettings.NumPublicConnections = 2;
+	}
+	else if(OSSName.IsEqual(FName(TEXT("Steam"))))
+	{
+		SessionSettings.bShouldAdvertise	= true;
+		SessionSettings.bIsLANMatch			= false;
+		SessionSettings.bUsesPresence		= true;
+		SessionSettings.bUseLobbiesIfAvailable = true;
+		SessionSettings.NumPublicConnections = 2;
+	}
 	
     SessionInterface->CreateSession(0,SessionName, SessionSettings);
 }
@@ -100,8 +112,18 @@ void UMYGameInstance::FindSessions()
 	
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if(!SessionInterface.IsValid()) return;
-	SessionSearch->bIsLanQuery = true;
-	//SessionSearch->QuerySettings.Set() // Interfaces with keys defined by OSS API, not FQuerySettings
+
+	if(OSSName.IsEqual(FName(TEXT("NULL"))))
+	{
+		SessionSearch->bIsLanQuery = true;
+		//SessionSearch->QuerySettings.Set() // Interfaces with keys defined by OSS API, not FQuerySettings
+	}
+	else if(OSSName.IsEqual(FName(TEXT("Steam"))))
+	{
+		SessionSearch->bIsLanQuery = false;
+		SessionSearch->MaxSearchResults = 100;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	}
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UMYGameInstance::OnFindSessionsComplete);
 	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Cyan,("Searching"));

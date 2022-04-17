@@ -61,4 +61,6 @@ public:
 
 protected:
 	IOnlineSessionPtr SessionInterface;
+
+	FName OSSName;
 };
