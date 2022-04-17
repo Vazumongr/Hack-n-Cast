@@ -16,8 +16,10 @@ class UE5TESTING_API UMYBTTask_ActivateAbility : public UBTTaskNode
 	UMYBTTask_ActivateAbility();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	
+
+	/*
 #if WITH_EDITOR
 	virtual FName GetNodeIconName() const override;
 #endif // WITH_EDITOR
+	*/
 };

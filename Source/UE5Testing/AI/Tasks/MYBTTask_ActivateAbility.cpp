@@ -9,12 +9,12 @@ UMYBTTask_ActivateAbility::UMYBTTask_ActivateAbility()
 {
 	NodeName=TEXT("ActivatePrimaryAbility");
 }
-
+/*
 FName UMYBTTask_ActivateAbility::GetNodeIconName() const
 {
 	return Super::GetNodeIconName();
 }
-
+*/
 EBTNodeResult::Type UMYBTTask_ActivateAbility::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const AMYEnemyController* EnemyController = Cast<AMYEnemyController>(OwnerComp.GetOwner());
