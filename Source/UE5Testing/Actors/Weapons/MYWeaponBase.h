@@ -41,8 +41,6 @@ public:
 	bool HasHitActor(AActor* InHitActor) const;
 	void ClearHitActors();
 	UFUNCTION(BlueprintCallable)
-	void Initialize();
-	UFUNCTION(BlueprintCallable)
 	void Deactivate();
 	virtual void Deconstruct() override;
 

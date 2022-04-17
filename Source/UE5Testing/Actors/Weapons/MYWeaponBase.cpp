@@ -41,8 +41,6 @@ void AMYWeaponBase::SetGameplayEffect(const FGameplayEffectSpecHandle& InGESpecH
 	GESpecHandle = InGESpecHandle;
 }
 
-
-
 void AMYWeaponBase::HitCharacter(AMYCharacterBase* TargetCharacter)
 {
 	ApplyEffectToTarget_Server(TargetCharacter);
@@ -66,11 +64,6 @@ bool AMYWeaponBase::HasHitActor(AActor* InHitActor) const
 void AMYWeaponBase::ClearHitActors()
 {
 	HitActors.Empty();
-}
-
-void AMYWeaponBase::Initialize()
-{
-	SpawnWeaponActors();
 }
 
 void AMYWeaponBase::Deactivate()
@@ -130,9 +123,14 @@ void AMYWeaponBase::SpawnWeaponActors()
 		RightHandWeapon->AttachToComponent(OwningCharacter->GetMesh(),FAttachmentTransformRules::SnapToTargetIncludingScale, OwningCharacter->RightSocketName);
 		RightHandWeapon->SetOwningWeapon(this);
 		RightHandWeapon->SetReplicates(true);
-		
 
-		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy)
+		bool bFirstCheck = (GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy);
+		bool bSecondCheck = (GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy);
+		bool bThirdCheck = (GetNetMode() == NM_Standalone);
+
+		ENetRole OwnerRole = OwningCharacter->GetLocalRole();
+
+		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || (GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy) || (GetNetMode() == NM_Standalone))
 		{
 			RightHandWeapon->bShouldDetect = true;
 		}
@@ -151,7 +149,7 @@ void AMYWeaponBase::SpawnWeaponActors()
 		LeftHandWeapon->SetOwningWeapon(this);
 		LeftHandWeapon->SetReplicates(true);
 
-		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy)
+		if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_AutonomousProxy) || (GetNetMode() == NM_ListenServer && OwningCharacter->GetRemoteRole() == ROLE_SimulatedProxy) || (GetNetMode() == NM_Standalone))
 		{
 			LeftHandWeapon->bShouldDetect = true;
 		}

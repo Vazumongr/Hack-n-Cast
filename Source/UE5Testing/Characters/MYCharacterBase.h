@@ -63,6 +63,8 @@ public:
 
 	void ActivatePrimaryAbility();
 
+	bool HasAutonomousProxy() const { return bHasAutonomousProxy; }
+
 	/* Attribute Getters */
 	UFUNCTION(BlueprintCallable)
 	float GetHealth() const;
@@ -115,6 +117,9 @@ protected:
 	/* Attribute Change Handlers */
 	virtual void HealthChanged(const FOnAttributeChangeData & Data);
 	virtual void MaxHealthChanged(const FOnAttributeChangeData & Data);
+
+	UFUNCTION(Server, Reliable)
+	void SetHasAutonomousProxy();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAbilityByHandle(FGameplayAbilitySpecHandle InHandle);
@@ -134,6 +139,9 @@ protected:
 	TSubclassOf<class AMYWeaponBase> WeaponClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Replicated)
 	uint8 AttackChainCounter{0};
+
+	UPROPERTY(Replicated)
+	bool bHasAutonomousProxy{false};
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="MYCharacterBase|Ability System")
 	class UMYAbilitySystemComponent* AbilitySystemComponent;

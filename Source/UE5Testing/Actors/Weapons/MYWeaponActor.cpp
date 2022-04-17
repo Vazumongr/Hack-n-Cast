@@ -44,14 +44,32 @@ void AMYWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
 	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AMYWeaponActor::OnBeginOverlap);
+	
+	if(!IsValid(OwningWeapon)) return;
+	AMYCharacterBase* OwningCharacter = OwningWeapon->GetOwningCharacter();
+	
+	if(!IsValid(OwningCharacter)) return;
+
+	/*
+	if( (GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_SimulatedProxy) || ( (GetNetMode() == NM_ListenServer) || (GetNetMode() == NM_DedicatedServer) ) && !OwningCharacter->HasAutonomousProxy() )
+	{
+		bShouldDetect = false;
+	}
+	*/
 }
 
 void AMYWeaponActor::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int OtherBodyIndex,
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	check(OwningWeapon);
-	if(GetNetMode() == NM_DedicatedServer || !bShouldDetect) return;
+	//if(GetNetMode() == NM_DedicatedServer || !bShouldDetect) return;
 	if(!IsValid(OtherActor) || OtherActor==OwningWeapon->GetOwningCharacter()) return;
+	
+	AMYCharacterBase* OwningCharacter = OwningWeapon->GetOwningCharacter();
+	if(!IsValid(OwningCharacter)) return;
+	
+	if((GetNetMode() == NM_Client && OwningCharacter->GetLocalRole() == ROLE_SimulatedProxy) || (((GetNetMode() == NM_ListenServer) || (GetNetMode() == NM_DedicatedServer)) && OwningCharacter->HasAutonomousProxy())) return;
+
 	
 	if(OtherComponent!=nullptr)
 	{

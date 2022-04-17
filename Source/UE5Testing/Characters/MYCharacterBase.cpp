@@ -53,6 +53,10 @@ void AMYCharacterBase::BeginPlay()
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
 	check(GameState)
 	GameState->GameOverDelegate.AddUObject(this, &AMYCharacterBase::GameOver);
+	if(GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		SetHasAutonomousProxy();
+	}
 }
 
 /**
@@ -99,6 +103,11 @@ void AMYCharacterBase::Die_Server_Implementation()
 void AMYCharacterBase::SetupWeapons(const FGameplayEffectSpecHandle& InGESpecHandle)
 {
 	Weapon->SetGameplayEffect(InGESpecHandle);
+}
+
+void AMYCharacterBase::SetHasAutonomousProxy_Implementation()
+{
+	bHasAutonomousProxy = false;
 }
 
 UAbilitySystemComponent* AMYCharacterBase::GetAbilitySystemComponent() const
