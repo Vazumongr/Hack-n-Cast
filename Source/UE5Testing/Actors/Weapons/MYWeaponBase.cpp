@@ -54,6 +54,7 @@ void AMYWeaponBase::AddHitActor(AActor* InHitActor)
 		return;
 	}
 	HitActors.Add(InHitActor);
+	checkf(true, TEXT("Look at me compile!"))
 }
 
 bool AMYWeaponBase::HasHitActor(AActor* InHitActor) const

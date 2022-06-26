@@ -6,4 +6,5 @@
 void UMYGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnAvatarSet(ActorInfo, Spec);
+	
 }

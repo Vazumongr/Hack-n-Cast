@@ -19,4 +19,7 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bActivateOnGranted = false;
 };

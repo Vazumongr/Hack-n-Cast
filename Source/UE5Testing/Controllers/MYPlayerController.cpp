@@ -27,6 +27,9 @@ void AMYPlayerController::BeginPlay()
 	AMYSurvivalGameState* GameState = Cast<AMYSurvivalGameState>(GetWorld()->GetGameState());
 	check(GameState)
 	GameState->GameOverDelegate.AddUObject(this, &AMYPlayerController::GameOver);
+	GameState->IsA(AMYSurvivalGameState::StaticClass());
+	TSet<uint32> test;
+	FSetElementId id;
 }
 
 // Called every frame
